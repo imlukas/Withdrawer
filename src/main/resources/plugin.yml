@@ -1,0 +1,19 @@
+name: Withdrawer
+version: '${version}'
+main: me.imlukas.withdrawer.Withdrawer
+api-version: 1.18
+depend: [ Vault ]
+softdepend: [ Essentials ]
+authors: [ imlukas ]
+description: Withdraw money and exp trough items!
+commands:
+  withdrawmoney:
+    usage: </command>
+    description: "Withdraw money"
+    aliases:
+      - wdmoney
+  withdrawxp:
+    usage: </command>
+    description: "Withdraw xp"
+    aliases:
+      - wdxp

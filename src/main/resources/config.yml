@@ -1,0 +1,39 @@
+
+banknote:
+  name: "&cBank Note &e(Right-Click)"
+  lore:
+    - "&d&lValue: $%value%"
+    - "&d&lSigner: %owner%"
+
+  item: PAPER
+
+  min: 100 # minimum value of the banknote
+  max: 10000 # maximum value of the banknote
+
+  sounds:
+    withdraw:
+      sound: BLOCK_AMETHYST_BLOCK_STEP
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      enabled: true
+
+expbottle:
+  name: "&cExp Bottle &e(Right-Click)"
+  lore:
+    - "&d&lValue: $%value%"
+
+  item: EXP_BOTTLE
+  
+  sounds:
+    withdraw:
+      sound: BLOCK_AMETHYST_BLOCK_STEP
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      enabled: true
+
+crafting: false # can items be used on crafting table
+drop: false # can items be dropped
+villager-trade: false # can items be used on villager trades
+

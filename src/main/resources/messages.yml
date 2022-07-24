@@ -1,0 +1,16 @@
+messages:
+  use-prefix: true # NOTE: this does not disable %prefix%
+  prefix: "[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
+  arrow: ">>" # arrow to appear before the messages [Withdrawer] >> This is a message
+  global:
+    not-player: 'The command can only be used by a player'
+    no-permission: 'You do not have permission to do this'
+    invalid-args: 'Invalid arguments!'
+    player-not-found: 'Player(s) not found'
+  withdraw:
+    success:
+      - '%prefix% You withdrew %money%$ from your account'
+      - 'Current balance: %balance%'
+    error:
+      - '%prefix% You do not have enough money'
+      - 'Current balance: %balance%'

@@ -5,6 +5,7 @@ import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,23 +36,32 @@ public class PlayerInteractListener implements Listener {
         if (event.getItem() == null) {
             return;
         }
-        if (!(event.getItem().getType().equals(Material.PAPER))) {
-            return;
-        }
 
+        Material itemMaterial = event.getItem().getType();
         NBTItem nbtitem = new NBTItem(event.getItem());
-        if (!(nbtitem.hasKey("money-value"))) {
-            return;
+
+        if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("banknote.item").toUpperCase())) && nbtitem.hasKey("money-value")) {
+            int money = nbtitem.getInteger("money-value");
+            noteRedeem(player, money);
         }
+        else if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase())) && nbtitem.hasKey("exp-value")) {
+            int exp = nbtitem.getInteger("exp-value");
+            //todo
+        }
+
         event.setCancelled(true);
-
-        int money = nbtitem.getInteger("money-value");
-        economyUtil.giveMoney(player, money);
-
         if (event.getItem().getAmount() > 1 ){
             event.getItem().setAmount(event.getItem().getAmount() - 1);
             return;
         }
         player.getInventory().setItemInMainHand(null);
+    }
+
+    private void noteRedeem(Player player, int money) {
+        economyUtil.giveMoney(player, money);
+        if (main.getConfig().getBoolean("banknote.sounds.redeem.enabled")) {
+            String sound =  main.getConfig().getString("banknote.sounds.redeem.sound");
+            player.playSound(player.getLocation(), Sound.valueOf(sound), 0.8f, 1);
+        }
     }
 }

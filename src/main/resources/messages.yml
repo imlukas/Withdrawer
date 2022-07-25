@@ -1,6 +1,6 @@
 messages:
   use-prefix: true # NOTE: this does not disable %prefix%
-  prefix: "[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
+  prefix: "&b&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
   arrow: ">>" # arrow to appear before the messages [Withdrawer] >> This is a message
   global:
     not-player: 'The command can only be used by a player'
@@ -9,8 +9,8 @@ messages:
     player-not-found: 'Player(s) not found'
   withdraw:
     success:
-      - '%prefix% You withdrew %money%$ from your account'
-      - 'Current balance: %balance%'
+      - '%prefix% &7You withdrew &a%money%$&7 from your account'
+      - '&7Current balance: &a%balance%$'
     error:
-      - '%prefix% You do not have enough money'
-      - 'Current balance: %balance%'
+      - '%prefix% &7You do not have enough money'
+      - '&7Current balance: &a%balance%$'

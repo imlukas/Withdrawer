@@ -1,18 +1,20 @@
-
 banknote:
   name: "&cBank Note &e(Right-Click)"
   lore:
     - "&d&lValue: $%value%"
     - "&d&lSigner: %owner%"
 
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   item: PAPER
 
   min: 100 # minimum value of the banknote
   max: 10000 # maximum value of the banknote
 
-  sounds:
+  # sounds that will be played when the note is used
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+  sounds: #
     withdraw:
-      sound: BLOCK_AMETHYST_BLOCK_STEP
+      sound: BLOCK_NOTE_BLOCK_PLING
       enabled: true
     redeem:
       sound: ENTITY_PLAYER_LEVELUP
@@ -23,8 +25,11 @@ expbottle:
   lore:
     - "&d&lValue: $%value%"
 
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   item: EXP_BOTTLE
-  
+
+  # sounds that will be played when the bottle is used
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
   sounds:
     withdraw:
       sound: BLOCK_AMETHYST_BLOCK_STEP

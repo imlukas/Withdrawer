@@ -3,10 +3,13 @@ package me.imlukas.withdrawer.manager;
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.utils.EconomyUtil;
+import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.item.ItemBuilder;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class NoteManager {
 
@@ -22,6 +26,7 @@ public class NoteManager {
     private final MessagesFile messages;
     private final EconomyUtil economyUtil;
     private final Economy econ;
+    private final TextUtil textUtil;
 
     private ItemStack note;
     private ItemMeta meta;
@@ -31,19 +36,25 @@ public class NoteManager {
         this.messages = main.getMessages();
         this.economyUtil = new EconomyUtil(main);
         this.econ = main.getEconomy();
+        this.textUtil = main.getTextUtil();
     }
 
 
-    public void give(Player player, int money) {
+    public void give(Player player, double money) {
         if (checkBalance(player, money)) {
             economyUtil.removeMoney(player, money);
             ItemStack noteItem = setItem(player, money);
             player.getInventory().addItem(noteItem);
+
+            playWithdrawSound(player);
+            sendMessages(player, money, true);
+            return;
         }
+        sendMessages(player, money, false);
         
     }
 
-    public void give(Player player, int money, double amount) {
+    public void give(Player player, double money, double amount) {
         double total = money * amount;
         if (checkBalance(player, money * amount)) {
             economyUtil.removeMoney(player, total);
@@ -51,19 +62,26 @@ public class NoteManager {
             for (int i = 0; i < amount; i++) {
                 player.getInventory().addItem(noteItem);
             }
+            playWithdrawSound(player);
+            sendMessages(player, total, true);
+            return;
         }
-    }
+        sendMessages(player, total, false);
 
-    private boolean checkBalance(Player player, double money) {
-        if (!(economyUtil.hasMoney(player, money))) {
-            sendMessages(player, money, false);
-            return false;
+
+    }
+    private void playWithdrawSound(Player player) {
+        if (main.getConfig().getBoolean("banknote.sounds.withdraw.enabled")) {
+            player.playSound(player.getLocation(), Sound.valueOf(main.getConfig().getString("banknote.sounds.withdraw.sound").toUpperCase()), 0.8f, 1);
         }
-        return true;
+
+    }
+    private boolean checkBalance(Player player, double money) {
+        return economyUtil.hasMoney(player, money);
     }
 
     private ItemStack setItem(Player player, double money) {
-        note = new ItemBuilder(Material.PAPER).name("&aBank Note").glowing(true).build();
+        note = new ItemBuilder(Material.PAPER).name(textUtil.getColorConfig("banknote.name")).glowing(true).build();
         // nbt setup
         NBTItem nbtItem = new NBTItem(note);
         nbtItem.setDouble("money-value", money);
@@ -73,10 +91,11 @@ public class NoteManager {
         meta = note.getItemMeta();
         // item setup
         List<String> lore = new ArrayList<>();
-        lore.add(main.getTextUtil().getColor("&d&lValue: &7" + nbtItem.getDouble("money-value")));
-        lore.add(main.getTextUtil().getColor("&d&lOriginal Owner: &7" + player.getName()) );
-
-
+        for (String s : main.getConfig().getStringList("banknote.lore")){
+            String newText = s.replace("%value%", "" + nbtItem.getDouble("money-value"))
+                    .replace("%owner%", player.getName());
+            lore.add(textUtil.getColor(newText));
+        }
         meta.setLore(lore);
         note.setItemMeta(meta);
 

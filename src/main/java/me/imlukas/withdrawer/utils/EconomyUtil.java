@@ -28,10 +28,10 @@ public class EconomyUtil {
     }
     public void removeMoney(Player player, double amount){
         econ.withdrawPlayer(player, amount);
-        messages.sendStringMessage(player, "&c-" + df.format(amount));
+        messages.sendStringMessage(player, "&c-" + df.format(amount) + "$");
     }
     public void giveMoney(Player player, double amount){
         econ.depositPlayer(player, amount);
-        messages.sendStringMessage(player, "&a+" + df.format(amount));
+        messages.sendStringMessage(player, "&a+" + df.format(amount) + "$");
     }
 }

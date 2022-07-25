@@ -42,9 +42,17 @@ public class WithdrawCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        int money = Integer.parseInt(args[0]);
+        double money = Double.parseDouble(args[0]);
         if (money <= 0) {
-            messages.sendMessage(sender, "Money must be positive and bigger than zero");
+            messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be positive and bigger than zero");
+            return true;
+        }
+        if (money < main.getConfig().getInt("banknote.min")){
+            messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be bigger than " + main.getConfig().getInt("banknote.min"));
+            return true;
+        }
+        if (money > main.getConfig().getInt("banknote.max")){
+            messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be smaller than " + main.getConfig().getInt("banknote.max"));
             return true;
         }
 
@@ -61,11 +69,13 @@ public class WithdrawCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             noteManager.give(player, money, amount);
+
             return true;
         }
         noteManager.give(player, money);
         return true;
     }
+
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {

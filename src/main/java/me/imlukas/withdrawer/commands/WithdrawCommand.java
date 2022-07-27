@@ -53,7 +53,6 @@ public class WithdrawCommand implements CommandExecutor, TabCompleter {
         }
         if (money > main.getConfig().getInt("banknote.max")){
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be smaller than " + main.getConfig().getInt("banknote.max"));
-            System.out.println("Test");
             return true;
 
         }

@@ -9,8 +9,6 @@ import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,7 +16,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class NoteManager {
 
@@ -43,7 +40,7 @@ public class NoteManager {
     public void give(Player player, double money) {
         if (checkBalance(player, money)) {
             economyUtil.removeMoney(player, money);
-            ItemStack noteItem = setItem(player, money);
+            ItemStack noteItem = setItemProperties(player, money);
             player.getInventory().addItem(noteItem);
 
             playWithdrawSound(player);
@@ -58,7 +55,7 @@ public class NoteManager {
         double total = money * amount;
         if (checkBalance(player, money * amount)) {
             economyUtil.removeMoney(player, total);
-            ItemStack noteItem = setItem(player, money);
+            ItemStack noteItem = setItemProperties(player, money);
             for (int i = 0; i < amount; i++) {
                 player.getInventory().addItem(noteItem);
             }
@@ -74,43 +71,39 @@ public class NoteManager {
         if (main.getConfig().getBoolean("banknote.sounds.withdraw.enabled")) {
             player.playSound(player.getLocation(), Sound.valueOf(main.getConfig().getString("banknote.sounds.withdraw.sound").toUpperCase()), 0.8f, 1);
         }
-
     }
     private boolean checkBalance(Player player, double money) {
         return economyUtil.hasMoney(player, money);
     }
 
-    private ItemStack setItem(Player player, double money) {
+    private ItemStack setItemProperties(Player player, double money) {
         note = new ItemBuilder(Material.PAPER).name(textUtil.getColorConfig("banknote.name")).glowing(true).build();
         // nbt setup
         NBTItem nbtItem = new NBTItem(note);
         nbtItem.setDouble("money-value", money);
         nbtItem.applyNBT(note);
 
-
         meta = note.getItemMeta();
         // item setup
         List<String> lore = new ArrayList<>();
-        for (String s : main.getConfig().getStringList("banknote.lore")){
-            String newText = s.replace("%value%", "" + nbtItem.getDouble("money-value"))
+        for (String str : main.getConfig().getStringList("banknote.lore")){
+            String newText = str.replace("%value%", "" + nbtItem.getDouble("money-value"))
                     .replace("%owner%", player.getName());
             lore.add(textUtil.getColor(newText));
         }
         meta.setLore(lore);
         note.setItemMeta(meta);
-
-
         return note;
     }
 
     private void sendMessages(Player player, double money, boolean sucess) {
         if (sucess) {
-            messages.sendMessage(player, "withdraw.success", (message) -> message
+            messages.sendMessage(player, "banknote-withdraw.success", (message) -> message
                     .replace("%money%", String.valueOf(new DecimalFormat("#").format(money)))
                     .replace("%balance%", String.valueOf(economyUtil.getMoney(player))));
             return;
         }
-        messages.sendMessage(player, "withdraw.error", (message) -> message
+        messages.sendMessage(player, "banknote-withdraw.error", (message) -> message
                 .replace("%balance%", "" + economyUtil.getMoney(player)));
     }
 }

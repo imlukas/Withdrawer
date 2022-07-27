@@ -6,6 +6,7 @@ import me.imlukas.withdrawer.commands.WithdrawCommand;
 import me.imlukas.withdrawer.config.MessagesHandler;
 import me.imlukas.withdrawer.listeners.PlayerInteractListener;
 import me.imlukas.withdrawer.manager.NoteManager;
+import me.imlukas.withdrawer.utils.ExpUtil;
 import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import net.milkbowl.vault.economy.Economy;
@@ -20,6 +21,7 @@ public final class Withdrawer extends JavaPlugin {
     private MessagesFile messages;
     private MessagesHandler messagesHandler;
     private TextUtil textUtil;
+    private ExpUtil expUtil;
     private NoteManager noteManager;
 
     private Logger log;
@@ -29,6 +31,7 @@ public final class Withdrawer extends JavaPlugin {
         messagesHandler = new MessagesHandler(this);
         noteManager = new NoteManager(this);
         textUtil = new TextUtil(this);
+        expUtil = new ExpUtil();
 
         System.out.println("Registered Classes");
         if (!setupEconomy() ) {

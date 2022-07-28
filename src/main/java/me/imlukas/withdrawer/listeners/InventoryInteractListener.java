@@ -25,12 +25,12 @@ public class InventoryInteractListener implements Listener {
         Material itemMaterial = event.getOldCursor().getType();
         NBTItem nbtitem = new NBTItem(event.getOldCursor());
 
-        if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("banknote.item").toUpperCase())) && nbtitem.hasKey("money-value")) {
+        if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("banknote.item").toUpperCase())) && nbtitem.hasKey("banknote-value")) {
             if (inventoryType.equals(InventoryType.CRAFTING)) {
                 event.setCancelled(true);
             }
         }
-        else if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase())) && nbtitem.hasKey("exp-value")) {
+        else if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase())) && nbtitem.hasKey("expbottle-value")) {
             if (inventoryType.equals(InventoryType.CRAFTING)) {
                 event.setCancelled(true);
             }

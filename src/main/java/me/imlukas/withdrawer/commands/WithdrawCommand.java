@@ -21,7 +21,7 @@ public class WithdrawCommand implements CommandExecutor, TabCompleter {
 
     private final NoteManager noteManager;
 
-    private Double amount;
+    private int amount;
 
     public WithdrawCommand(Withdrawer main) {
         this.main = main;
@@ -59,7 +59,7 @@ public class WithdrawCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 2) {
             try{
-                amount = Double.parseDouble(args[1]);
+                amount = Integer.parseInt(args[1]);
             }
             catch (NumberFormatException e) {
                 messages.sendStringMessage(sender, "Amount must be a number");

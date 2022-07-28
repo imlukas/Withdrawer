@@ -1,87 +1,130 @@
 package me.imlukas.withdrawer.utils;
-
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
+/**
+ * A utility for managing player experience.
+ * THIS UTILITY WAS MADE BY @Jikoo
+ * Thank you for this, kind sir - Lukas :)
+ *
+ */
 @Getter
-public class ExpUtil {
+public final class ExpUtil {
 
-    public void setTotalExperience(Player player, int exp) {
+    /**
+     * Calculate a player's total experience based on level and progress to next.
+     *
+     * @param player the Player
+     * @return the amount of experience the Player has
+     *
+     * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
+     */
+    public int getExp(Player player) {
+        return getExpFromLevel(player.getLevel())
+                + Math.round(getExpToNext(player.getLevel()) * player.getExp());
+    }
+
+    /**
+     * Calculate total experience based on level.
+     *
+     * @param level the level
+     * @return the total experience calculated
+     *
+     * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
+     */
+    public int getExpFromLevel(int level) {
+        if (level > 30) {
+            return (int) (4.5 * level * level - 162.5 * level + 2220);
+        }
+        if (level > 15) {
+            return (int) (2.5 * level * level - 40.5 * level + 360);
+        }
+        return level * level + 6 * level;
+    }
+
+    /**
+     * Calculate level (including progress to next level) based on total experience.
+     *
+     * @param exp the total experience
+     * @return the level calculated
+     */
+    public double getLevelFromExp(long exp) {
+        int level = getIntLevelFromExp(exp);
+
+        // Get remaining exp progressing towards next level. Cast to float for next bit of math.
+        float remainder = exp - (float) getExpFromLevel(level);
+
+        // Get level progress with float precision.
+        float progress = remainder / getExpToNext(level);
+
+        // Slap both numbers together and call it a day. While it shouldn't be possible for progress
+        // to be an invalid value (value < 0 || 1 <= value)
+        return ((double) level) + progress;
+    }
+
+    /**
+     * Calculate level based on total experience.
+     *
+     * @param exp the total experience
+     * @return the level calculated
+     */
+    public int getIntLevelFromExp(long exp) {
+        if (exp > 1395) {
+            return (int) ((Math.sqrt(72 * exp - 54215D) + 325) / 18);
+        }
+        if (exp > 315) {
+            return (int) (Math.sqrt(40 * exp - 7839D) / 10 + 8.1);
+        }
+        if (exp > 0) {
+            return (int) (Math.sqrt(exp + 9D) - 3);
+        }
+        return 0;
+    }
+
+    /**
+     * Get the total amount of experience required to progress to the next level.
+     *
+     * @param level the current level
+     *
+     * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
+     */
+    private int getExpToNext(int level) {
+        if (level >= 30) {
+            // Simplified formula. Internal: 112 + (level - 30) * 9
+            return level * 9 - 158;
+        }
+        if (level >= 15) {
+            // Simplified formula. Internal: 37 + (level - 15) * 5
+            return level * 5 - 38;
+        }
+        // Internal: 7 + level * 2
+        return level * 2 + 7;
+    }
+
+    /**
+     * Change a Player's experience.
+     *
+     * <p>This method is preferred over {@link Player#giveExp(int)}.
+     * <br>In older versions the method does not take differences in exp per level into account.
+     * This leads to overlevelling when granting players large amounts of experience.
+     * <br>In modern versions, while differing amounts of experience per level are accounted for, the
+     * approach used is loop-heavy and requires an excessive number of calculations, which makes it
+     * quite slow.
+     *
+     * @param player the Player affected
+     * @param exp the amount of experience to add or remove
+     */
+    public void changeExp(Player player, int exp) {
+        exp += getExp(player);
+
         if (exp < 0) {
-            return;
+            exp = 0;
         }
-        player.setExp(0.0F);
-        player.setLevel(0);
-        player.setTotalExperience(0);
 
-        int amount = exp;
-        while (amount > 0) {
-            int expToLevel = getExpAtLevel(player);
-            amount -= expToLevel;
-            if (amount >= 0) {
-
-                player.giveExp(expToLevel);
-                continue;
-            }
-            amount += expToLevel;
-            player.giveExp(amount);
-            amount = 0;
-        }
+        double levelAndExp = getLevelFromExp(exp);
+        int level = (int) levelAndExp;
+        player.setLevel(level);
+        player.setExp((float) (levelAndExp - level));
     }
 
-
-    private int getExpAtLevel(Player player) {
-        return getExpAtLevel(player.getLevel());
-    }
-
-
-    private int getExpAtLevel(int level) {
-        if (level <= 15) {
-            return 2 * level + 7;
-        }
-        if (level >= 16 && level <= 30) {
-            return 5 * level - 38;
-        }
-        return 9 * level - 158;
-    }
-
-
-    private int getExpToLevel(int level) {
-        int currentLevel = 0;
-        int exp = 0;
-
-        while (currentLevel < level) {
-            exp += getExpAtLevel(currentLevel);
-            currentLevel++;
-        }
-        if (exp < 0) {
-            exp = Integer.MAX_VALUE;
-        }
-        return exp;
-    }
-
-
-
-    public int getTotalExperience(Player player) {
-        int exp = Math.round(getExpAtLevel(player) * player.getExp());
-        int currentLevel = player.getLevel();
-
-        while (currentLevel > 0) {
-            currentLevel--;
-            exp += getExpAtLevel(currentLevel);
-        }
-        if (exp < 0) {
-            exp = Integer.MAX_VALUE;
-        }
-        return exp;
-    }
-
-    private int getExpUntilNextLevel(Player player) {
-        int exp = Math.round(getExpAtLevel(player) * player.getExp());
-        int nextLevel = player.getLevel();
-        return getExpAtLevel(nextLevel) - exp;
-    }
-
-    public void removeExp(Player player, double exp) {
-    }
 }

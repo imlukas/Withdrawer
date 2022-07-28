@@ -5,7 +5,9 @@ import me.imlukas.withdrawer.commands.ExpBottleCommand;
 import me.imlukas.withdrawer.commands.WithdrawCommand;
 import me.imlukas.withdrawer.config.MessagesHandler;
 import me.imlukas.withdrawer.listeners.PlayerInteractListener;
+import me.imlukas.withdrawer.manager.ExpBottleManager;
 import me.imlukas.withdrawer.manager.NoteManager;
+import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.ExpUtil;
 import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
@@ -15,33 +17,48 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
+
 @Getter
 public final class Withdrawer extends JavaPlugin {
     private Economy econ;
     private MessagesFile messages;
     private MessagesHandler messagesHandler;
     private TextUtil textUtil;
+    private EconomyUtil economyUtil;
     private ExpUtil expUtil;
     private NoteManager noteManager;
+    private ExpBottleManager expBottleManager;
 
     private Logger log;
     @Override
     public void onEnable() {
-        messages = new MessagesFile(this);
-        messagesHandler = new MessagesHandler(this);
-        noteManager = new NoteManager(this);
-        textUtil = new TextUtil(this);
-        expUtil = new ExpUtil();
-
-        System.out.println("Registered Classes");
         if (!setupEconomy() ) {
             log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+        System.out.println("[Withdrawer] Vault dependency found!");
+
+
+        expUtil = new ExpUtil();
+
+        messagesHandler = new MessagesHandler(this);
+        messages = new MessagesFile(this);
+        textUtil = new TextUtil(this);
+        economyUtil = new EconomyUtil(this);
+        noteManager = new NoteManager(this);
+        expBottleManager = new ExpBottleManager(this);
+
+
+
+
+        System.out.println("[Withdrawer] Registered Classes!");
+
 
         registerCommands();
+        System.out.println("[Withdrawer] Registered Ccommands!");
         registerListeners();
+        System.out.println("[Withdrawer] Registered Listeners!");
 
 
 
@@ -64,6 +81,7 @@ public final class Withdrawer extends JavaPlugin {
 
     private void registerListeners(){
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+
     }
     // Vault Integration
     private boolean setupEconomy() {

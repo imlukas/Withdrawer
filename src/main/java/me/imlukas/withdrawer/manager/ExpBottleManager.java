@@ -7,6 +7,7 @@ import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.item.ItemBuilder;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -35,7 +36,7 @@ public class ExpBottleManager {
 
     public void give(Player player, int exp){
         if (checkExp(player, exp)){
-            expUtil.removeExp(player, exp);
+            expUtil.changeExp(player, -exp);
             ItemStack expItem = setItemProperties(player, exp);
             player.getInventory().addItem(expItem);
 
@@ -48,12 +49,12 @@ public class ExpBottleManager {
 
 
     public void give(Player player, int exp, int amount){
-        double total = exp * amount;
-        if (checkExp(player, exp * amount)) {
-            expUtil.removeExp(player, total);
-            ItemStack noteItem = setItemProperties(player, exp);
+        int total = exp * amount;
+        if (checkExp(player, total)) {
+            expUtil.changeExp(player, -total);
+            ItemStack expItem = setItemProperties(player, exp);
             for (int i = 0; i < amount; i++) {
-                player.getInventory().addItem(noteItem);
+                player.getInventory().addItem(expItem);
             }
             playWithdrawSound(player);
             sendMessages(player, total, true);
@@ -62,18 +63,18 @@ public class ExpBottleManager {
         sendMessages(player, total, false);
     }
 
-    private ItemStack setItemProperties(Player player, double money) {
-        expItem = new ItemBuilder(Material.PAPER).name(textUtil.getColorConfig("expbottle.name")).glowing(true).build();
+    private ItemStack setItemProperties(Player player, int exp) {
+        expItem = new ItemBuilder(Material.EXPERIENCE_BOTTLE).name(textUtil.getColorConfig("expbottle.name")).glowing(true).build();
         // nbt setup
         NBTItem nbtItem = new NBTItem(expItem);
-        nbtItem.setDouble("exp-value", money);
+        nbtItem.setInteger("expbottle-value", exp);
         nbtItem.applyNBT(expItem);
 
         meta = expItem.getItemMeta();
         // item setup
         List<String> lore = new ArrayList<>();
         for (String str : main.getConfig().getStringList("expbottle.lore")){
-            String newText = str.replace("%value%", "" + nbtItem.getDouble("exp-value"))
+            String newText = str.replace("%value%", "" + nbtItem.getDouble("expbottle-value"))
                     .replace("%owner%", player.getName());
             lore.add(textUtil.getColor(newText));
         }
@@ -86,21 +87,21 @@ public class ExpBottleManager {
         if (sucess) {
             messages.sendMessage(player, "expbottle-withdraw.success", (message) -> message
                     .replace("%exp%", String.valueOf(new DecimalFormat("#").format(exp)))
-                    .replace("%current_exp%", String.valueOf(expUtil.getTotalExperience(player))));
+                    .replace("%current_exp%", String.valueOf(expUtil.getExp(player))));
             return;
         }
         messages.sendMessage(player, "expbottle-withdraw.error", (message) -> message
-                .replace("%current_exp%", "" + expUtil.getTotalExperience(player)));
+                .replace("%current_exp%", "" + expUtil.getExp(player)));
     }
 
 
     private boolean checkExp(Player player, int exp){
-        return (!(expUtil.getTotalExperience(player) < exp));
+        return (!(expUtil.getExp(player) < exp));
     }
 
     private void playWithdrawSound(Player player){
         if (main.getConfig().getBoolean("expbottle.sounds.withdraw.enabled")) {
-            player.playSound(player.getLocation(), main.getConfig().getString("expbottle.sounds.withdraw.sound"), 1, 1);
+            player.playSound(player.getLocation(), Sound.valueOf(main.getConfig().getString("expbottle.sounds.withdraw.sound")), 0.8f, 1);
         }
     }
 

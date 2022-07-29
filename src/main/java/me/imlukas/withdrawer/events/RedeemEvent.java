@@ -5,39 +5,42 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
 @Getter
-public class ItemWithdrawEvent extends Event implements Cancellable {
-    public enum WithdrawType {
+public class RedeemEvent extends Event implements Cancellable {
+    public enum ReedemType {
         BANKNOTE,
         EXPBOTTLE
     }
+
     private boolean cancelled = false;
-
-
-    private Player player;
-    private double amount;
-    private int quantity;
-    private WithdrawType type;
+    Player player;
+    double amount;
+    ReedemType type;
+    int quantity = 1;
 
     private static final HandlerList HANDLERS = new HandlerList();
+
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
+
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }
-    public ItemWithdrawEvent(Player player, double amount, WithdrawType type) {
-        this.player = player;
-        this.amount = amount;
-        this.type = type;
 
-    }
-    public ItemWithdrawEvent(Player player, double amount, int quantity,  WithdrawType type) {
+    public RedeemEvent(Player player, double amount, ReedemType type) {
         this.player = player;
         this.amount = amount;
-        this.quantity = quantity;
         this.type = type;
+    }
+
+    public RedeemEvent(Player player, double amount, ReedemType type, int quantity) {
+        this.player = player;
+        this.amount = amount;
+        this.type = type;
+        this.quantity = quantity;
     }
 
     @Override
@@ -49,5 +52,4 @@ public class ItemWithdrawEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         cancelled = cancel;
     }
-
 }

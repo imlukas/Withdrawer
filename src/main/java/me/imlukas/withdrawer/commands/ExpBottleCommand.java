@@ -44,29 +44,28 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be positive and bigger than zero");
             return true;
         }
-        if (expAmount < main.getConfig().getInt("expbottle.min")){
+        if (expAmount < main.getConfig().getInt("expbottle.min")) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be bigger than " + main.getConfig().getInt("expbottle.min"));
             return true;
         }
-        if (expAmount > main.getConfig().getInt("expbottle.max")){
+        if (expAmount > main.getConfig().getInt("expbottle.max")) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + main.getConfig().getInt("expbottle.max"));
             return true;
 
         }
 
         if (args.length == 2) {
-            try{
+            try {
                 quantity = Integer.parseInt(args[1]);
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 messages.sendStringMessage(sender, "Amount must be a number");
                 return true;
             }
-            if (expAmount * quantity > main.getConfig().getInt("expbottle.max")){
+            if (expAmount * quantity > main.getConfig().getInt("expbottle.max")) {
                 messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + main.getConfig().getInt("expbottle.max"));
                 return true;
             }
-            if(quantity < 1){
+            if (quantity < 1) {
                 messages.sendStringMessage(sender, "Usage: /withdrawxp <money> (quantity)");
                 return true;
             }

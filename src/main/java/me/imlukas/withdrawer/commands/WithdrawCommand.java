@@ -47,32 +47,32 @@ public class WithdrawCommand implements CommandExecutor, TabCompleter {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be positive and bigger than zero");
             return true;
         }
-        if (money < main.getConfig().getInt("banknote.min")){
+        if (money < main.getConfig().getInt("banknote.min")) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be bigger than " + main.getConfig().getInt("banknote.min"));
             return true;
         }
-        if (money > main.getConfig().getInt("banknote.max")){
+        if (money > main.getConfig().getInt("banknote.max")) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be smaller than " + main.getConfig().getInt("banknote.max"));
             return true;
 
         }
 
         if (args.length == 2) {
-            try{
+            try {
                 amount = Integer.parseInt(args[1]);
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 messages.sendStringMessage(sender, "Amount must be a number");
                 return true;
             }
-            if(amount < 1){
+            if (amount < 1) {
                 messages.sendStringMessage(sender, "Usage: /withdrawmoney <money> <amount>");
                 return true;
             }
-            noteManager.give(player, money, amount);
 
+            noteManager.give(player, money, amount);
             return true;
         }
+
         noteManager.give(player, money);
         return true;
     }

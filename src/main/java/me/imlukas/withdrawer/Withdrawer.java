@@ -4,6 +4,8 @@ import lombok.Getter;
 import me.imlukas.withdrawer.commands.ExpBottleCommand;
 import me.imlukas.withdrawer.commands.WithdrawCommand;
 import me.imlukas.withdrawer.config.MessagesHandler;
+import me.imlukas.withdrawer.listeners.InventoryClickListener;
+import me.imlukas.withdrawer.listeners.ItemDropListener;
 import me.imlukas.withdrawer.listeners.PlayerInteractListener;
 import me.imlukas.withdrawer.manager.ExpBottleManager;
 import me.imlukas.withdrawer.manager.NoteManager;
@@ -13,6 +15,7 @@ import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,26 +33,22 @@ public final class Withdrawer extends JavaPlugin {
     private ExpBottleManager expBottleManager;
 
     private Logger log;
+
     @Override
     public void onEnable() {
-        if (!setupEconomy() ) {
+        if (!setupEconomy()) {
             log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
         System.out.println("[Withdrawer] Vault dependency found!");
-
-
         expUtil = new ExpUtil();
-
         messagesHandler = new MessagesHandler(this);
         messages = new MessagesFile(this);
         textUtil = new TextUtil(this);
         economyUtil = new EconomyUtil(this);
         noteManager = new NoteManager(this);
         expBottleManager = new ExpBottleManager(this);
-
-
 
 
         System.out.println("[Withdrawer] Registered Classes!");
@@ -59,7 +58,6 @@ public final class Withdrawer extends JavaPlugin {
         System.out.println("[Withdrawer] Registered Ccommands!");
         registerListeners();
         System.out.println("[Withdrawer] Registered Listeners!");
-
 
 
         saveDefaultConfig();
@@ -74,15 +72,18 @@ public final class Withdrawer extends JavaPlugin {
     }
 
 
-    private void registerCommands(){
+    private void registerCommands() {
         getCommand("withdrawmoney").setExecutor(new WithdrawCommand(this));
         getCommand("withdrawxp").setExecutor(new ExpBottleCommand(this));
     }
 
-    private void registerListeners(){
+    private void registerListeners() {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new ItemDropListener(this), this);
 
     }
+
     // Vault Integration
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {

@@ -2,7 +2,7 @@ package me.imlukas.withdrawer.manager;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.events.ItemWithdrawEvent;
+import me.imlukas.withdrawer.events.WithdrawEvent;
 import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.item.ItemBuilder;
@@ -30,7 +30,7 @@ public class NoteManager {
     private ItemStack note;
     private ItemMeta meta;
 
-    private ItemWithdrawEvent withdrawEvent;
+    private WithdrawEvent withdrawEvent;
 
     public NoteManager(Withdrawer main) {
         this.main = main;
@@ -42,7 +42,7 @@ public class NoteManager {
 
 
     public void give(Player player, double money) {
-        if (callEvent(player, money)){
+        if (callEvent(player, money)) {
             return;
         }
         if (checkBalance(player, money)) {
@@ -55,11 +55,11 @@ public class NoteManager {
             return;
         }
         sendMessages(player, money, false);
-        
+
     }
 
     public void give(Player player, double money, int amount) {
-        if (callEvent(player, money, amount)){
+        if (callEvent(player, money, amount)) {
             return;
         }
         double total = money * amount;
@@ -77,11 +77,13 @@ public class NoteManager {
 
 
     }
+
     private void playWithdrawSound(Player player) {
         if (main.getConfig().getBoolean("banknote.sounds.withdraw.enabled")) {
             player.playSound(player.getLocation(), Sound.valueOf(main.getConfig().getString("banknote.sounds.withdraw.sound").toUpperCase()), 0.8f, 1);
         }
     }
+
     private boolean checkBalance(Player player, double money) {
         return economyUtil.hasMoney(player, money);
     }
@@ -96,7 +98,7 @@ public class NoteManager {
         meta = note.getItemMeta();
         // item setup
         List<String> lore = new ArrayList<>();
-        for (String str : main.getConfig().getStringList("banknote.lore")){
+        for (String str : main.getConfig().getStringList("banknote.lore")) {
             String newText = str.replace("%value%", "" + nbtItem.getDouble("banknote-value"))
                     .replace("%owner%", player.getName());
             lore.add(textUtil.getColor(newText));
@@ -118,12 +120,13 @@ public class NoteManager {
     }
 
     private boolean callEvent(Player player, double money) {
-        withdrawEvent = new ItemWithdrawEvent(player, money, ItemWithdrawEvent.WithdrawType.BANKNOTE);
+        withdrawEvent = new WithdrawEvent(player, money, WithdrawEvent.WithdrawType.BANKNOTE);
         Bukkit.getServer().getPluginManager().callEvent(withdrawEvent);
         return withdrawEvent.isCancelled();
     }
+
     private boolean callEvent(Player player, double money, int amount) {
-        withdrawEvent = new ItemWithdrawEvent(player, money, amount, ItemWithdrawEvent.WithdrawType.BANKNOTE);
+        withdrawEvent = new WithdrawEvent(player, money, amount, WithdrawEvent.WithdrawType.BANKNOTE);
         Bukkit.getServer().getPluginManager().callEvent(withdrawEvent);
         return withdrawEvent.isCancelled();
     }

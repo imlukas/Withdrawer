@@ -26,8 +26,7 @@ public class ItemDropListener implements Listener {
 
         if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("banknote.item").toUpperCase())) && nbtitem.hasKey("banknote-value")) {
             event.setCancelled(true);
-        }
-        else if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase())) && nbtitem.hasKey("expbottle-value")) {
+        } else if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase())) && nbtitem.hasKey("expbottle-value")) {
             event.setCancelled(true);
 
         }

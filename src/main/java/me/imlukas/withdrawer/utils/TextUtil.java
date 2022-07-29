@@ -21,7 +21,7 @@ public class TextUtil {
         return message;
     }
 
-    public String getColorConfig(String key){
+    public String getColorConfig(String key) {
         return ChatColor.translateAlternateColorCodes('&', config.getString(key));
     }
 }

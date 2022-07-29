@@ -1,4 +1,7 @@
 messages:
+  # if true the messages will be simpler and less intrusive
+  # reedem will only be "+money$" instead of the default message.
+  less-intrusive: false
   use-prefix: true # NOTE: this does not disable %prefix% -- Messages in a list of messages will not have prefix by default. You need to use the %prefix%.
   prefix: "&b&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
   arrow: ">>" # arrow to appear before the messages [Withdrawer] >> This is a message
@@ -13,6 +16,10 @@ messages:
     error:
       - '%prefix% &7You do not have enough money'
       - '&7Current balance: &a%balance%$'
+  banknote-redeem:
+    - '%prefix% &7You redeemed &a%money%$&7!'
+    - '&7Current balance: &a%balance%$'
+
   expbottle-withdraw:
     success:
       - '%prefix% &7You withdrew &a%exp%EXP&7!'
@@ -20,3 +27,6 @@ messages:
     error:
       - '%prefix% &7You do not have enough EXP'
       - '&7Current EXP: &a%current_exp%EXP'
+  expbottle-redeem:
+    - '%prefix% &7You withdrew &a%exp%EXP&7!'
+    - '&7Current EXP: &a%current_exp%EXP'

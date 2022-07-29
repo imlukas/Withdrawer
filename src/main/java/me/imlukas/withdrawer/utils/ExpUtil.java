@@ -1,4 +1,5 @@
 package me.imlukas.withdrawer.utils;
+
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
@@ -6,7 +7,6 @@ import org.bukkit.entity.Player;
  * A utility for managing player experience.
  * THIS UTILITY WAS MADE BY @Jikoo
  * Thank you for this, kind sir - Lukas :)
- *
  */
 @Getter
 public final class ExpUtil {
@@ -16,7 +16,6 @@ public final class ExpUtil {
      *
      * @param player the Player
      * @return the amount of experience the Player has
-     *
      * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
      */
     public int getExp(Player player) {
@@ -29,7 +28,6 @@ public final class ExpUtil {
      *
      * @param level the level
      * @return the total experience calculated
-     *
      * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
      */
     public int getExpFromLevel(int level) {
@@ -85,7 +83,6 @@ public final class ExpUtil {
      * Get the total amount of experience required to progress to the next level.
      *
      * @param level the current level
-     *
      * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
      */
     private int getExpToNext(int level) {
@@ -112,7 +109,7 @@ public final class ExpUtil {
      * quite slow.
      *
      * @param player the Player affected
-     * @param exp the amount of experience to add or remove
+     * @param exp    the amount of experience to add or remove
      */
     public void changeExp(Player player, int exp) {
         exp += getExp(player);

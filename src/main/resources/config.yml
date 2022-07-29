@@ -1,8 +1,10 @@
 banknote:
   name: "&bBank Note &e(Right-Click)"
   lore:
-    - "&d&lValue: $%value%"
-    - "&d&lSigner: %owner%"
+    - "&b&lValue: &7$%value%"
+    - "&b&lSigner: &7%owner%"
+    - " "
+    - "&e&l(Shift-Right-Click) &7to bulk-open"
 
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   item: PAPER
@@ -23,7 +25,9 @@ banknote:
 expbottle:
   name: "&bExp Bottle &e&l(Right-Click)"
   lore:
-    - "&d&lValue: %value%EXP"
+    - "&b&lValue: &7%exp%EXP"
+    - " "
+    - "&e&l(Shift-Right-Click) &7to bulk-open"
 
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   item: EXPERIENCE_BOTTLE

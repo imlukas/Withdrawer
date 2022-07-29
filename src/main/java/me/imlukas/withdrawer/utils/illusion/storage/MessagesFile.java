@@ -44,13 +44,11 @@ public class MessagesFile extends YMLBase {
             }
             return;
         }
-        if (usePrefix){
+        if (usePrefix) {
             msg = prefix + " " + arrow + " " + getMessage(name);
-        }
-        else if (getMessage(name).contains("%prefix%")) {
+        } else if (getMessage(name).contains("%prefix%")) {
             msg = getMessage(name).replace("%prefix%", prefix + " " + arrow + getMessage(name));
-        }
-        else{
+        } else {
             msg = getMessage(name);
         }
         msg = action.apply(msg);
@@ -61,7 +59,8 @@ public class MessagesFile extends YMLBase {
     public String getMessage(String name) {
         return getConfiguration().getString("messages." + name);
     }
-    public void setPrefixEnabled(Boolean enable){
+
+    public void setPrefixEnabled(Boolean enable) {
         getConfiguration().set("messages.use-prefix", enable);
         save();
     }

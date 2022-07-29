@@ -1,7 +1,7 @@
 package me.imlukas.withdrawer.commands;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.manager.ExpBottleManager;
+import me.imlukas.withdrawer.managers.ExpBottleManager;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,8 +18,8 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
     private final MessagesFile messages;
     private final ExpBottleManager expBottleManager;
 
-    int expAmount;
-    int quantity;
+    private int expAmount;
+    private int quantity;
 
     public ExpBottleCommand(Withdrawer main) {
         this.main = main;
@@ -38,21 +38,27 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             messages.sendStringMessage(sender, "Usage: /withdrawxp <exp> (quantity)");
             return true;
         }
+        if (!(player.hasPermission("withdrawer.withdraw.expbottle"))) {
+            messages.sendMessage(sender, "global.no-permission");
+            return true;
+        }
 
         expAmount = Integer.parseInt(args[0]);
         if (expAmount <= 0) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be positive and bigger than zero");
             return true;
         }
-        if (expAmount < main.getConfig().getInt("expbottle.min")) {
-            messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be bigger than " + main.getConfig().getInt("expbottle.min"));
-            return true;
+        if(!(player.hasPermission("withdrawer.bypass.minmax.expbottle"))){
+            if (expAmount < main.getConfig().getInt("expbottle.min")) {
+                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be bigger than " + main.getConfig().getInt("expbottle.min"));
+                return true;
+            }
+            if (expAmount > main.getConfig().getInt("expbottle.max")) {
+                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + main.getConfig().getInt("expbottle.max"));
+                return true;
+            }
         }
-        if (expAmount > main.getConfig().getInt("expbottle.max")) {
-            messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + main.getConfig().getInt("expbottle.max"));
-            return true;
 
-        }
 
         if (args.length == 2) {
             try {
@@ -69,10 +75,10 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
                 messages.sendStringMessage(sender, "Usage: /withdrawxp <money> (quantity)");
                 return true;
             }
-            expBottleManager.give(player, expAmount, quantity);
+            expBottleManager.give(player, expAmount, quantity); // gives player x amount of expbottles
             return true;
         }
-        expBottleManager.give(player, expAmount);
+        expBottleManager.give(player, expAmount); // gives player 1 exp bottle
         return true;
     }
 

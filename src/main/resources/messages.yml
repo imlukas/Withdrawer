@@ -3,11 +3,12 @@ messages:
   # reedem will only be "+money$" instead of the default message.
   less-intrusive: false
   use-prefix: true # NOTE: this does not disable %prefix% -- Messages in a list of messages will not have prefix by default. You need to use the %prefix%.
-  prefix: "&b&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
-  arrow: ">>" # arrow to appear before the messages [Withdrawer] >> This is a message
+  prefix: "&d&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
+  arrow: "->" # arrow to appear before the messages [Withdrawer] >> This is a message
+
   global:
     not-player: 'This command can only be used by a player'
-    no-permission: 'You do not have permission to do this'
+    no-permission: '&cYou do not have permission to do this'
     player-not-found: 'Player(s) not found'
   banknote-withdraw:
     success:

@@ -52,79 +52,89 @@ public class PlayerInteractListener implements Listener {
         Material expBottleMaterial = Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase());
 
         if (itemMaterial.equals(bankNoteMaterial) && nbtItem.hasKey("banknote-value")) {
-            redeemItem(player, nbtItem, RedeemEvent.ReedemType.BANKNOTE);
+            event.setCancelled(true);
+            setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.BANKNOTE);
         } else if (itemMaterial.equals(expBottleMaterial) && nbtItem.hasKey("expbottle-value")) {
             event.setCancelled(true);
-            redeemItem(player, nbtItem, RedeemEvent.ReedemType.EXPBOTTLE);
+            setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.EXPBOTTLE);
 
         }
-
-
     }
-
-    private void redeemItem(Player player, NBTItem nbtItem, RedeemEvent.ReedemType type) {
+    private void setRedeemProperties(Player player, NBTItem nbtItem, RedeemEvent.ReedemType type) {
+        if (!(player.hasPermission("withdrawer.reedem." + type.toString().toLowerCase()))) {
+            messages.sendMessage(player, "global.no-permission");
+            return;
+        }
         String itemType = type.toString().toLowerCase();
 
         int value = nbtItem.getInteger(itemType + "-value");
 
-        reedemEvent = new RedeemEvent(player, value, type);
+        int itemAmount = player.getInventory().getItemInMainHand().getAmount();
+
+        if (player.isSneaking() && itemAmount > 1){
+            if (!(player.hasPermission("withdrawer.reedem." + type + ".bulk"))) {
+                messages.sendStringMessage(player, "&c[ERROR] &7ou don't have permission to bulk open this item.");
+                return;
+            }
+            reedemEvent = new RedeemEvent(player, value * itemAmount, type, itemAmount);
+        } else{
+            reedemEvent = new RedeemEvent(player, value, type);
+        }
         Bukkit.getServer().getPluginManager().callEvent(reedemEvent);
         if (reedemEvent.isCancelled()) {
             return;
         }
         if (type == RedeemEvent.ReedemType.BANKNOTE) {
-            noteRedeem(player, value);
+            redeemItem(player, value, itemAmount, itemType);
         } else if (type == RedeemEvent.ReedemType.EXPBOTTLE) {
-            expBottleRedeem(player, value);
+            redeemItem(player, value, itemAmount, itemType);
         }
-        sendMessages(player, value, itemType);
+
     }
 
-    private void expBottleRedeem(Player player, int exp) {
-        int itemAmount = player.getInventory().getItemInMainHand().getAmount();
-
+    private void redeemItem(Player player, int value, int itemAmount, String type) {
         if (player.isSneaking() && itemAmount > 1) {
-            expUtil.changeExp(player, exp * itemAmount);
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-        } else {
-            expUtil.changeExp(player, exp);
-            player.getInventory().getItemInMainHand().setAmount(itemAmount - 1);
-        }
-        if (main.getConfig().getBoolean("expbottle.sounds.redeem.enabled")) {
-            String sound = main.getConfig().getString("expbottle.sounds.redeem.sound");
-            player.playSound(player.getLocation(), Sound.valueOf(sound), 0.8f, 1);
-        }
-    }
-
-    private void noteRedeem(Player player, int money) {
-        int itemAmount = player.getInventory().getItemInMainHand().getAmount();
-
-        if (player.isSneaking() && itemAmount > 1) {
-            economyUtil.giveMoney(player, money * itemAmount);
-            player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-
-        } else {
-            economyUtil.giveMoney(player, money);
-            player.getInventory().getItemInMainHand().setAmount(itemAmount - 1);
-        }
-
-        if (main.getConfig().getBoolean("banknote.sounds.redeem.enabled")) {
-            String sound = main.getConfig().getString("banknote.sounds.redeem.sound");
-            player.playSound(player.getLocation(), Sound.valueOf(sound), 0.8f, 1);
-        }
-    }
-    private void sendMessages(Player player, double value, String type) {
-        if (main.getConfig().getBoolean("messages.less-intrusive")){
-            if (type.equalsIgnoreCase("banknote")){
-                messages.sendStringMessage(player,"&a+" + value + "$");
+            playSounds(player, type);
+            sendMessages(player, value * itemAmount, type);
+            if (type.equalsIgnoreCase("expbottle")) {
+                expUtil.changeExp(player, value * itemAmount);
+                return;
             }
-            messages.sendStringMessage(player,"&a+" + value + "EXP");
+            economyUtil.giveMoney(player, value * itemAmount);
+            return;
+        }
+        player.getInventory().getItemInMainHand().setAmount(itemAmount - 1);
+        playSounds(player, type);
+        sendMessages(player, value, type);
+        if (type.equalsIgnoreCase("expbottle")) {
+            expUtil.changeExp(player, value);
+            return;
+        }
+        economyUtil.giveMoney(player, value);
+    }
+
+    private void sendMessages(Player player, double value, String type) {
+        if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
+            System.out.println("test");
+            if (type.equalsIgnoreCase("banknote")) {
+                messages.sendStringMessage(player, "&a+" + value + "$");
+                return;
+            }
+            messages.sendStringMessage(player, "&a+" + value + "EXP");
             return;
         }
         messages.sendMessage(player, type + "-redeem", (message) -> message
                 .replace("%money%", String.valueOf(new DecimalFormat("#").format(value)))
                 .replace("%balance%", String.valueOf(economyUtil.getMoney(player)))
-                .replace("%exp%", String.valueOf(new DecimalFormat("#").format(value)) )
+                .replace("%exp%", String.valueOf(new DecimalFormat("#").format(value)))
                 .replace("%current_exp%", String.valueOf(expUtil.getExp(player))));
+    }
+
+    private void playSounds(Player player, String type) {
+        if (main.getConfig().getBoolean(type + ".sounds.redeem.enabled")) {
+            String sound = main.getConfig().getString(type + ".sounds.redeem.sound");
+            player.playSound(player.getLocation(), Sound.valueOf(sound), 0.8f, 1);
+        }
     }
 }

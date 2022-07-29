@@ -1,4 +1,4 @@
-package me.imlukas.withdrawer.manager;
+package me.imlukas.withdrawer.managers;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
@@ -89,7 +89,11 @@ public class NoteManager {
     }
 
     private ItemStack setItemProperties(Player player, double money) {
-        note = new ItemBuilder(Material.PAPER).name(textUtil.getColorConfig("banknote.name")).glowing(true).build();
+        Material itemMaterial = Material.getMaterial( main.getConfig().getString("banknote.item").toUpperCase());
+        if (itemMaterial == null) {
+            itemMaterial = Material.PAPER;
+        }
+        note = new ItemBuilder(itemMaterial).name(textUtil.getColorConfig("banknote.name")).glowing(true).build();
         // nbt setup
         NBTItem nbtItem = new NBTItem(note);
         nbtItem.setDouble("banknote-value", money);
@@ -110,6 +114,10 @@ public class NoteManager {
 
     private void sendMessages(Player player, double money, boolean sucess) {
         if (sucess) {
+            if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
+                messages.sendStringMessage(player, "&c-" + money + "$");
+                return;
+            }
             messages.sendMessage(player, "banknote-withdraw.success", (message) -> message
                     .replace("%money%", String.valueOf(new DecimalFormat("#").format(money)))
                     .replace("%balance%", String.valueOf(economyUtil.getMoney(player))));

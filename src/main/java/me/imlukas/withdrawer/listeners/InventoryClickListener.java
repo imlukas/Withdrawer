@@ -3,6 +3,7 @@ package me.imlukas.withdrawer.listeners;
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,9 +20,16 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getWhoClicked().getOpenInventory().getTopInventory().getType()
-                != InventoryType.WORKBENCH)
+        Player player = (Player) event.getWhoClicked();
+        if (main.getConfig().getBoolean("crafting")){
             return;
+        }
+        if (player.hasPermission("withdrawer.bypass.crafting")) {
+            return;
+        }
+        if (player.getOpenInventory().getTopInventory().getType() != InventoryType.WORKBENCH) {
+            return;
+        }
         ItemStack item = event.getCurrentItem();
         if (item == null) {
             return;

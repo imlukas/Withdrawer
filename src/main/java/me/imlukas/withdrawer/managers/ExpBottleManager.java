@@ -1,4 +1,4 @@
-package me.imlukas.withdrawer.manager;
+package me.imlukas.withdrawer.managers;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
@@ -71,7 +71,14 @@ public class ExpBottleManager {
     }
 
     private ItemStack setItemProperties(Player player, int exp) {
-        expItem = new ItemBuilder(Material.EXPERIENCE_BOTTLE).name(textUtil.getColorConfig("expbottle.name")).glowing(true).build();
+        Material itemMaterial = Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase());
+        if (itemMaterial == null) {
+            itemMaterial = Material.EXPERIENCE_BOTTLE;
+        }
+        expItem = new ItemBuilder(itemMaterial)
+                .name(textUtil.getColorConfig("expbottle.name"))
+                .glowing(true)
+                .build();
         // nbt setup
         NBTItem nbtItem = new NBTItem(expItem);
         nbtItem.setInteger("expbottle-value", exp);
@@ -93,6 +100,10 @@ public class ExpBottleManager {
 
     private void sendMessages(Player player, double exp, boolean sucess) {
         if (sucess) {
+            if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
+                messages.sendStringMessage(player, "&c-" + exp + "EXP");
+                return;
+            }
             messages.sendMessage(player, "expbottle-withdraw.success", (message) -> message
                     .replace("%exp%", String.valueOf(new DecimalFormat("#").format(exp)))
                     .replace("%current_exp%", String.valueOf(expUtil.getExp(player))));

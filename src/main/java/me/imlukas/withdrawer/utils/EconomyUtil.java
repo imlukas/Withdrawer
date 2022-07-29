@@ -21,6 +21,8 @@ public class EconomyUtil {
         this.df = new DecimalFormat("#");
     }
 
+    // TODO: Add PlayerPoints support + other requested economy plugins.
+
     public boolean hasMoney(Player player, double amount) {
         return !(getMoney(player) < amount);
     }

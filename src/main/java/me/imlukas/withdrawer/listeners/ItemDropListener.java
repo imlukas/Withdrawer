@@ -20,6 +20,9 @@ public class ItemDropListener implements Listener {
         if (main.getConfig().getBoolean("drop")) {
             return;
         }
+        if (event.getPlayer().hasPermission("withdrawer.bypass.drop")){
+            return;
+        }
 
         Material itemMaterial = event.getItemDrop().getItemStack().getType();
         NBTItem nbtitem = new NBTItem(event.getItemDrop().getItemStack());

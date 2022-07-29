@@ -6,13 +6,17 @@ banknote:
     - " "
     - "&e&l(Shift-Right-Click) &7to bulk-open"
 
+  min: 100 # minimum value of the banknote
+  max: 10000 # maximum value of the banknote
+  # List of all available materials.
+  # if the material is not right paper will be default.
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   item: PAPER
 
-  min: 100 # minimum value of the banknote
-  max: 10000 # maximum value of the banknote
 
-  # sounds that will be played when the note is used
+
+  # List of all the available sounds.
+
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
   sounds:
     withdraw:
@@ -29,13 +33,17 @@ expbottle:
     - " "
     - "&e&l(Shift-Right-Click) &7to bulk-open"
 
+
+  min: 100 # minimum value of the exp bottle
+  max: 10000 # maximum value of the exp bottle
+
+  # List of all available materials.
+  # if material is not right experience bottle will be default
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   item: EXPERIENCE_BOTTLE
 
-  min: 100 # minimum value of the banknote
-  max: 10000 # maximum value of the exp
 
-  # sounds that will be played when the bottle is used
+  # List of all the available sounds.
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
   sounds:
     withdraw:

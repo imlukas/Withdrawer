@@ -7,7 +7,7 @@ Features:
   - Most of the messages are configurable, such as plugin prefix.
   - The items are all configurable.
 
-Commands:
+### Commands:
  - wd or withdrawer - shows the plugin version / author.
    - wd (help) - shows the commands for the plugin.
  - wdmoney (money) - gives you a bank note with the specified value.
@@ -15,14 +15,14 @@ Commands:
  - wdxp (xp) - gives you a xp item with the specified value.
    - wdxp (xp) [amount] - gives you x(amount) of xp item(s) with the specified value.
 
-Permissions:
+### Permissions:
   - withdrawer.redeem.expbottle
     - withdrawer.redeem.expbottle.bulk 
   - withdrawer.withdraw.expbottle
   - withdrawer.redeem.banknote
     - withdrawer.redeem.banknote.bulk
   - withdrawer.withdraw.banknote
-  # Bypass Permissions
+### Bypass Permissions
   - withdrawer.bypass.minmax.banknote
   - withdrawer.bypass.minmax.expbottle	
   - withdrawer.bypass.crafting

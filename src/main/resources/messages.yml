@@ -24,10 +24,7 @@ messages:
   expbottle-withdraw:
     success:
       - '%prefix% &7You withdrew &a%exp%EXP&7!'
-      - '&7Current EXP: &a%current_exp%EXP'
     error:
       - '%prefix% &7You do not have enough EXP'
-      - '&7Current EXP: &a%current_exp%EXP'
   expbottle-redeem:
-    - '%prefix% &7You withdrew &a%exp%EXP&7!'
-    - '&7Current EXP: &a%current_exp%EXP'
+    - '%prefix% &7You redeemed &a%exp%EXP&7!'

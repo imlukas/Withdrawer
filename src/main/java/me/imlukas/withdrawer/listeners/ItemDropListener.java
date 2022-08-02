@@ -24,12 +24,11 @@ public class ItemDropListener implements Listener {
             return;
         }
 
-        Material itemMaterial = event.getItemDrop().getItemStack().getType();
         NBTItem nbtitem = new NBTItem(event.getItemDrop().getItemStack());
 
-        if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("banknote.item").toUpperCase())) && nbtitem.hasKey("banknote-value")) {
+        if (nbtitem.hasKey("banknote-value")) {
             event.setCancelled(true);
-        } else if (itemMaterial.equals(Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase())) && nbtitem.hasKey("expbottle-value")) {
+        } else if (nbtitem.hasKey("expbottle-value")) {
             event.setCancelled(true);
 
         }

@@ -45,16 +45,13 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        Material itemMaterial = event.getItem().getType();
         NBTItem nbtItem = new NBTItem(event.getItem());
 
-        Material bankNoteMaterial = Material.getMaterial(main.getConfig().getString("banknote.item").toUpperCase());
-        Material expBottleMaterial = Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase());
 
-        if (itemMaterial.equals(bankNoteMaterial) && nbtItem.hasKey("banknote-value")) {
+        if (nbtItem.hasKey("banknote-value")) {
             event.setCancelled(true);
             setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.BANKNOTE);
-        } else if (itemMaterial.equals(expBottleMaterial) && nbtItem.hasKey("expbottle-value")) {
+        } else if (nbtItem.hasKey("expbottle-value")) {
             event.setCancelled(true);
             setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.EXPBOTTLE);
 
@@ -127,8 +124,7 @@ public class PlayerInteractListener implements Listener {
         messages.sendMessage(player, type + "-redeem", (message) -> message
                 .replace("%money%", String.valueOf(new DecimalFormat("#").format(value)))
                 .replace("%balance%", String.valueOf(economyUtil.getMoney(player)))
-                .replace("%exp%", String.valueOf(new DecimalFormat("#").format(value)))
-                .replace("%current_exp%", String.valueOf(expUtil.getExp(player))));
+                .replace("%exp%", String.valueOf(new DecimalFormat("#").format(value))));
     }
 
     private void playSounds(Player player, String type) {

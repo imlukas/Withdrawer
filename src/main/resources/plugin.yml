@@ -16,3 +16,8 @@ commands:
     description: "Withdraw xp"
     aliases:
       - wdxp
+  withdrawer:
+    usage: </command>
+    description: "main plugin command"
+    aliases:
+      - wd

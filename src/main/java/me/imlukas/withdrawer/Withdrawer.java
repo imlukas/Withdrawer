@@ -13,6 +13,8 @@ import me.imlukas.withdrawer.utils.ExpUtil;
 import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import net.milkbowl.vault.economy.Economy;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,17 +30,23 @@ public final class Withdrawer extends JavaPlugin {
     private ExpUtil expUtil;
     private NoteManager noteManager;
     private ExpBottleManager expBottleManager;
+    private PlayerPointsAPI playerPointsAPI;
 
     private Logger log;
 
     @Override
     public void onEnable() {
-        if (!setupEconomy()) {
-            log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+        updateConfig();
+        if (Bukkit.getPluginManager().isPluginEnabled("PlayerPoints")) {
+            playerPointsAPI = PlayerPoints.getInstance().getAPI();
+            System.out.println("[Withdrawer] PlayerPoints dependency found!");
+        }
+        if (!setupEconomy() && this.getConfig().getString("economy-plugin").equalsIgnoreCase("vault")) {
+            System.out.println("[Withdrawer] Disabled due to no Vault dependency found!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        System.out.println("[Withdrawer] Vault dependency found!");
+
         expUtil = new ExpUtil();
         messages = new MessagesFile(this);
         textUtil = new TextUtil(this);
@@ -46,15 +54,11 @@ public final class Withdrawer extends JavaPlugin {
         noteManager = new NoteManager(this);
         expBottleManager = new ExpBottleManager(this);
 
-
         System.out.println("[Withdrawer] Registered Classes!");
-
-
         registerCommands();
         System.out.println("[Withdrawer] Rsegistered Ccommands!");
         registerListeners();
         System.out.println("[Withdrawer] Registered Listeners!");
-        updateConfig();
 
 
         // Plugin startup logic
@@ -66,9 +70,10 @@ public final class Withdrawer extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    private void updateConfig(){
+    private void updateConfig() {
         saveDefaultConfig();
     }
+
     private void registerCommands() {
         getCommand("withdrawmoney").setExecutor(new BankNoteWithdrawCommand(this));
         getCommand("withdrawxp").setExecutor(new ExpBottleCommand(this));

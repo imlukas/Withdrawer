@@ -1,3 +1,5 @@
+economy-plugin: vault # Default is vault, Supported: vault, playerpoints. Can choose more than one.
+
 banknote:
   name: "&bBank Note &e(Right-Click)"
   lore:

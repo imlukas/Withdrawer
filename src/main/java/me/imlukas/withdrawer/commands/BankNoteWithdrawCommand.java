@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
 
     private int amount;
     private double money;
+    private String economySytem;
 
     public BankNoteWithdrawCommand(Withdrawer main) {
         this.main = main;
@@ -39,9 +41,10 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args.length >= 3) {
-            messages.sendStringMessage(sender, "Usage: /withdrawmoney <money> <amount>");
+            messages.sendStringMessage(sender, "Usage: /withdrawmoney <amount> (quantity)");
             return true;
         }
+
         if (!(player.hasPermission("withdrawer.withdraw.banknote"))) {
             messages.sendMessage(sender, "global.no-permission");
             return true;
@@ -76,17 +79,30 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            noteManager.give(player, money, amount); // gives player x amount of notes
+            noteManager.give(player, money, amount, ""); // gives player x amount of notes
             return true;
         }
 
-        noteManager.give(player, money); // gives player 1 note.
+        noteManager.give(player, money, ""); // gives player 1 note.
         return true;
     }
 
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        List<String> completions = new ArrayList<>();
+        if (args.length == 1) {
+            completions.add("10");
+            completions.add("100");
+            completions.add("1000");
+            completions.add("" + this.main.getConfig().getInt("banknote.max"));
+            return completions;
+        }
+        if (args.length == 2) {
+            completions.add("10");
+            completions.add("100");
+            return completions;
+        }
         return Collections.emptyList();
     }
 }

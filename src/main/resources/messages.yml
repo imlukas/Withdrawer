@@ -12,14 +12,14 @@ messages:
     player-not-found: 'Player(s) not found'
   banknote-withdraw:
     success:
-      - '%prefix% &7You withdrew &a%money%$&7 from your account'
-      - '&7Current balance: &a%balance%$'
+      - '%prefix% &7You withdrew &a%currency%%currency_sign%&7 from your account'
+      - '&7Current balance: &a%balance%%currency_sign%'
     error:
       - '%prefix% &7You do not have enough money'
       - '&7Current balance: &a%balance%$'
   banknote-redeem:
-    - '%prefix% &7You redeemed &a%money%$&7!'
-    - '&7Current balance: &a%balance%$'
+    - '%prefix% &7You redeemed &a%currency%%currency_sign%&7!'
+    - '&7Current balance: &a%balance%%currency_sign%'
 
   expbottle-withdraw:
     success:
@@ -29,5 +29,5 @@ messages:
       - '%prefix% &7You do not have enough EXP'
       - '&7Current EXP: &a%current_exp%EXP'
   expbottle-redeem:
-    - '%prefix% &7You withdrew &a%exp%EXP&7!'
+    - '%prefix% &7You redeemed &a%exp%EXP&7!'
     - '&7Current EXP: &a%current_exp%EXP'

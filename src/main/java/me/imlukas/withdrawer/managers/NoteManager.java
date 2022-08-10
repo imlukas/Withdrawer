@@ -26,6 +26,7 @@ public class NoteManager {
     private final EconomyUtil economyUtil;
     private final Economy econ;
     private final TextUtil textUtil;
+    private final String economySystem;
 
     private ItemStack note;
     private ItemMeta meta;
@@ -38,10 +39,11 @@ public class NoteManager {
         this.economyUtil = new EconomyUtil(main);
         this.econ = main.getEconomy();
         this.textUtil = main.getTextUtil();
+        this.economySystem = main.getConfig().getString("economy-plugin");
     }
 
 
-    public void give(Player player, double money) {
+    public void give(Player player, double money, String economySytem) {
         if (callEvent(player, money)) {
             return;
         }
@@ -58,7 +60,7 @@ public class NoteManager {
 
     }
 
-    public void give(Player player, double money, int amount) {
+    public void give(Player player, double money, int amount, String economySytem) {
         if (callEvent(player, money, amount)) {
             return;
         }
@@ -119,8 +121,9 @@ public class NoteManager {
                 return;
             }
             messages.sendMessage(player, "banknote-withdraw.success", (message) -> message
-                    .replace("%money%", String.valueOf(new DecimalFormat("#").format(money)))
-                    .replace("%balance%", String.valueOf(economyUtil.getMoney(player))));
+                    .replace("%currency%", String.valueOf(new DecimalFormat("#").format(money)))
+                    .replace("%balance%", String.valueOf(economyUtil.getMoney(player)))
+                    .replace("%currency_sign%", economyUtil.getCurrencySign()));
             return;
         }
         messages.sendMessage(player, "banknote-withdraw.error", (message) -> message

@@ -60,6 +60,7 @@ public class PlayerInteractListener implements Listener {
 
         }
     }
+
     private void setRedeemProperties(Player player, NBTItem nbtItem, RedeemEvent.ReedemType type) {
         if (!(player.hasPermission("withdrawer.reedem." + type.toString().toLowerCase()))) {
             messages.sendMessage(player, "global.no-permission");
@@ -71,13 +72,13 @@ public class PlayerInteractListener implements Listener {
 
         int itemAmount = player.getInventory().getItemInMainHand().getAmount();
 
-        if (player.isSneaking() && itemAmount > 1){
+        if (player.isSneaking() && itemAmount > 1) {
             if (!(player.hasPermission("withdrawer.reedem." + type + ".bulk"))) {
                 messages.sendStringMessage(player, "&c[ERROR] &7ou don't have permission to bulk open this item.");
                 return;
             }
             reedemEvent = new RedeemEvent(player, value * itemAmount, type, itemAmount);
-        } else{
+        } else {
             reedemEvent = new RedeemEvent(player, value, type);
         }
         Bukkit.getServer().getPluginManager().callEvent(reedemEvent);
@@ -96,39 +97,41 @@ public class PlayerInteractListener implements Listener {
         if (player.isSneaking() && itemAmount > 1) {
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
             playSounds(player, type);
-            sendMessages(player, value * itemAmount, type);
             if (type.equalsIgnoreCase("expbottle")) {
                 expUtil.changeExp(player, value * itemAmount);
-                return;
+            } else {
+                economyUtil.giveMoney(player, value * itemAmount);
             }
-            economyUtil.giveMoney(player, value * itemAmount);
+            sendMessages(player, value * itemAmount, type);
             return;
         }
         player.getInventory().getItemInMainHand().setAmount(itemAmount - 1);
         playSounds(player, type);
-        sendMessages(player, value, type);
         if (type.equalsIgnoreCase("expbottle")) {
             expUtil.changeExp(player, value);
-            return;
+        } else {
+            economyUtil.giveMoney(player, value);
         }
-        economyUtil.giveMoney(player, value);
+
+        sendMessages(player, value, type);
     }
 
     private void sendMessages(Player player, double value, String type) {
         if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
-            System.out.println("test");
             if (type.equalsIgnoreCase("banknote")) {
-                messages.sendStringMessage(player, "&a+" + value + "$");
+                messages.sendStringMessage(player, "&a+" + value + economyUtil.getCurrencySign());
                 return;
             }
             messages.sendStringMessage(player, "&a+" + value + "EXP");
             return;
         }
         messages.sendMessage(player, type + "-redeem", (message) -> message
-                .replace("%money%", String.valueOf(new DecimalFormat("#").format(value)))
+                .replace("%currency%", String.valueOf(new DecimalFormat("#").format(value)))
                 .replace("%balance%", String.valueOf(economyUtil.getMoney(player)))
                 .replace("%exp%", String.valueOf(new DecimalFormat("#").format(value)))
-                .replace("%current_exp%", String.valueOf(expUtil.getExp(player))));
+                .replace("%current_exp%", String.valueOf(expUtil.getExp(player)))
+                .replace("%currency_sign%", economyUtil.getCurrencySign()));
+
     }
 
     private void playSounds(Player player, String type) {

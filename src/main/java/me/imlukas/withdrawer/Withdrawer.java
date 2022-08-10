@@ -3,7 +3,6 @@ package me.imlukas.withdrawer;
 import lombok.Getter;
 import me.imlukas.withdrawer.commands.BankNoteWithdrawCommand;
 import me.imlukas.withdrawer.commands.ExpBottleCommand;
-import me.imlukas.withdrawer.commands.WithdrawerCommand;
 import me.imlukas.withdrawer.listeners.InventoryClickListener;
 import me.imlukas.withdrawer.listeners.ItemDropListener;
 import me.imlukas.withdrawer.listeners.PlayerInteractListener;
@@ -78,7 +77,6 @@ public final class Withdrawer extends JavaPlugin {
     private void registerCommands() {
         getCommand("withdrawmoney").setExecutor(new BankNoteWithdrawCommand(this));
         getCommand("withdrawxp").setExecutor(new ExpBottleCommand(this));
-        getCommand("withdrawer").setExecutor(new WithdrawerCommand(this));
     }
 
     private void registerListeners() {

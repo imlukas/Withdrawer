@@ -10,7 +10,6 @@ banknote:
 
   min: 100 # minimum value of the banknote
   max: 10000 # maximum value of the banknote
-
   # List of all available materials.
   # if the material is not right paper will be default.
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
@@ -19,6 +18,7 @@ banknote:
 
 
   # List of all the available sounds.
+
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
   sounds:
     withdraw:

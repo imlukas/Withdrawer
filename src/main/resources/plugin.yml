@@ -1,7 +1,8 @@
 name: Withdrawer
 version: '${version}'
 main: me.imlukas.withdrawer.Withdrawer
-api-version: 1.18
+api-version: 1.19
+depend: [ NBTAPI ]
 softdepend: [ Essentials, PlayerPoints, Vault ]
 authors: [ imlukas ]
 description: Withdraw money and exp trough items!

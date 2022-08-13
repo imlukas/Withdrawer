@@ -37,16 +37,7 @@ public final class Withdrawer extends JavaPlugin {
     @Override
     public void onEnable() {
         updateConfig();
-        if (Bukkit.getPluginManager().isPluginEnabled("PlayerPoints")) {
-            playerPointsAPI = PlayerPoints.getInstance().getAPI();
-            System.out.println("[Withdrawer] PlayerPoints dependency found!");
-        }
-        if (!setupEconomy() && this.getConfig().getString("economy-plugin").equalsIgnoreCase("vault")) {
-            System.out.println("[Withdrawer] Disabled due to no Vault dependency found!");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
+        setupEconomies();
         expUtil = new ExpUtil();
         messages = new MessagesFile(this);
         textUtil = new TextUtil(this);
@@ -56,7 +47,7 @@ public final class Withdrawer extends JavaPlugin {
 
         System.out.println("[Withdrawer] Registered Classes!");
         registerCommands();
-        System.out.println("[Withdrawer] Rsegistered Ccommands!");
+        System.out.println("[Withdrawer] Rsegistered Commands!");
         registerListeners();
         System.out.println("[Withdrawer] Registered Listeners!");
 
@@ -71,6 +62,7 @@ public final class Withdrawer extends JavaPlugin {
     }
 
     private void updateConfig() {
+        // TODO: make a proper config updater.
         saveDefaultConfig();
     }
 
@@ -83,7 +75,24 @@ public final class Withdrawer extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new ItemDropListener(this), this);
+    }
 
+    private void setupEconomies() {
+
+        String economy = this.getConfig().getString("economy-plugin");
+        if (economy.equalsIgnoreCase("playerpoints")) {
+            if (Bukkit.getPluginManager().getPlugin("PlayerPoints") != null) {
+                playerPointsAPI = PlayerPoints.getInstance().getAPI();
+                System.out.println("[Withdrawer] Found PlayerPoints!");
+            } else {
+                System.out.println("[Withdrawer] PlayerPoints not found! DISABLING PLUGIN!");
+                Bukkit.getPluginManager().disablePlugin(this);
+                return;
+            }
+        } else if (!setupEconomy() && economy.equalsIgnoreCase("vault")) {
+            System.out.println("[Withdrawer] Vault dependency not found! DISABLING PLUGIN!");
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
     }
 
     // Vault Integration
@@ -91,6 +100,11 @@ public final class Withdrawer extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
+        if (getServer().getPluginManager().getPlugin("Essentials") == null) {
+            System.out.println("[Withdrawer] Please install Essentials in order to use Vault!");
+            return false;
+        }
+        System.out.println("[Withdrawer] Found Vault and Essentials!");
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
             return false;

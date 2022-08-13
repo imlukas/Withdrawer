@@ -32,17 +32,11 @@ public class WithdrawEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public WithdrawEvent(Player player, double amount, WithdrawType type) {
-        this.player = player;
-        this.amount = amount;
-        this.type = type;
-
-    }
 
     public WithdrawEvent(Player player, double amount, int quantity, WithdrawType type) {
         this.player = player;
         this.amount = amount;
-        this.quantity = quantity;
+        this.quantity = Math.max(quantity, 1);
         this.type = type;
     }
 

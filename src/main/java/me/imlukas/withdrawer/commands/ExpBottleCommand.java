@@ -35,12 +35,12 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             messages.sendMessage(sender, "global.not-player");
             return true;
         }
-        if (args.length >= 3) {
-            messages.sendStringMessage(sender, "Usage: /withdrawxp <exp> (quantity)");
-            return true;
-        }
         if (!(player.hasPermission("withdrawer.withdraw.expbottle"))) {
             messages.sendMessage(sender, "global.no-permission");
+            return true;
+        }
+        if (args.length >= 3) {
+            messages.sendStringMessage(sender, "Usage: /withdrawxp <exp> (quantity)");
             return true;
         }
 
@@ -79,7 +79,7 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             expBottleManager.give(player, expAmount, quantity); // gives player x amount of expbottles
             return true;
         }
-        expBottleManager.give(player, expAmount); // gives player 1 exp bottle
+        expBottleManager.give(player, expAmount, 1); // gives player 1 exp bottle
         return true;
     }
 

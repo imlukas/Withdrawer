@@ -40,13 +40,12 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
             messages.sendMessage(sender, "global.not-player");
             return true;
         }
-        if (args.length >= 3) {
-            messages.sendStringMessage(sender, "Usage: /withdrawmoney <amount> (quantity)");
-            return true;
-        }
-
         if (!(player.hasPermission("withdrawer.withdraw.banknote"))) {
             messages.sendMessage(sender, "global.no-permission");
+            return true;
+        }
+        if (args.length >= 3) {
+            messages.sendStringMessage(sender, "Usage: /withdrawmoney <amount> (quantity)");
             return true;
         }
 
@@ -78,12 +77,10 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
                 messages.sendStringMessage(sender, "Usage: /withdrawmoney <money> <amount>");
                 return true;
             }
-
-            noteManager.give(player, money, amount, ""); // gives player x amount of notes
-            return true;
+        } else {
+            amount = 1;
         }
-
-        noteManager.give(player, money, ""); // gives player 1 note.
+        noteManager.give(player, money, amount); // gives player x amount of notes.
         return true;
     }
 

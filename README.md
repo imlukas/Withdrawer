@@ -1,4 +1,4 @@
-# [Withdrawer](https://pages.github.com/).
+# [Withdrawer](https://www.spigotmc.org/resources/withdrawer.103986/).
 Withdrawer is a way for players to withdraw their money or exp onto physical items, so they can use them, trade them, sell them or store them as they wish.
 
 Features:

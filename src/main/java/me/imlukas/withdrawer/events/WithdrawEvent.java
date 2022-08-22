@@ -10,7 +10,8 @@ import org.bukkit.event.HandlerList;
 public class WithdrawEvent extends Event implements Cancellable {
     public enum WithdrawType {
         BANKNOTE,
-        EXPBOTTLE
+        EXPBOTTLE,
+        HEALTH
     }
 
     private boolean cancelled = false;

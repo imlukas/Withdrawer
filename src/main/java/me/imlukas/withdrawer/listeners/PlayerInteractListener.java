@@ -24,7 +24,6 @@ public class PlayerInteractListener implements Listener {
     private final EconomyUtil economyUtil;
     private final ExpUtil expUtil;
     private final MessagesFile messages;
-    private RedeemEvent reedemEvent;
 
     public PlayerInteractListener(Withdrawer main) {
         this.main = main;
@@ -50,6 +49,7 @@ public class PlayerInteractListener implements Listener {
 
         Material bankNoteMaterial = Material.getMaterial(main.getConfig().getString("banknote.item").toUpperCase());
         Material expBottleMaterial = Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase());
+        Material healthItemMaterial = Material.getMaterial(main.getConfig().getString("health.item").toUpperCase());
 
         if (itemMaterial.equals(bankNoteMaterial) && nbtItem.hasKey("banknote-value")) {
             event.setCancelled(true);
@@ -57,7 +57,9 @@ public class PlayerInteractListener implements Listener {
         } else if (itemMaterial.equals(expBottleMaterial) && nbtItem.hasKey("expbottle-value")) {
             event.setCancelled(true);
             setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.EXPBOTTLE);
-
+        } else if (itemMaterial.equals(healthItemMaterial) && nbtItem.hasKey("health-value")) {
+            event.setCancelled(true);
+            setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.HEALTH);
         }
     }
 
@@ -72,6 +74,7 @@ public class PlayerInteractListener implements Listener {
 
         int itemAmount = player.getInventory().getItemInMainHand().getAmount();
 
+        RedeemEvent reedemEvent;
         if (player.isSneaking() && itemAmount > 1) {
             if (!(player.hasPermission("withdrawer.reedem." + type + ".bulk"))) {
                 messages.sendStringMessage(player, "&c[ERROR] &7ou don't have permission to bulk open this item.");
@@ -99,7 +102,7 @@ public class PlayerInteractListener implements Listener {
             playSounds(player, type);
             if (type.equalsIgnoreCase("expbottle")) {
                 expUtil.changeExp(player, value * itemAmount);
-            } else {
+            } else if (type.equalsIgnoreCase("banknote")) {
                 economyUtil.giveMoney(player, value * itemAmount);
             }
             sendMessages(player, value * itemAmount, type);
@@ -109,8 +112,10 @@ public class PlayerInteractListener implements Listener {
         playSounds(player, type);
         if (type.equalsIgnoreCase("expbottle")) {
             expUtil.changeExp(player, value);
-        } else {
+        } else if (type.equalsIgnoreCase("banknote")) {
             economyUtil.giveMoney(player, value);
+        } else {
+            // todo
         }
 
         sendMessages(player, value, type);

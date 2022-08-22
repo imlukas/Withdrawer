@@ -6,11 +6,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class TextUtil {
 
-    private final JavaPlugin main;
     private final FileConfiguration config;
 
     public TextUtil(JavaPlugin main) {
-        this.main = main;
         this.config = main.getConfig();
 
     }

@@ -2,7 +2,6 @@ name: Withdrawer
 version: '${version}'
 main: me.imlukas.withdrawer.Withdrawer
 api-version: 1.19
-depend: [ NBTAPI ]
 softdepend: [ Essentials, PlayerPoints, Vault ]
 authors: [ imlukas ]
 description: Withdraw money and exp trough items!
@@ -17,3 +16,8 @@ commands:
     description: "Withdraw xp"
     aliases:
       - wdxp
+  withdrawhp:
+    usage: </command>
+    description: "Withdraw hp"
+    aliases:
+      - wdhp

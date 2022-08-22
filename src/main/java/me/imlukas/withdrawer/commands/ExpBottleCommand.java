@@ -1,7 +1,7 @@
 package me.imlukas.withdrawer.commands;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.managers.ExpBottleManager;
+import me.imlukas.withdrawer.managers.ExpBottle;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,7 +17,7 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
 
     private final Withdrawer main;
     private final MessagesFile messages;
-    private final ExpBottleManager expBottleManager;
+    private final ExpBottle expBottleManager;
 
     private int expAmount;
     private int quantity;
@@ -49,7 +49,7 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be positive and bigger than zero");
             return true;
         }
-        if(!(player.hasPermission("withdrawer.bypass.minmax.expbottle"))){
+        if (!(player.hasPermission("withdrawer.bypass.minmax.expbottle"))) {
             if (expAmount < main.getConfig().getInt("expbottle.min")) {
                 messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be bigger than " + main.getConfig().getInt("expbottle.min"));
                 return true;

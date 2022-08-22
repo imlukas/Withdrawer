@@ -55,6 +55,33 @@ expbottle:
       sound: ENTITY_PLAYER_LEVELUP
       enabled: true
 
+
+health:
+  name: "&bHP Jar &e&l(Right-Click)"
+  lore:
+    - "&b&lHP Stored: &7%hp%EXP"
+    - " "
+    - "&e&l(Shift-Right-Click) &7to bulk-open"
+
+
+  min: 1 # minimum value of the hp
+
+  # List of all available materials.
+  # if material is not right experience bottle will be default
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+  item: REDSTONE
+
+
+  # List of all the available sounds.
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+  sounds:
+    withdraw:
+      sound: BLOCK_NOTE_BLOCK_PLING
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      enabled: true
+
 crafting: false # can items be used on crafting table
 drop: false # can items be dropped
 villager-trade: false # can items be used on villager trades

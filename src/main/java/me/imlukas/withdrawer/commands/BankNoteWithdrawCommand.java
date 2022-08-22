@@ -1,7 +1,7 @@
 package me.imlukas.withdrawer.commands;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.managers.NoteManager;
+import me.imlukas.withdrawer.managers.Note;
 import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import org.bukkit.command.Command;
@@ -18,19 +18,16 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
 
     private final Withdrawer main;
     private final MessagesFile messages;
-    private final EconomyUtil economyUtil;
 
-    private final NoteManager noteManager;
+    private final Note noteManager;
 
     private int amount;
     private double money;
-    private String economySytem;
 
     public BankNoteWithdrawCommand(Withdrawer main) {
         this.main = main;
         this.messages = main.getMessages();
-        this.noteManager = new NoteManager(main);
-        this.economyUtil = new EconomyUtil(main);
+        this.noteManager = new Note(main);
     }
 
     @Override

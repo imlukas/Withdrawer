@@ -3,11 +3,13 @@ package me.imlukas.withdrawer;
 import lombok.Getter;
 import me.imlukas.withdrawer.commands.BankNoteWithdrawCommand;
 import me.imlukas.withdrawer.commands.ExpBottleCommand;
+import me.imlukas.withdrawer.commands.HealthWithdrawCommand;
 import me.imlukas.withdrawer.listeners.InventoryClickListener;
 import me.imlukas.withdrawer.listeners.ItemDropListener;
 import me.imlukas.withdrawer.listeners.PlayerInteractListener;
-import me.imlukas.withdrawer.managers.ExpBottleManager;
-import me.imlukas.withdrawer.managers.NoteManager;
+import me.imlukas.withdrawer.managers.ExpBottle;
+import me.imlukas.withdrawer.managers.HealthItem;
+import me.imlukas.withdrawer.managers.Note;
 import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.ExpUtil;
 import me.imlukas.withdrawer.utils.TextUtil;
@@ -28,8 +30,9 @@ public final class Withdrawer extends JavaPlugin {
     private TextUtil textUtil;
     private EconomyUtil economyUtil;
     private ExpUtil expUtil;
-    private NoteManager noteManager;
-    private ExpBottleManager expBottleManager;
+    private Note noteManager;
+    private ExpBottle expBottleManager;
+    private HealthItem healthItemManager;
     private PlayerPointsAPI playerPointsAPI;
 
     private Logger log;
@@ -42,8 +45,9 @@ public final class Withdrawer extends JavaPlugin {
         messages = new MessagesFile(this);
         textUtil = new TextUtil(this);
         economyUtil = new EconomyUtil(this);
-        noteManager = new NoteManager(this);
-        expBottleManager = new ExpBottleManager(this);
+        noteManager = new Note(this);
+        expBottleManager = new ExpBottle(this);
+        healthItemManager = new HealthItem(this);
 
         System.out.println("[Withdrawer] Registered Classes!");
         registerCommands();
@@ -69,6 +73,7 @@ public final class Withdrawer extends JavaPlugin {
     private void registerCommands() {
         getCommand("withdrawmoney").setExecutor(new BankNoteWithdrawCommand(this));
         getCommand("withdrawxp").setExecutor(new ExpBottleCommand(this));
+        getCommand("withdrawhp").setExecutor(new HealthWithdrawCommand(this));
     }
 
     private void registerListeners() {
@@ -87,7 +92,6 @@ public final class Withdrawer extends JavaPlugin {
             } else {
                 System.out.println("[Withdrawer] PlayerPoints not found! DISABLING PLUGIN!");
                 Bukkit.getPluginManager().disablePlugin(this);
-                return;
             }
         } else if (!setupEconomy() && economy.equalsIgnoreCase("vault")) {
             System.out.println("[Withdrawer] Vault dependency not found! DISABLING PLUGIN!");

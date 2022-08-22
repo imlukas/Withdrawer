@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Managers {
+public abstract class Manager {
 
     protected final Withdrawer main;
     protected final MessagesFile messages;
@@ -27,10 +27,8 @@ public abstract class Managers {
     protected final EconomyUtil economyUtil;
     protected final TextUtil textUtil;
     private final String type;
-    private ItemStack finalItem;
-    private ItemMeta meta;
 
-    public Managers(Withdrawer main, String type) {
+    public Manager(Withdrawer main, String type) {
         this.main = main;
         this.messages = main.getMessages();
         this.expUtil = main.getExpUtil();
@@ -50,7 +48,7 @@ public abstract class Managers {
         if (itemMaterial == null) {
             itemMaterial = Material.BARRIER;
         }
-        finalItem = new ItemBuilder(itemMaterial)
+        ItemStack finalItem = new ItemBuilder(itemMaterial)
                 .name(textUtil.getColorConfig(type + ".name"))
                 .glowing(true)
                 .build();
@@ -59,7 +57,7 @@ public abstract class Managers {
         nbtItem.setInteger(type + "-value", exp);
         nbtItem.applyNBT(finalItem);
 
-        meta = finalItem.getItemMeta();
+        ItemMeta meta = finalItem.getItemMeta();
         // item setup
         List<String> lore = new ArrayList<>();
         for (String str : main.getConfig().getStringList(type + ".lore")) {

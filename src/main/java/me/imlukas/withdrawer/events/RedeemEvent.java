@@ -10,6 +10,7 @@ import org.bukkit.event.HandlerList;
 public class RedeemEvent extends Event implements Cancellable {
     public enum ReedemType {
         BANKNOTE,
+        HEALTH,
         EXPBOTTLE
     }
 

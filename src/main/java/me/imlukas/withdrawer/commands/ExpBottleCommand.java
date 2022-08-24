@@ -44,7 +44,12 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        expAmount = Integer.parseInt(args[0]);
+        try {
+            expAmount = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            messages.sendStringMessage(sender, "&c&l[Error]&7 Exp must valid and an integer number.");
+            return true;
+        }
         if (expAmount <= 0) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be positive and bigger than zero");
             return true;

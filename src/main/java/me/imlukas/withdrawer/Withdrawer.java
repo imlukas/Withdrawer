@@ -12,6 +12,7 @@ import me.imlukas.withdrawer.managers.HealthItem;
 import me.imlukas.withdrawer.managers.Note;
 import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.ExpUtil;
+import me.imlukas.withdrawer.utils.HealthUtil;
 import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import net.milkbowl.vault.economy.Economy;
@@ -30,12 +31,11 @@ public final class Withdrawer extends JavaPlugin {
     private TextUtil textUtil;
     private EconomyUtil economyUtil;
     private ExpUtil expUtil;
+    private HealthUtil healthUtil;
     private Note noteManager;
     private ExpBottle expBottleManager;
     private HealthItem healthItemManager;
     private PlayerPointsAPI playerPointsAPI;
-
-    private Logger log;
 
     @Override
     public void onEnable() {
@@ -45,6 +45,7 @@ public final class Withdrawer extends JavaPlugin {
         messages = new MessagesFile(this);
         textUtil = new TextUtil(this);
         economyUtil = new EconomyUtil(this);
+        healthUtil = new HealthUtil();
         noteManager = new Note(this);
         expBottleManager = new ExpBottle(this);
         healthItemManager = new HealthItem(this);
@@ -94,7 +95,7 @@ public final class Withdrawer extends JavaPlugin {
                 Bukkit.getPluginManager().disablePlugin(this);
             }
         } else if (!setupEconomy() && economy.equalsIgnoreCase("vault")) {
-            System.out.println("[Withdrawer] Vault dependency not found! DISABLING PLUGIN!");
+            System.out.println("[Withdrawer] Vault or essentials dependency not found! DISABLING PLUGIN!");
             Bukkit.getPluginManager().disablePlugin(this);
         }
     }

@@ -2,6 +2,7 @@ package me.imlukas.withdrawer.commands;
 
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.managers.HealthItem;
+import me.imlukas.withdrawer.utils.HealthUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -12,9 +13,11 @@ import org.bukkit.entity.Player;
 public class HealthWithdrawCommand implements CommandExecutor {
     private final MessagesFile messages;
     private final HealthItem healthItemManager;
+    private final HealthUtil healthUtil;
 
     public HealthWithdrawCommand(Withdrawer main) {
         this.healthItemManager = main.getHealthItemManager();
+        this.healthUtil = main.getHealthUtil();
         this.messages = main.getMessages();
     }
 
@@ -33,18 +36,15 @@ public class HealthWithdrawCommand implements CommandExecutor {
             messages.sendStringMessage(sender, "Usage: /withdrawmoney <amount>");
             return true;
         }
-        double amount;
+        int amount;
         try {
-            amount = Double.parseDouble(args[0]);
+            amount = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            messages.sendStringMessage(sender, "&c&l[Error]&7 Amount must be a number");
+            messages.sendStringMessage(sender, "&c&l[Error]&7 Amount must be an integer number and be bigger than 0.5");
             return true;
         }
-        double newHealth = amount;
-        // player.setHealthScale(newHealth);
-        double oldHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(oldHealth - newHealth);
-        healthItemManager.give(player, newHealth);
-        return false;
+
+        healthItemManager.give(player, amount);
+        return true;
     }
 }

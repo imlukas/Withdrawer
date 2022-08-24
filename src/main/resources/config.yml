@@ -3,7 +3,7 @@ economy-plugin: vault # Default is vault, Supported: vault, playerpoints. Can ch
 banknote:
   name: "&bBank Note &e(Right-Click)"
   lore:
-    - "&b&lValue: &7$%value%"
+    - "&b&lValue: &7%value%$"
     - "&b&lSigner: &7%owner%"
     - " "
     - "&e&l(Shift-Right-Click) &7to bulk-open"
@@ -11,7 +11,8 @@ banknote:
   min: 100 # minimum value of the banknote
   max: 10000 # maximum value of the banknote
   # List of all available materials.
-  # if the material is not right paper will be default.
+  # if material is a BARRIER it means something is wrong.
+  # do not use consumables, such as potions and food.
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   item: PAPER
 
@@ -31,7 +32,7 @@ banknote:
 expbottle:
   name: "&bExp Bottle &e&l(Right-Click)"
   lore:
-    - "&b&lValue: &7%exp%EXP"
+    - "&b&lValue: &7%value%EXP"
     - " "
     - "&e&l(Shift-Right-Click) &7to bulk-open"
 
@@ -40,7 +41,8 @@ expbottle:
   max: 10000 # maximum value of the exp bottle
 
   # List of all available materials.
-  # if material is not right experience bottle will be default
+  # if material is a BARRIER it means something is wrong.
+  # do not use consumables, such as potions and food.
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   item: EXPERIENCE_BOTTLE
 
@@ -59,9 +61,9 @@ expbottle:
 health:
   name: "&bHP Jar &e&l(Right-Click)"
   lore:
-    - "&b&lHP Stored: &7%hp%EXP"
+    - "&b&lHP Stored: &7%value% HP"
     - " "
-    - "&e&l(Shift-Right-Click) &7to bulk-open"
+    - "&cThis item can't be bulk-opened."
 
 
   min: 1 # minimum value of the hp

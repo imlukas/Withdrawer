@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class ExpBottle extends Manager {
 
-
     public ExpBottle(Withdrawer main) {
         super(main, "expbottle");
     }

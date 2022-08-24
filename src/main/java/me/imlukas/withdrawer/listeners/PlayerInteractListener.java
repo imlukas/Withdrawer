@@ -5,6 +5,7 @@ import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.events.RedeemEvent;
 import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.ExpUtil;
+import me.imlukas.withdrawer.utils.HealthUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,6 +24,7 @@ public class PlayerInteractListener implements Listener {
     private final Withdrawer main;
     private final EconomyUtil economyUtil;
     private final ExpUtil expUtil;
+    private final HealthUtil healthUtil;
     private final MessagesFile messages;
 
     public PlayerInteractListener(Withdrawer main) {
@@ -30,6 +32,7 @@ public class PlayerInteractListener implements Listener {
         this.economyUtil = main.getEconomyUtil();
         this.messages = main.getMessages();
         this.expUtil = main.getExpUtil();
+        this.healthUtil = main.getHealthUtil();
 
     }
 
@@ -44,20 +47,15 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        Material itemMaterial = event.getItem().getType();
         NBTItem nbtItem = new NBTItem(event.getItem());
 
-        Material bankNoteMaterial = Material.getMaterial(main.getConfig().getString("banknote.item").toUpperCase());
-        Material expBottleMaterial = Material.getMaterial(main.getConfig().getString("expbottle.item").toUpperCase());
-        Material healthItemMaterial = Material.getMaterial(main.getConfig().getString("health.item").toUpperCase());
-
-        if (itemMaterial.equals(bankNoteMaterial) && nbtItem.hasKey("banknote-value")) {
+        if (nbtItem.hasKey("banknote-value")) {
             event.setCancelled(true);
             setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.BANKNOTE);
-        } else if (itemMaterial.equals(expBottleMaterial) && nbtItem.hasKey("expbottle-value")) {
+        } else if (nbtItem.hasKey("expbottle-value")) {
             event.setCancelled(true);
             setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.EXPBOTTLE);
-        } else if (itemMaterial.equals(healthItemMaterial) && nbtItem.hasKey("health-value")) {
+        } else if (nbtItem.hasKey("health-value")) {
             event.setCancelled(true);
             setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.HEALTH);
         }
@@ -70,7 +68,7 @@ public class PlayerInteractListener implements Listener {
         }
         String itemType = type.toString().toLowerCase();
 
-        int value = nbtItem.getInteger(itemType + "-value");
+        double value = nbtItem.getDouble(itemType + "-value");
 
         int itemAmount = player.getInventory().getItemInMainHand().getAmount();
 
@@ -92,16 +90,18 @@ public class PlayerInteractListener implements Listener {
             redeemItem(player, value, itemAmount, itemType);
         } else if (type == RedeemEvent.ReedemType.EXPBOTTLE) {
             redeemItem(player, value, itemAmount, itemType);
+        } else if (type == RedeemEvent.ReedemType.HEALTH) {
+            redeemItem(player, value, itemAmount, itemType);
         }
 
     }
 
-    private void redeemItem(Player player, int value, int itemAmount, String type) {
-        if (player.isSneaking() && itemAmount > 1) {
+    private void redeemItem(Player player, double value, int itemAmount, String type) {
+        if (player.isSneaking() && itemAmount > 1 && !(type.equalsIgnoreCase("health"))) {
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
             playSounds(player, type);
             if (type.equalsIgnoreCase("expbottle")) {
-                expUtil.changeExp(player, value * itemAmount);
+                expUtil.changeExp(player, (int) value * itemAmount);
             } else if (type.equalsIgnoreCase("banknote")) {
                 economyUtil.giveMoney(player, value * itemAmount);
             }
@@ -111,17 +111,22 @@ public class PlayerInteractListener implements Listener {
         player.getInventory().getItemInMainHand().setAmount(itemAmount - 1);
         playSounds(player, type);
         if (type.equalsIgnoreCase("expbottle")) {
-            expUtil.changeExp(player, value);
+            expUtil.changeExp(player, (int) value);
         } else if (type.equalsIgnoreCase("banknote")) {
+            System.out.println(value);
             economyUtil.giveMoney(player, value);
         } else {
-            // todo
+            healthUtil.addHealth(player, (int) value);
         }
 
         sendMessages(player, value, type);
     }
 
     private void sendMessages(Player player, double value, String type) {
+        String currencySign = economyUtil.getCurrencySign();
+        String balance = String.valueOf(economyUtil.getMoney(player));
+        String currentExp = String.valueOf(expUtil.getExp(player));
+        String currentHealth = String.valueOf(healthUtil.getHealth(player) / 2);
         if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
             if (type.equalsIgnoreCase("banknote")) {
                 messages.sendStringMessage(player, "&a+" + value + economyUtil.getCurrencySign());
@@ -131,11 +136,12 @@ public class PlayerInteractListener implements Listener {
             return;
         }
         messages.sendMessage(player, type + "-redeem", (message) -> message
-                .replace("%currency%", String.valueOf(new DecimalFormat("#").format(value)))
-                .replace("%balance%", String.valueOf(economyUtil.getMoney(player)))
-                .replace("%exp%", String.valueOf(new DecimalFormat("#").format(value)))
-                .replace("%current_exp%", String.valueOf(expUtil.getExp(player)))
-                .replace("%currency_sign%", economyUtil.getCurrencySign()));
+                .replace("%value%", String.valueOf(value))
+                .replace("%hp%", String.valueOf(value))
+                .replace("%balance%", balance)
+                .replace("%current_exp%", currentExp)
+                .replace("%currency_sign%", currencySign)
+                .replace("%current_hp%", currentHealth));
 
     }
 

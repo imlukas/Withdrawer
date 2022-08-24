@@ -18,7 +18,7 @@ public class Note extends Manager {
         }
         if (economyUtil.hasMoney(player, money * amount)) {
             economyUtil.removeMoney(player, total);
-            ItemStack noteItem = setItemProperties(player, (int) money);
+            ItemStack noteItem = setItemProperties(player, money);
             if (amount > 1) {
                 for (int i = 0; i < amount; i++) {
                     player.getInventory().addItem(noteItem);

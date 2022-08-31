@@ -31,9 +31,11 @@ public class InventoryClickListener implements Listener {
         if (item == null)
             return;
         NBTItem nbtItem = new NBTItem(item);
-        if (nbtItem.hasKey("banknote-value").booleanValue()) {
+        if (nbtItem.hasKey("banknote-value")) {
             event.setCancelled(true);
-        } else if (nbtItem.hasKey("expbottle-value").booleanValue()) {
+        } else if (nbtItem.hasKey("expbottle-value")) {
+            event.setCancelled(true);
+        } else if (nbtItem.hasKey("health-value")) {
             event.setCancelled(true);
         }
     }

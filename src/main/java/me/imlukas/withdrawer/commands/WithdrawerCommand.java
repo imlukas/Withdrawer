@@ -29,9 +29,9 @@ public class WithdrawerCommand implements CommandExecutor {
         }
         if (player.hasPermission("withdrawer.admin") && args.length != 1) {
             this.messages.sendStringMessage(player, "&7||---- &dWithdrawer &7----||");
-            this.messages.sendStringMessage(player, "&7Version: V1.0");
+            this.messages.sendStringMessage(player, "&7Version: V1.4");
             this.messages.sendStringMessage(player, "&7Author: imlukas");
-            this.messages.sendStringMessage(player, "&cThanks for using this plugin <3");
+            this.messages.sendStringMessage(player, "&cThanks for using withdrawer <3");
             return true;
         }
         if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?")) {
@@ -40,6 +40,7 @@ public class WithdrawerCommand implements CommandExecutor {
             this.messages.sendStringMessage(player, "  - &7/withdrawmoney <money> <amount>");
             this.messages.sendStringMessage(player, "- &7/withdrawxp <money>");
             this.messages.sendStringMessage(player, "  - &7/withdrawxp <money> <amount>");
+            this.messages.sendStringMessage(player, "- &7/withdrawhp <amount>");
             return true;
         }
         return true;

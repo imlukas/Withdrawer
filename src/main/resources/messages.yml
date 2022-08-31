@@ -32,15 +32,13 @@ messages:
   expbottle-redeem:
     - '%prefix% &7You redeemed &a%value%EXP&7!'
     - '&7Current EXP: &a%current_exp%EXP'
-  health:
-    bulk-not-possible: "&cYou can't bulk-open this item"
   health-withdraw:
     success:
       - '%prefix% &7You withdrew &a%hp% HP!&7'
-      - '&7Current hearts: &a%current_health% HP'
+      - '&7Current hearts: &a%current_health% Hearts'
     error:
       - '%prefix% &7You do not have enough HP'
-      - '&7Current hearts: &a%current_health% HP'
+      - '&7Current hearts: &a%current_health% Hearts'
   health-redeem:
     - '%prefix% &7You redeemed &a%hp% HP&7!'
-    - '&7Current hearts: &a%current_hp% HP'
+    - '&7Current hearts: &a%current_hp% Hearts'

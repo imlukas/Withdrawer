@@ -90,8 +90,10 @@ public abstract class Manager {
             if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
                 if (type.equalsIgnoreCase("expbottle")) {
                     messages.sendStringMessage(player, "&c-" + value + "EXP");
-                } else {
+                } else if (type.equalsIgnoreCase("banknote")){
                     messages.sendStringMessage(player, "&c-" + value + currencySign);
+                } else {
+                    messages.sendStringMessage(player, "&c-" + value + "HP");
                 }
                 return;
             }

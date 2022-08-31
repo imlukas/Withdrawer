@@ -28,12 +28,12 @@ public class HealthWithdrawCommand implements CommandExecutor {
             messages.sendMessage(sender, "global.not-player");
             return true;
         }
-        if (!(player.hasPermission("withdrawer.withdraw.banknote"))) {
+        if (!(player.hasPermission("withdrawer.withdraw.health"))) {
             messages.sendMessage(sender, "global.no-permission");
             return true;
         }
-        if (args.length >= 2) {
-            messages.sendStringMessage(sender, "Usage: /withdrawmoney <amount>");
+        if (args.length != 1) {
+            messages.sendStringMessage(sender, "Usage: /withdrawmoney <heart amount (1-20)>");
             return true;
         }
         int amount;

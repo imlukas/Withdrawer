@@ -6,7 +6,7 @@ plugins {
 tasks.build.dependsOn('shadowJar')
 
 group = 'imlukas'
-version = '1.2'
+version = '1.4'
 
 repositories {
     mavenCentral()

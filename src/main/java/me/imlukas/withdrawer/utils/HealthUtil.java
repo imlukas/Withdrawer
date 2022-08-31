@@ -19,11 +19,7 @@ public class HealthUtil {
     public boolean checkHealth(Player player, int health){
         int oldHealth = (int) (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - 1);
 
-        if (!(oldHealth <= health)){
-            System.out.println("im here");
-            return true;
-        }
-        return false;
+        return !(oldHealth <= health);
     }
     public double getHealth(Player player){
         return player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();

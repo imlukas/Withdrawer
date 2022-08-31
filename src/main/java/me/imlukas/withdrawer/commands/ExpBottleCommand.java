@@ -39,7 +39,7 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             messages.sendMessage(sender, "global.no-permission");
             return true;
         }
-        if (args.length >= 3) {
+        if (args.length >= 3 || args.length == 0) {
             messages.sendStringMessage(sender, "Usage: /withdrawxp <exp> (quantity)");
             return true;
         }

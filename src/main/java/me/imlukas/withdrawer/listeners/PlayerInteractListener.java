@@ -113,7 +113,6 @@ public class PlayerInteractListener implements Listener {
         if (type.equalsIgnoreCase("expbottle")) {
             expUtil.changeExp(player, (int) value);
         } else if (type.equalsIgnoreCase("banknote")) {
-            System.out.println(value);
             economyUtil.giveMoney(player, value);
         } else {
             healthUtil.addHealth(player, (int) value);
@@ -128,11 +127,13 @@ public class PlayerInteractListener implements Listener {
         String currentExp = String.valueOf(expUtil.getExp(player));
         String currentHealth = String.valueOf(healthUtil.getHealth(player) / 2);
         if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
-            if (type.equalsIgnoreCase("banknote")) {
-                messages.sendStringMessage(player, "&a+" + value + economyUtil.getCurrencySign());
-                return;
+            if (type.equalsIgnoreCase("expbottle")) {
+                messages.sendStringMessage(player, "&a+" + value + "EXP");
+            } else if (type.equalsIgnoreCase("banknote")){
+                messages.sendStringMessage(player, "&a+" + value + currencySign);
+            } else {
+                messages.sendStringMessage(player, "&a+" + value + "HP");
             }
-            messages.sendStringMessage(player, "&a+" + value + "EXP");
             return;
         }
         messages.sendMessage(player, type + "-redeem", (message) -> message

@@ -1,6 +1,6 @@
 messages:
   # if true the messages will be simpler and less intrusive
-  # reedem will only be "+money$" instead of the default message.
+  # redeem will only be "+money$" instead of the default message.
   less-intrusive: false
   use-prefix: true # NOTE: this does not disable %prefix% -- Messages in a list of messages will not have prefix by default. You need to use the %prefix%.
   prefix: "&d&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message

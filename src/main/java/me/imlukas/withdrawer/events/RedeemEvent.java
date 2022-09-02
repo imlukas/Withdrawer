@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 
 @Getter
 public class RedeemEvent extends Event implements Cancellable {
-    public enum ReedemType {
+    public enum redeemType {
         BANKNOTE,
         HEALTH,
         EXPBOTTLE
@@ -17,7 +17,7 @@ public class RedeemEvent extends Event implements Cancellable {
     private boolean cancelled = false;
     Player player;
     double amount;
-    ReedemType type;
+    redeemType type;
     int quantity = 1;
 
     private static final HandlerList HANDLERS = new HandlerList();
@@ -31,13 +31,13 @@ public class RedeemEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public RedeemEvent(Player player, double amount, ReedemType type) {
+    public RedeemEvent(Player player, double amount, redeemType type) {
         this.player = player;
         this.amount = amount;
         this.type = type;
     }
 
-    public RedeemEvent(Player player, double amount, ReedemType type, int quantity) {
+    public RedeemEvent(Player player, double amount, redeemType type, int quantity) {
         this.player = player;
         this.amount = amount;
         this.type = type;

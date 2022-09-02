@@ -51,18 +51,19 @@ public class PlayerInteractListener implements Listener {
 
         if (nbtItem.hasKey("banknote-value")) {
             event.setCancelled(true);
-            setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.BANKNOTE);
+            setRedeemProperties(player, nbtItem, RedeemEvent.redeemType.BANKNOTE);
         } else if (nbtItem.hasKey("expbottle-value")) {
             event.setCancelled(true);
-            setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.EXPBOTTLE);
+            setRedeemProperties(player, nbtItem, RedeemEvent.redeemType.EXPBOTTLE);
         } else if (nbtItem.hasKey("health-value")) {
             event.setCancelled(true);
-            setRedeemProperties(player, nbtItem, RedeemEvent.ReedemType.HEALTH);
+            setRedeemProperties(player, nbtItem, RedeemEvent.redeemType.HEALTH);
         }
     }
 
-    private void setRedeemProperties(Player player, NBTItem nbtItem, RedeemEvent.ReedemType type) {
-        if (!(player.hasPermission("withdrawer.reedem." + type.toString().toLowerCase()))) {
+    private void setRedeemProperties(Player player, NBTItem nbtItem, RedeemEvent.redeemType type) {
+        if (!(player.hasPermission("withdrawer.redeem." + type.toString().toLowerCase()))) {
+            System.out.println(type);
             messages.sendMessage(player, "global.no-permission");
             return;
         }
@@ -72,25 +73,25 @@ public class PlayerInteractListener implements Listener {
 
         int itemAmount = player.getInventory().getItemInMainHand().getAmount();
 
-        RedeemEvent reedemEvent;
+        RedeemEvent redeemEvent;
         if (player.isSneaking() && itemAmount > 1) {
-            if (!(player.hasPermission("withdrawer.reedem." + type + ".bulk"))) {
+            if (!(player.hasPermission("withdrawer.redeem." + type + ".bulk"))) {
                 messages.sendStringMessage(player, "&c[ERROR] &7ou don't have permission to bulk open this item.");
                 return;
             }
-            reedemEvent = new RedeemEvent(player, value * itemAmount, type, itemAmount);
+            redeemEvent = new RedeemEvent(player, value * itemAmount, type, itemAmount);
         } else {
-            reedemEvent = new RedeemEvent(player, value, type);
+            redeemEvent = new RedeemEvent(player, value, type);
         }
-        Bukkit.getServer().getPluginManager().callEvent(reedemEvent);
-        if (reedemEvent.isCancelled()) {
+        Bukkit.getServer().getPluginManager().callEvent(redeemEvent);
+        if (redeemEvent.isCancelled()) {
             return;
         }
-        if (type == RedeemEvent.ReedemType.BANKNOTE) {
+        if (type == RedeemEvent.redeemType.BANKNOTE) {
             redeemItem(player, value, itemAmount, itemType);
-        } else if (type == RedeemEvent.ReedemType.EXPBOTTLE) {
+        } else if (type == RedeemEvent.redeemType.EXPBOTTLE) {
             redeemItem(player, value, itemAmount, itemType);
-        } else if (type == RedeemEvent.ReedemType.HEALTH) {
+        } else if (type == RedeemEvent.redeemType.HEALTH) {
             redeemItem(player, value, itemAmount, itemType);
         }
 

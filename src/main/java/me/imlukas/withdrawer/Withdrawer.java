@@ -7,6 +7,7 @@ import me.imlukas.withdrawer.commands.HealthWithdrawCommand;
 import me.imlukas.withdrawer.listeners.InventoryClickListener;
 import me.imlukas.withdrawer.listeners.ItemDropListener;
 import me.imlukas.withdrawer.listeners.PlayerInteractListener;
+import me.imlukas.withdrawer.listeners.PlayerJoinListener;
 import me.imlukas.withdrawer.managers.ExpBottle;
 import me.imlukas.withdrawer.managers.HealthItem;
 import me.imlukas.withdrawer.managers.Note;
@@ -52,7 +53,7 @@ public final class Withdrawer extends JavaPlugin {
 
         System.out.println("[Withdrawer] Registered Classes!");
         registerCommands();
-        System.out.println("[Withdrawer] Rsegistered Commands!");
+        System.out.println("[Withdrawer] Registered Commands!");
         registerListeners();
         System.out.println("[Withdrawer] Registered Listeners!");
 
@@ -81,6 +82,7 @@ public final class Withdrawer extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new ItemDropListener(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
     }
 
     private void setupEconomies() {

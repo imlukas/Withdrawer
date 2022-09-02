@@ -1,7 +1,7 @@
 name: Withdrawer
 version: '${version}'
 main: me.imlukas.withdrawer.Withdrawer
-api-version: 1.19
+api-version: 1.16
 softdepend: [ Essentials, PlayerPoints, Vault ]
 authors: [ imlukas ]
 description: Withdraw money and exp trough items!

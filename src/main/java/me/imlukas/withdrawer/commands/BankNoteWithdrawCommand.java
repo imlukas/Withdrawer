@@ -2,12 +2,12 @@ package me.imlukas.withdrawer.commands;
 
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.managers.Note;
-import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -16,18 +16,18 @@ import java.util.List;
 
 public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
 
-    private final Withdrawer main;
+    private final FileConfiguration config;
     private final MessagesFile messages;
-
     private final Note noteManager;
 
-    private int amount;
-    private double money;
+    private final int minMoney, maxMoney;
 
     public BankNoteWithdrawCommand(Withdrawer main) {
-        this.main = main;
+        this.config = main.getConfig();
         this.messages = main.getMessages();
         this.noteManager = new Note(main);
+        minMoney = config.getInt("banknote.min");
+        maxMoney = config.getInt("banknote.max");
     }
 
     @Override
@@ -46,23 +46,26 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        money = Double.parseDouble(args[0]);
+        double money = Double.parseDouble(args[0]);
         if (money <= 0) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be positive and bigger than zero");
             return true;
         }
+
         if (!(player.hasPermission("withdrawer.bypass.minmax.banknote"))) {
-            if (money < main.getConfig().getInt("banknote.min")) {
-                messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be bigger than " + main.getConfig().getInt("banknote.min"));
+
+            if (money < minMoney) {
+                messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be bigger than " + minMoney);
                 return true;
             }
-            if (money > main.getConfig().getInt("banknote.max")) {
-                messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be smaller than " + main.getConfig().getInt("banknote.max"));
+            if (money > maxMoney) {
+                messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be smaller than " + maxMoney);
                 return true;
 
             }
         }
 
+        int amount;
         if (args.length == 2) {
             try {
                 amount = Integer.parseInt(args[1]);
@@ -89,7 +92,7 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
             completions.add("10");
             completions.add("100");
             completions.add("1000");
-            completions.add("" + this.main.getConfig().getInt("banknote.max"));
+            completions.add("" + maxMoney);
             return completions;
         }
         if (args.length == 2) {

@@ -7,25 +7,27 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ExpBottleCommand implements CommandExecutor, TabCompleter {
 
-    private final Withdrawer main;
+    private final FileConfiguration config;
     private final MessagesFile messages;
     private final ExpBottle expBottleManager;
 
-    private int expAmount;
-    private int quantity;
-
+    private final int minExp, maxExp;
     public ExpBottleCommand(Withdrawer main) {
-        this.main = main;
+        this.config = main.getConfig();
         this.messages = main.getMessages();
         this.expBottleManager = main.getExpBottleManager();
+        minExp = config.getInt("expbottle.min");
+        maxExp = config.getInt("expbottle.max");
     }
 
     @Override
@@ -44,37 +46,40 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        int expAmount;
         try {
             expAmount = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            messages.sendStringMessage(sender, "&c&l[Error]&7 Exp must valid and an integer number.");
+            messages.sendStringMessage(sender, "&c&l[Error]&7 Exp must be an integer number.");
             return true;
         }
         if (expAmount <= 0) {
-            messages.sendStringMessage(sender, "&c&l[Error]&7 Money must be positive and bigger than zero");
+            messages.sendStringMessage(sender, "&c&l[Error]&7 Exp must be positive and bigger than zero");
             return true;
         }
+
         if (!(player.hasPermission("withdrawer.bypass.minmax.expbottle"))) {
-            if (expAmount < main.getConfig().getInt("expbottle.min")) {
-                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be bigger than " + main.getConfig().getInt("expbottle.min"));
+            if (expAmount < minExp) {
+                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be bigger than " + minExp);
                 return true;
             }
-            if (expAmount > main.getConfig().getInt("expbottle.max")) {
-                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + main.getConfig().getInt("expbottle.max"));
+            if (expAmount >maxExp) {
+                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + maxExp);
                 return true;
             }
         }
 
 
         if (args.length == 2) {
+            int quantity;
             try {
                 quantity = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
                 messages.sendStringMessage(sender, "Amount must be a number");
                 return true;
             }
-            if (expAmount * quantity > main.getConfig().getInt("expbottle.max")) {
-                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + main.getConfig().getInt("expbottle.max"));
+            if (expAmount * quantity > maxExp) {
+                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + maxExp);
                 return true;
             }
             if (quantity < 1) {
@@ -96,7 +101,7 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             completions.add("10");
             completions.add("100");
             completions.add("1000");
-            completions.add("" + this.main.getConfig().getInt("expbottle.max"));
+            completions.add("" + maxExp);
             return completions;
         }
         if (args.length == 2) {

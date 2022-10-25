@@ -21,3 +21,8 @@ commands:
     description: "Withdraw hp"
     aliases:
       - wdhp
+  withdrawer:
+    usage: </command>
+    description: "Withdrawer commands"
+    aliases:
+      - wd

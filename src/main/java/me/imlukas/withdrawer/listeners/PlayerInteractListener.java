@@ -43,7 +43,7 @@ public class PlayerInteractListener implements Listener {
         if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
-        if (event.getItem() == null) {
+        if (event.getItem() == null || event.getItem().getType().equals(Material.AIR)) {
             return;
         }
 
@@ -101,16 +101,11 @@ public class PlayerInteractListener implements Listener {
         if (player.isSneaking() && itemAmount > 1 && !(type.equalsIgnoreCase("health"))) {
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
             playSounds(player, type);
-            if (type.equalsIgnoreCase("expbottle")) {
-                expUtil.changeExp(player, (int) value * itemAmount);
-            } else if (type.equalsIgnoreCase("banknote")) {
-                economyUtil.giveMoney(player, value * itemAmount);
-            }
-            sendMessages(player, value * itemAmount, type);
-            return;
+            value = value * itemAmount;
+        } else {
+            player.getInventory().getItemInMainHand().setAmount(itemAmount - 1);
+            playSounds(player, type);
         }
-        player.getInventory().getItemInMainHand().setAmount(itemAmount - 1);
-        playSounds(player, type);
         if (type.equalsIgnoreCase("expbottle")) {
             expUtil.changeExp(player, (int) value);
         } else if (type.equalsIgnoreCase("banknote")) {
@@ -118,8 +113,17 @@ public class PlayerInteractListener implements Listener {
         } else {
             healthUtil.addHealth(player, (int) value);
         }
-
+        if (messages.getConfiguration().getBoolean("messages.actionbar.enabled")) {
+            sendActionBar(player, value, type);
+            return;
+        }
         sendMessages(player, value, type);
+    }
+
+    private void sendActionBar(Player player, double value, String type){
+        messages.sendActionBarMessage(player, type + "-redeem.actionbar", (message) -> message
+                .replace("%value%", "" + value)
+                .replace("%currency_sign%", "" + economyUtil.getCurrencySign()));
     }
 
     private void sendMessages(Player player, double value, String type) {
@@ -127,7 +131,7 @@ public class PlayerInteractListener implements Listener {
         String balance = String.valueOf(economyUtil.getMoney(player));
         String currentExp = String.valueOf(expUtil.getExp(player));
         String currentHealth = String.valueOf(healthUtil.getHealth(player) / 2);
-        if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
+        if (messages.isLessIntrusive()) {
             if (type.equalsIgnoreCase("expbottle")) {
                 messages.sendStringMessage(player, "&a+" + value + "EXP");
             } else if (type.equalsIgnoreCase("banknote")){
@@ -137,7 +141,7 @@ public class PlayerInteractListener implements Listener {
             }
             return;
         }
-        messages.sendMessage(player, type + "-redeem", (message) -> message
+        messages.sendMessage(player, type + "-redeem.message", (message) -> message
                 .replace("%value%", String.valueOf(value))
                 .replace("%hp%", String.valueOf(value))
                 .replace("%balance%", balance)
@@ -146,6 +150,7 @@ public class PlayerInteractListener implements Listener {
                 .replace("%current_hp%", currentHealth));
 
     }
+
 
     private void playSounds(Player player, String type) {
         if (main.getConfig().getBoolean(type + ".sounds.redeem.enabled")) {

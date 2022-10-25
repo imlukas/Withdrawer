@@ -13,6 +13,7 @@ public class ExpBottle extends Manager {
 
     public void give(Player player, int exp, int amount) {
         int total = exp * amount;
+        boolean success = false;
         if (callEvent(player, total, amount, WithdrawEvent.WithdrawType.EXPBOTTLE)) {
             return;
         }
@@ -27,11 +28,13 @@ public class ExpBottle extends Manager {
                 player.getInventory().addItem(expItem);
             }
             playWithdrawSound(player);
-            sendMessages(player, total, true);
-            callEvent(player, total, 1, WithdrawEvent.WithdrawType.EXPBOTTLE);
+            success = true;
+        }
+        if (messages.isUseActionBar()) {
+            sendActionBar(player, total, success);
             return;
         }
-        sendMessages(player, total, false);
+        sendMessages(player, total, success);
     }
 
 }

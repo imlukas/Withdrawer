@@ -42,7 +42,7 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args.length >= 3 || args.length == 0) {
-            messages.sendStringMessage(sender, "Usage: /withdrawmoney <amount> (quantity)");
+            messages.sendMessage(player, "banknote-withdraw.usage");
             return true;
         }
 
@@ -74,7 +74,7 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             if (amount < 1) {
-                messages.sendStringMessage(sender, "Usage: /withdrawmoney <money> <amount>");
+                messages.sendMessage(player, "banknote-withdraw.usage");
                 return true;
             }
         } else {

@@ -65,7 +65,6 @@ health:
     - " "
     - "&cThis item can't be bulk-opened."
 
-
   min: 1 # minimum value of the hp
 
   # List of all available materials.

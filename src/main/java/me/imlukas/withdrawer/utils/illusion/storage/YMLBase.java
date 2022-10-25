@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class YMLBase {
 
-    protected File file;
+    @Getter protected File file;
     private final boolean existsOnSource;
     private final JavaPlugin plugin;
     @Getter

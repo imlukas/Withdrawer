@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +39,7 @@ public abstract class Manager {
         this.healthUtil = main.getHealthUtil();
         this.textUtil = main.getTextUtil();
         this.type = type;
+
     }
 
     public boolean callEvent(Player player, double value, int quantity, WithdrawEvent.WithdrawType type) {
@@ -66,11 +66,11 @@ public abstract class Manager {
         for (String str : main.getConfig().getStringList(type + ".lore")) {
             String newText = str.replace("%value%", "" + nbtItem.getDouble(type + "-value"))
                     .replace("%owner%", player.getName());
-            lore.add(textUtil.getColor(newText));
+            lore.add(textUtil.setColor(newText));
         }
         if (itemMaterial.equals(Material.BARRIER)){
-            lore.add(textUtil.getColor("&cThis item is a barrier because something is wrong in the config."));
-            lore.add(textUtil.getColor("&cBut you can still use it :)."));
+            lore.add(textUtil.setColor("&cThis item is a barrier because something is wrong in the config."));
+            lore.add(textUtil.setColor("&cBut you can still use it :)."));
         }
 
         if (meta != null) {
@@ -80,13 +80,26 @@ public abstract class Manager {
         return finalItem;
     }
 
-    public void sendMessages(Player player, double value, boolean sucess) {
+    public void sendActionBar(Player player, double value, boolean success){
+        String currencySign = economyUtil.getCurrencySign();
+
+        if (success){
+            messages.sendActionBarMessage(player, type + "-withdraw.actionbar-success", (message) -> message
+                    .replace("%value%", String.valueOf(value))
+                    .replace("%currency_sign%", currencySign));
+            return;
+        }
+        messages.sendActionBarMessage(player, type + "-withdraw.actionbar-error", (message) -> message
+                .replace("%value%", String.valueOf(value)));
+    }
+
+    public void sendMessages(Player player, double value, boolean success) {
         String currencySign = economyUtil.getCurrencySign();
         String balance = String.valueOf(economyUtil.getMoney(player));
         String currentExp = String.valueOf(expUtil.getExp(player));
         String currentHealth = String.valueOf(healthUtil.getHealth(player) / 2);
 
-        if (sucess) {
+        if (success) {
             if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
                 if (type.equalsIgnoreCase("expbottle")) {
                     messages.sendStringMessage(player, "&c-" + value + "EXP");

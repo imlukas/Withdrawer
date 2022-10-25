@@ -13,10 +13,11 @@ public class Note extends Manager {
 
     public void give(Player player, double money, int amount) {
         double total = money * amount;
+        boolean success = false;
         if (callEvent(player, total, amount, WithdrawEvent.WithdrawType.BANKNOTE)) {
             return;
         }
-        if (economyUtil.hasMoney(player, money * amount)) {
+        if (economyUtil.hasMoney(player, total)) {
             economyUtil.removeMoney(player, total);
             ItemStack noteItem = setItemProperties(player, money);
             if (amount > 1) {
@@ -27,9 +28,12 @@ public class Note extends Manager {
                 player.getInventory().addItem(noteItem);
             }
             playWithdrawSound(player);
-            sendMessages(player, total, true);
+            success = true;
+        }
+        if (messages.isUseActionBar()) {
+            sendActionBar(player, total, success);
             return;
         }
-        sendMessages(player, total, false);
+        sendMessages(player, total, success);
     }
 }

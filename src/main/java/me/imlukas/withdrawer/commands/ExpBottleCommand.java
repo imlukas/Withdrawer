@@ -42,7 +42,7 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args.length >= 3 || args.length == 0) {
-            messages.sendStringMessage(sender, "Usage: /withdrawxp <exp> (quantity)");
+            messages.sendMessage(player, "expbottle-withdraw.usage");
             return true;
         }
 
@@ -75,15 +75,15 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             try {
                 quantity = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
-                messages.sendStringMessage(sender, "Amount must be a number");
+                messages.sendStringMessage(player, "&cAmount must be a number");
                 return true;
             }
             if (expAmount * quantity > maxExp) {
-                messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + maxExp);
+                messages.sendStringMessage(player, "&c&l[Error]&7 EXP amount must be smaller than " + maxExp);
                 return true;
             }
             if (quantity < 1) {
-                messages.sendStringMessage(sender, "Usage: /withdrawxp <money> (quantity)");
+                messages.sendMessage(player, "expbottle-withdraw.usage");
                 return true;
             }
             expBottleManager.give(player, expAmount, quantity); // gives player x amount of expbottles

@@ -2,43 +2,65 @@ messages:
   # if true the messages will be simpler and less intrusive
   # redeem will only be "+money$" instead of the default message.
   less-intrusive: false
+
   use-prefix: true # NOTE: this does not disable %prefix% -- Messages in a list of messages will not have prefix by default. You need to use the %prefix%.
   prefix: "&d&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
   arrow: "->" # arrow to appear before the messages [Withdrawer] >> This is a message
+  actionbar:
+    enabled: true
 
   global:
     not-player: 'This command can only be used by a player'
     no-permission: '&cYou do not have permission to do this'
     player-not-found: 'Player(s) not found'
+    feature-on: '&7%feature% is now &aon'
+    feature-off: '&7%feature% is now &coff'
+    reload: '&7Reloaded plugin configs'
   banknote-withdraw:
+    usage: '&cUsage: /withdrawmoney <amount> (quantity)'
     success:
       - '%prefix% &7You withdrew &a%value%%currency_sign%&7 from your account'
       - '&7Current balance: &a%balance%%currency_sign%'
+    actionbar-success: '&7You withdrew &a%value%%currency_sign%&7 from your account'
     error:
       - '%prefix% &7You do not have enough money'
       - '&7Current balance: &a%balance%$'
+    actionbar-error: '&7You do not have enough money'
   banknote-redeem:
-    - '%prefix% &7You redeemed &a%value%%currency_sign%&7!'
-    - '&7Current balance: &a%balance%%currency_sign%'
+    message:
+      - '%prefix% &7You redeemed &a%value%%currency_sign%&7!'
+      - '&7Current balance: &a%balance%%currency_sign%'
+    actionbar: '&7You redeemed &a%value%%currency_sign%&7!'
 
   expbottle-withdraw:
+    usage: '&cUsage: /withdrawxp <exp> (quantity)'
     success:
       - '%prefix% &7You withdrew &a%value%EXP&7!'
       - '&7Current EXP: &a%current_exp%EXP'
+    actionbar-success: '&7You withdrew &a%value%EXP&7!'
     error:
       - '%prefix% &7You do not have enough EXP'
       - '&7Current EXP: &a%current_exp%EXP'
-      -
+    actionbar-error: '&7You do not have enough EXP'
+
   expbottle-redeem:
-    - '%prefix% &7You redeemed &a%value%EXP&7!'
-    - '&7Current EXP: &a%current_exp%EXP'
+    message:
+      - '%prefix% &7You redeemed &a%value%EXP&7!'
+      - '&7Current EXP: &a%current_exp%EXP'
+    actionbar: '&7You redeemed &a%value%EXP&7!'
+
   health-withdraw:
+    usage: '&cUsage: /withdrawhp <amount of hearts>'
     success:
       - '%prefix% &7You withdrew &a%hp% HP!&7'
       - '&7Current hearts: &a%current_health% Hearts'
+    actionbar-success: '&7You withdrew &a%value% HP!&7'
     error:
       - '%prefix% &7You do not have enough HP'
       - '&7Current hearts: &a%current_health% Hearts'
+    actionbar-error: '&7You do not have enough HP'
   health-redeem:
-    - '%prefix% &7You redeemed &a%hp% HP&7!'
-    - '&7Current hearts: &a%current_hp% Hearts'
+    message:
+      - '%prefix% &7You redeemed &a%hp% HP&7!'
+      - '&7Current hearts: &a%current_hp% Hearts'
+    actionbar: '&7You redeemed &a%value% HP&7!'

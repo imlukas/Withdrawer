@@ -42,7 +42,7 @@ public class HealthWithdrawCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args.length != 1) {
-            messages.sendStringMessage(sender, "Usage: /withdrawmoney <heart amount (1-20)>");
+            messages.sendMessage(player, "health-withdraw.usage");
             return true;
         }
         int amount;

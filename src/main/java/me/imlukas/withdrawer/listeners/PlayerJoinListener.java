@@ -10,12 +10,12 @@ public class PlayerJoinListener implements Listener {
 
 
     @EventHandler
-    private void onPlayerJoin(PlayerJoinEvent event){
+    private void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         double playerMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
-        if (playerMaxHealth > 20){
+        if (playerMaxHealth > 20) {
             player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         }
     }

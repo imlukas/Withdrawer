@@ -19,7 +19,8 @@ public class MessagesFile extends YMLBase {
 
     @Getter
     private final String prefix, arrow;
-    @Getter private boolean usePrefix, lessIntrusive, useActionBar;
+    @Getter
+    private boolean usePrefix, lessIntrusive, useActionBar;
     private String msg;
 
     public MessagesFile(JavaPlugin plugin) {
@@ -37,7 +38,7 @@ public class MessagesFile extends YMLBase {
         String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
         int minorVer = Integer.parseInt(split[1]);
 
-        if(minorVer >= 16){
+        if (minorVer >= 16) {
             Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
             Matcher matcher = pattern.matcher(message);
 
@@ -51,10 +52,10 @@ public class MessagesFile extends YMLBase {
     }
 
     private String setMessage(String name) {
-       return setMessage(name, (s) -> s);
+        return setMessage(name, (s) -> s);
     }
 
-    private String setMessage(String name, Function<String, String> action){
+    private String setMessage(String name, Function<String, String> action) {
         if (!getConfiguration().contains("messages." + name))
             return "";
 
@@ -102,7 +103,7 @@ public class MessagesFile extends YMLBase {
         return getConfiguration().getString("messages." + name);
     }
 
-    public boolean toggleLessIntrusive(){
+    public boolean toggleLessIntrusive() {
         boolean isEnabled = lessIntrusive;
         if (isEnabled) {
             getConfiguration().set("messages.less-intrusive", false);
@@ -113,6 +114,7 @@ public class MessagesFile extends YMLBase {
         lessIntrusive = getConfiguration().getBoolean("messages.less-intrusive");
         return !isEnabled;
     }
+
     public boolean togglePrefix() {
         boolean isEnabled = usePrefix;
         if (isEnabled) {

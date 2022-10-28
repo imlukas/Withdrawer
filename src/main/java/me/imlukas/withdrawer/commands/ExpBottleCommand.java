@@ -3,6 +3,7 @@ package me.imlukas.withdrawer.commands;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.managers.ExpBottle;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,7 +11,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +22,7 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
     private final ExpBottle expBottleManager;
 
     private final int minExp, maxExp;
+
     public ExpBottleCommand(Withdrawer main) {
         this.config = main.getConfig();
         this.messages = main.getMessages();
@@ -34,9 +35,10 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player player)) {
-            messages.sendMessage(sender, "global.not-player");
+            giveConsole(sender, args);
             return true;
         }
+
         if (!(player.hasPermission("withdrawer.withdraw.expbottle"))) {
             messages.sendMessage(sender, "global.no-permission");
             return true;
@@ -63,36 +65,68 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
                 messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be bigger than " + minExp);
                 return true;
             }
-            if (expAmount >maxExp) {
+            if (expAmount > maxExp) {
                 messages.sendStringMessage(sender, "&c&l[Error]&7 EXP amount must be smaller than " + maxExp);
                 return true;
             }
         }
 
+        int amount = parseAmount(args[1]);
 
-        if (args.length == 2) {
-            int quantity;
-            try {
-                quantity = Integer.parseInt(args[1]);
-            } catch (NumberFormatException e) {
-                messages.sendStringMessage(player, "&cAmount must be a number");
-                return true;
-            }
-            if (expAmount * quantity > maxExp) {
-                messages.sendStringMessage(player, "&c&l[Error]&7 EXP amount must be smaller than " + maxExp);
-                return true;
-            }
-            if (quantity < 1) {
-                messages.sendMessage(player, "expbottle-withdraw.usage");
-                return true;
-            }
-            expBottleManager.give(player, expAmount, quantity); // gives player x amount of expbottles
+        if (expAmount * amount > maxExp) {
+            messages.sendStringMessage(player, "&c&l[Error]&7 Total EXP amount must be smaller than " + maxExp);
             return true;
         }
-        expBottleManager.give(player, expAmount, 1); // gives player 1 exp bottle
+        if (amount < 1) {
+            messages.sendMessage(player, "expbottle-withdraw.usage");
+            return true;
+        }
+        expBottleManager.give(player, expAmount, amount, false);
         return true;
     }
 
+
+    private void giveConsole(CommandSender sender, String[] args) {
+        if (args.length != 3) {
+            return;
+        }
+        Player target = Bukkit.getPlayer(args[0]);
+        if (target == null) {
+            messages.sendMessage(sender, "global.player-not-found");
+            return;
+        }
+
+        int expAmount = parseAmount(args[1]);
+
+        if (expAmount <= 0) {
+            messages.sendStringMessage(sender, "&c&l[Error]&7 Exp must be positive and bigger than zero");
+            return;
+        }
+
+        int amount = parseAmount(args[2]);
+
+        if (amount <= 0) {
+            messages.sendStringMessage(sender, "&c&l[Error]&7 amount must be positive and bigger than zero");
+            return;
+        }
+        if (expAmount * amount > maxExp) {
+            messages.sendStringMessage(target, "&c&l[Error]&7 EXP amount must be smaller than " + maxExp);
+        }
+
+        expBottleManager.give(target, expAmount, amount, true);
+    }
+
+    private int parseAmount(String amount) {
+        int amountParsed;
+
+        try {
+            amountParsed = Integer.parseInt(amount);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+
+        return amountParsed;
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {

@@ -3,6 +3,7 @@ package me.imlukas.withdrawer.managers;
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.events.WithdrawEvent;
+import me.imlukas.withdrawer.events.WithdrawType;
 import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.ExpUtil;
 import me.imlukas.withdrawer.utils.HealthUtil;
@@ -42,10 +43,21 @@ public abstract class Manager {
 
     }
 
-    public boolean callEvent(Player player, double value, int quantity, WithdrawEvent.WithdrawType type) {
+    public boolean callEvent(Player player, double value, int quantity, WithdrawType type) {
         WithdrawEvent withdrawEvent = new WithdrawEvent(player, value, quantity, type);
         Bukkit.getServer().getPluginManager().callEvent(withdrawEvent);
         return withdrawEvent.isCancelled();
+    }
+
+    public void giveItem(Player player, double value, int amount) {
+        ItemStack item = setItemProperties(player, value);
+        if (amount > 1) {
+            for (int i = 0; i < amount; i++) {
+                player.getInventory().addItem(item);
+            }
+        } else {
+            player.getInventory().addItem(item);
+        }
     }
 
     public ItemStack setItemProperties(Player player, double value) {
@@ -68,7 +80,7 @@ public abstract class Manager {
                     .replace("%owner%", player.getName());
             lore.add(textUtil.setColor(newText));
         }
-        if (itemMaterial.equals(Material.BARRIER)){
+        if (itemMaterial.equals(Material.BARRIER)) {
             lore.add(textUtil.setColor("&cThis item is a barrier because something is wrong in the config."));
             lore.add(textUtil.setColor("&cBut you can still use it :)."));
         }
@@ -80,10 +92,14 @@ public abstract class Manager {
         return finalItem;
     }
 
-    public void sendActionBar(Player player, double value, boolean success){
+    public void sendActionBar(Player player, double value, boolean success, boolean console) {
         String currencySign = economyUtil.getCurrencySign();
-
-        if (success){
+        if (console && success) {
+            messages.sendActionBarMessage(player, type + "-withdraw.actionbar.console", (message) -> message
+                    .replace("%value%", String.valueOf(value))
+                    .replace("%currency_sign%", currencySign));
+        }
+        if (success) {
             messages.sendActionBarMessage(player, type + "-withdraw.actionbar-success", (message) -> message
                     .replace("%value%", String.valueOf(value))
                     .replace("%currency_sign%", currencySign));
@@ -93,17 +109,35 @@ public abstract class Manager {
                 .replace("%value%", String.valueOf(value)));
     }
 
-    public void sendMessages(Player player, double value, boolean success) {
+    public void sendGiftMessage(Player target, int value, int quantity) {
+        String currencySign = economyUtil.getCurrencySign();
+        messages.sendMessage(target, type + "withdraw.gifted", (message) -> message
+                .replace("%type%", "banknote")
+                .replace("%currencySign%", currencySign)
+                .replace("%amount%", String.valueOf(value))
+                .replace("%quantity%", String.valueOf(quantity)));
+
+    }
+
+    public void sendMessages(Player player, double value, boolean success, boolean console) {
         String currencySign = economyUtil.getCurrencySign();
         String balance = String.valueOf(economyUtil.getMoney(player));
         String currentExp = String.valueOf(expUtil.getExp(player));
         String currentHealth = String.valueOf(healthUtil.getHealth(player) / 2);
-
+        if (console) {
+            messages.sendMessage(player, type + "-withdraw.console", (message) -> message
+                    .replace("%value%", String.valueOf(value))
+                    .replace("%balance%", balance)
+                    .replace("%current_exp%", currentExp)
+                    .replace("%current_health%", currentHealth)
+                    .replace("%currency_sign%", currencySign));
+            return;
+        }
         if (success) {
             if (messages.getConfiguration().getBoolean("messages.less-intrusive")) {
                 if (type.equalsIgnoreCase("expbottle")) {
                     messages.sendStringMessage(player, "&c-" + value + "EXP");
-                } else if (type.equalsIgnoreCase("banknote")){
+                } else if (type.equalsIgnoreCase("banknote")) {
                     messages.sendStringMessage(player, "&c-" + value + currencySign);
                 } else {
                     messages.sendStringMessage(player, "&c-" + value + "HP");
@@ -112,7 +146,6 @@ public abstract class Manager {
             }
             messages.sendMessage(player, type + "-withdraw.success", (message) -> message
                     .replace("%value%", String.valueOf(value))
-                    .replace("%hp%", String.valueOf(value))
                     .replace("%current_exp%", currentExp)
                     .replace("%balance%", balance)
                     .replace("%current_health%", currentHealth)
@@ -134,7 +167,7 @@ public abstract class Manager {
 
     private Material getItemMaterial(String type) {
         Material itemMaterial = Material.getMaterial(main.getConfig().getString(type + ".item").toUpperCase());
-        if (itemMaterial == null || itemMaterial.isEdible() || consumables.contains(itemMaterial) ) {
+        if (itemMaterial == null || itemMaterial.isEdible() || consumables.contains(itemMaterial)) {
             itemMaterial = Material.BARRIER;
         }
         return itemMaterial;

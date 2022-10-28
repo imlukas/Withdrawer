@@ -1,9 +1,8 @@
 package me.imlukas.withdrawer.managers;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.events.WithdrawEvent;
+import me.imlukas.withdrawer.events.WithdrawType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class ExpBottle extends Manager {
 
@@ -11,30 +10,38 @@ public class ExpBottle extends Manager {
         super(main, "expbottle");
     }
 
-    public void give(Player player, int exp, int amount) {
+    public void give(Player player, int exp, int amount, boolean console) {
         int total = exp * amount;
         boolean success = false;
-        if (callEvent(player, total, amount, WithdrawEvent.WithdrawType.EXPBOTTLE)) {
+        if (callEvent(player, total, amount, WithdrawType.EXPBOTTLE)) {
             return;
         }
-        if (!(expUtil.getExp(player) < total)) {
+        if (expUtil.hasExp(player, total)) {
             expUtil.changeExp(player, -total);
-            ItemStack expItem = setItemProperties(player, exp);
-            if (amount > 1) {
-                for (int i = 0; i < amount; i++) {
-                    player.getInventory().addItem(expItem);
-                }
-            } else {
-                player.getInventory().addItem(expItem);
-            }
+
+            giveItem(player, exp, amount);
+
             playWithdrawSound(player);
             success = true;
         }
-        if (messages.isUseActionBar()) {
-            sendActionBar(player, total, success);
+        if (console && !success) {
+            System.out.println("The player does not have enough EXP!");
             return;
         }
-        sendMessages(player, total, success);
+        if (messages.isUseActionBar()) {
+            sendActionBar(player, total, success, console);
+            return;
+        }
+        sendMessages(player, total, success, console);
+
+        if (console) {
+            System.out.println("You withdrew" + total + " EXP from " + player.getName());
+        }
     }
 
+    public void gift(Player target, int value, int quantity) {
+
+        giveItem(target, value, quantity);
+        sendGiftMessage(target, value, quantity);
+    }
 }

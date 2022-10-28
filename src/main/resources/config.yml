@@ -1,4 +1,6 @@
-economy-plugin: vault # Default is vault, Supported: vault, playerpoints. Can choose more than one.
+# Default is vault, Supported: vault, playerpoints, tokenmanager.
+# be careful with this when reloading, might crash the plugin :)
+economy-plugin: vault
 
 banknote:
   name: "&bBank Note &e(Right-Click)"

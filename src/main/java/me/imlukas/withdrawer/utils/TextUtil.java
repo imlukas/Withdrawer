@@ -21,7 +21,7 @@ public class TextUtil {
         String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
         int minorVer = Integer.parseInt(split[1]);
 
-        if(minorVer >= 16){
+        if (minorVer >= 16) {
             Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
             Matcher matcher = pattern.matcher(message);
 
@@ -31,7 +31,7 @@ public class TextUtil {
                 matcher = pattern.matcher(message);
             }
         }
-        return net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', message);
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 
     public String getColorConfig(String key) {

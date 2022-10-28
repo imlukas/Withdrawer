@@ -1,33 +1,44 @@
 package me.imlukas.withdrawer.managers;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.events.WithdrawEvent;
+import me.imlukas.withdrawer.events.WithdrawType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class HealthItem extends Manager {
     public HealthItem(Withdrawer main) {
         super(main, "health");
     }
 
-    public void give(Player player, int hp) {
+    public void give(Player player, int hp, boolean console) {
         boolean success = false;
-        if (callEvent(player, hp, 1, WithdrawEvent.WithdrawType.HEALTH)) {
+        if (callEvent(player, hp, 1, WithdrawType.HEALTH)) {
             return;
         }
         if (healthUtil.checkHealth(player, hp)) {
             healthUtil.removeHealth(player, hp);
-            ItemStack HealtItem = setItemProperties(player, hp);
-            player.getInventory().addItem(HealtItem);
+
+            giveItem(player, hp, 1);
+
             playWithdrawSound(player);
             success = true;
         }
-        if (messages.isUseActionBar()) {
-            sendActionBar(player, hp, success);
+        if (console && !success) {
+            System.out.println("The player does not have enough EXP!");
             return;
         }
-        sendMessages(player, hp, success);
+        if (messages.isUseActionBar()) {
+            sendActionBar(player, hp, success, console);
+            return;
+        }
+        sendMessages(player, hp, success, false);
+        if (console) {
+            System.out.println("You withdrew" + hp + " HP from " + player.getName());
+        }
     }
 
 
+    public void gift(Player target, int value) {
+        giveItem(target, value, 1);
+        sendGiftMessage(target, value, 1);
+    }
 }

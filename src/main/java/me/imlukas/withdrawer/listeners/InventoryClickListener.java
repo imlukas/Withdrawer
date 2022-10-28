@@ -24,19 +24,19 @@ public class InventoryClickListener implements Listener {
                 .getConfig().getBoolean("villager-trade")) {
             return;
         }
-        if (player.hasPermission("withdrawer.bypass.crafting")){
+        if (player.hasPermission("withdrawer.bypass.crafting")) {
             return;
         }
         InventoryType invType = player.getOpenInventory().getTopInventory().getType();
-        if (invType != InventoryType.WORKBENCH && invType != InventoryType.MERCHANT){
+        if (invType != InventoryType.WORKBENCH && invType != InventoryType.MERCHANT) {
             return;
         }
         ItemStack item = event.getCurrentItem();
-        if (item == null || item.getType().equals(Material.AIR)){
+        if (item == null || item.getType().equals(Material.AIR)) {
             return;
         }
         NBTItem nbtItem = new NBTItem(item);
-        if (nbtItem.hasKey("banknote-value") || nbtItem.hasKey("expbottle-value") || nbtItem.hasKey("health-value")){
+        if (nbtItem.hasKey("banknote-value") || nbtItem.hasKey("expbottle-value") || nbtItem.hasKey("health-value")) {
             event.setCancelled(true);
         }
     }

@@ -21,6 +21,12 @@ commands:
     description: "Withdraw hp"
     aliases:
       - wdhp
+      -
+  withdrawgift:
+    usage: </command>
+    description: "Withdraw gift"
+    aliases:
+      - wdgift
   withdrawer:
     usage: </command>
     description: "Withdrawer commands"

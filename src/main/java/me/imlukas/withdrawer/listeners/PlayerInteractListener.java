@@ -17,8 +17,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.text.DecimalFormat;
-
 public class PlayerInteractListener implements Listener {
 
     private final Withdrawer main;
@@ -120,7 +118,7 @@ public class PlayerInteractListener implements Listener {
         sendMessages(player, value, type);
     }
 
-    private void sendActionBar(Player player, double value, String type){
+    private void sendActionBar(Player player, double value, String type) {
         messages.sendActionBarMessage(player, type + "-redeem.actionbar", (message) -> message
                 .replace("%value%", "" + value)
                 .replace("%currency_sign%", "" + economyUtil.getCurrencySign()));
@@ -134,7 +132,7 @@ public class PlayerInteractListener implements Listener {
         if (messages.isLessIntrusive()) {
             if (type.equalsIgnoreCase("expbottle")) {
                 messages.sendStringMessage(player, "&a+" + value + "EXP");
-            } else if (type.equalsIgnoreCase("banknote")){
+            } else if (type.equalsIgnoreCase("banknote")) {
                 messages.sendStringMessage(player, "&a+" + value + currencySign);
             } else {
                 messages.sendStringMessage(player, "&a+" + value + "HP");

@@ -18,6 +18,11 @@ public final class ExpUtil {
      * @return the amount of experience the Player has
      * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
      */
+
+    public boolean hasExp(Player player, int exp) {
+        return getExp(player) >= exp;
+    }
+
     public int getExp(Player player) {
         return getExpFromLevel(player.getLevel())
                 + Math.round(getExpToNext(player.getLevel()) * player.getExp());

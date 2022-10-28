@@ -20,7 +20,7 @@ public class ItemDropListener implements Listener {
         if (event.getPlayer().hasPermission("withdrawer.bypass.drop"))
             return;
         NBTItem nbtitem = new NBTItem(event.getItemDrop().getItemStack());
-        
+
         if (nbtitem.hasKey("banknote-value")) {
             event.setCancelled(true);
         } else if (nbtitem.hasKey("expbottle-value")) {

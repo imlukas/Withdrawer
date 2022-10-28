@@ -2,9 +2,8 @@ package me.imlukas.withdrawer.commands;
 
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.managers.HealthItem;
-import me.imlukas.withdrawer.utils.HealthUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,9 +33,10 @@ public class HealthWithdrawCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player player)) {
-            messages.sendMessage(sender, "global.not-player");
+            giveConsole(sender, args);
             return true;
         }
+
         if (!(player.hasPermission("withdrawer.withdraw.health"))) {
             messages.sendMessage(sender, "global.no-permission");
             return true;
@@ -45,27 +45,57 @@ public class HealthWithdrawCommand implements CommandExecutor, TabCompleter {
             messages.sendMessage(player, "health-withdraw.usage");
             return true;
         }
-        int amount;
-        try {
-            amount = Integer.parseInt(args[0]);
-        } catch (NumberFormatException e) {
-            messages.sendStringMessage(sender, "&c&l[Error]&7 Amount must be an integer number");
-            return true;
-        }
+
+        int amount = parseAmount(args[0]);
 
         if (amount < minHealth) {
-            messages.sendStringMessage(sender, "&c&l[Error]&7 Amount must be bigger than " + minHealth);
+            messages.sendStringMessage(sender, "&c&l[Error]&7 HP Amount must be bigger than " + minHealth);
             return true;
         }
 
-        healthItemManager.give(player, amount);
+        healthItemManager.give(player, amount, false);
         return true;
+    }
+
+    private void giveConsole(CommandSender sender, String[] args) {
+        if (args.length != 3) {
+            return;
+        }
+        Player target = Bukkit.getPlayer(args[0]);
+        if (target == null) {
+            messages.sendMessage(sender, "global.player-not-found");
+            return;
+        }
+
+        int hpAmount = parseAmount(args[1]);
+
+        if (hpAmount <= 0) {
+            messages.sendStringMessage(sender, "&c&l[Error]&7 amount must be positive and bigger than zero");
+            return;
+        }
+        if (hpAmount < minHealth) {
+            messages.sendStringMessage(sender, "&c&l[Error]&7 HP Amount must be bigger than " + minHealth);
+        }
+        healthItemManager.give(target, hpAmount, true);
+    }
+
+    private int parseAmount(String amount) {
+        int amountParsed;
+
+        try {
+            amountParsed = Integer.parseInt(amount);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+
+        return amountParsed;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
+            completions.add(minHealth + "");
             completions.add("5");
             completions.add("10");
             completions.add("15");

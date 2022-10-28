@@ -1,10 +1,7 @@
 package me.imlukas.withdrawer;
 
 import lombok.Getter;
-import me.imlukas.withdrawer.commands.BankNoteWithdrawCommand;
-import me.imlukas.withdrawer.commands.ExpBottleCommand;
-import me.imlukas.withdrawer.commands.HealthWithdrawCommand;
-import me.imlukas.withdrawer.commands.WithdrawerCommand;
+import me.imlukas.withdrawer.commands.*;
 import me.imlukas.withdrawer.config.ConfigHandler;
 import me.imlukas.withdrawer.listeners.InventoryClickListener;
 import me.imlukas.withdrawer.listeners.ItemDropListener;
@@ -19,6 +16,7 @@ import me.imlukas.withdrawer.utils.HealthUtil;
 import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
 import me.imlukas.withdrawer.utils.illusion.storage.YMLBase;
+import me.realized.tokenmanager.api.TokenManager;
 import net.milkbowl.vault.economy.Economy;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
@@ -32,7 +30,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.logging.Logger;
 
 @Getter
 public final class Withdrawer extends JavaPlugin {
@@ -47,6 +44,7 @@ public final class Withdrawer extends JavaPlugin {
     private ExpBottle expBottleManager;
     private HealthItem healthItemManager;
     private PlayerPointsAPI playerPointsAPI;
+    private TokenManager tokenManagerAPI;
 
     @Override
     public void onEnable() {
@@ -91,14 +89,14 @@ public final class Withdrawer extends JavaPlugin {
         File file = base.getFile();
         InputStream stream = plugin.getResource(file.getAbsolutePath().replace(plugin.getDataFolder().getAbsolutePath() + File.separator, ""));
 
-        if(stream ==null)
+        if (stream == null)
             return;
 
         FileConfiguration cfg = base.getConfiguration();
         FileConfiguration other = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
 
-        for(String key : other.getKeys(true)) {
-            if (!cfg.isSet(key)){
+        for (String key : other.getKeys(true)) {
+            if (!cfg.isSet(key)) {
                 cfg.set(key, other.get(key));
             }
         }
@@ -110,6 +108,7 @@ public final class Withdrawer extends JavaPlugin {
         getCommand("withdrawxp").setExecutor(new ExpBottleCommand(this));
         getCommand("withdrawhp").setExecutor(new HealthWithdrawCommand(this));
         getCommand("withdrawer").setExecutor(new WithdrawerCommand(this));
+        getCommand("withdrawgift").setExecutor(new GiftCommand(this));
     }
 
     private void registerListeners() {
@@ -119,9 +118,13 @@ public final class Withdrawer extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
     }
 
+    // setup economies based on choice.
     private void setupEconomies() {
 
         String economy = this.getConfig().getString("economy-plugin");
+        if (economy == null || economy.isEmpty()) {
+            economy = "vault";
+        }
         if (economy.equalsIgnoreCase("playerpoints")) {
             if (Bukkit.getPluginManager().getPlugin("PlayerPoints") != null) {
                 playerPointsAPI = PlayerPoints.getInstance().getAPI();
@@ -130,14 +133,23 @@ public final class Withdrawer extends JavaPlugin {
                 System.out.println("[Withdrawer] PlayerPoints not found! DISABLING PLUGIN!");
                 Bukkit.getPluginManager().disablePlugin(this);
             }
-        } else if (!setupEconomy() && economy.equalsIgnoreCase("vault")) {
+            return;
+        }
+        if (!setupEconomy() && economy.equalsIgnoreCase("vault")) {
             System.out.println("[Withdrawer] Vault or plugin that handles vault economy not found! DISABLING PLUGIN!");
             Bukkit.getPluginManager().disablePlugin(this);
+            return;
         }
-    }
-
-    public void addDefaults(JavaPlugin plugin, YMLBase base) {
-
+        if (economy.equalsIgnoreCase("tokenmanager")) {
+            if (Bukkit.getPluginManager().getPlugin("TokenManager") != null) {
+                tokenManagerAPI = (TokenManager) Bukkit.getServer().getPluginManager().getPlugin("TokenManager");
+                System.out.println("[Withdrawer] Found TokenManager!");
+            } else {
+                System.out.println("[Withdrawer] TokenManager not found! DISABLING PLUGIN!");
+                Bukkit.getPluginManager().disablePlugin(this);
+            }
+            return;
+        }
     }
 
     // Vault Integration

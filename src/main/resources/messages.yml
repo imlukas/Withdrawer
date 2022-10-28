@@ -17,10 +17,13 @@ messages:
     feature-off: '&7%feature% is now &coff'
     reload: '&7Reloaded plugin configs'
   banknote-withdraw:
+    gifted: '&7You have been gifted &a%amount% %currency_sign% from an admin'
+    console: "&c%value%%currency_sign% &7have been withdrawn from your account"
     usage: '&cUsage: /withdrawmoney <amount> (quantity)'
     success:
       - '%prefix% &7You withdrew &a%value%%currency_sign%&7 from your account'
       - '&7Current balance: &a%balance%%currency_sign%'
+    actionbar-console: '&7%value%%currency_sign% &has been withdrawn from your account by an admin.'
     actionbar-success: '&7You withdrew &a%value%%currency_sign%&7 from your account'
     error:
       - '%prefix% &7You do not have enough money'
@@ -33,10 +36,13 @@ messages:
     actionbar: '&7You redeemed &a%value%%currency_sign%&7!'
 
   expbottle-withdraw:
+    gifted: '&7You have been gifted &a%amount% EXP from an admin'
+    console: "&c%value% has been withdrawn from you."
     usage: '&cUsage: /withdrawxp <exp> (quantity)'
     success:
       - '%prefix% &7You withdrew &a%value%EXP&7!'
       - '&7Current EXP: &a%current_exp%EXP'
+    actionbar-console: '&7%value% EXP has been withdrawn from you by an admin'
     actionbar-success: '&7You withdrew &a%value%EXP&7!'
     error:
       - '%prefix% &7You do not have enough EXP'
@@ -50,10 +56,13 @@ messages:
     actionbar: '&7You redeemed &a%value%EXP&7!'
 
   health-withdraw:
+    gifted: '&7You have been gifted &a%amount% HP from an admin'
+    console: "&c%value% has been withdrawn from you by an admin."
     usage: '&cUsage: /withdrawhp <amount of hearts>'
     success:
-      - '%prefix% &7You withdrew &a%hp% HP!&7'
+      - '%prefix% &7You withdrew &a%value% HP!&7'
       - '&7Current hearts: &a%current_health% Hearts'
+    actionbar-console: '&7%value% HP has been withdrawn from you by an admin.'
     actionbar-success: '&7You withdrew &a%value% HP!&7'
     error:
       - '%prefix% &7You do not have enough HP'
@@ -61,6 +70,6 @@ messages:
     actionbar-error: '&7You do not have enough HP'
   health-redeem:
     message:
-      - '%prefix% &7You redeemed &a%hp% HP&7!'
+      - '%prefix% &7You redeemed &a%value% HP&7!'
       - '&7Current hearts: &a%current_hp% Hearts'
     actionbar: '&7You redeemed &a%value% HP&7!'

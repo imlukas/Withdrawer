@@ -14,6 +14,8 @@ Features:
    - wdmoney (money) [amount] - gives you x(amount) of notes with the specified value.
  - wdxp (xp) - gives you a xp item with the specified value.
    - wdxp (xp) [amount] - gives you x(amount) of xp item(s) with the specified value.
+ - wdhp (hp) - gives you a health item that can be reedemed for health.
+ 
 
 ### Permissions:
   - withdrawer.redeem.expbottle
@@ -22,13 +24,15 @@ Features:
   - withdrawer.redeem.banknote
     - withdrawer.redeem.banknote.bulk
   - withdrawer.withdraw.banknote
+  - withdrawer.redeem.health
+  - withdrawer.withdraw.health
 ### Bypass Permissions
   - withdrawer.bypass.minmax.banknote
   - withdrawer.bypass.minmax.expbottle	
   - withdrawer.bypass.crafting
   - withdrawer.bypass.drop
 
-![Plugin working GIF](https://media.giphy.com/media/OBD6VdU2tz3BSjqfHG/giphy.gif)
+![Plugin working GIF](https://proxy.spigotmc.org/90441416b7527495f4f359f0c3e3cdd10a41d776?url=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2FCVflLRSCW1KGa2UjEi%2Fgiphy.gif)
 
 The idea for this plugin came from the fact that i didn't find any good open-source projects that could what this plugin does.
 So i thought it would be nice to create something like this for people to use.

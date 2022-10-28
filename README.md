@@ -32,7 +32,7 @@ Features:
   - withdrawer.bypass.crafting
   - withdrawer.bypass.drop
 
-![Plugin working GIF](https://proxy.spigotmc.org/90441416b7527495f4f359f0c3e3cdd10a41d776?url=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2FCVflLRSCW1KGa2UjEi%2Fgiphy.gif)
+![Plugin working GIF](https://media.giphy.com/media/CVflLRSCW1KGa2UjEi/giphy.gif)
 
 The idea for this plugin came from the fact that i didn't find any good open-source projects that could what this plugin does.
 So i thought it would be nice to create something like this for people to use.

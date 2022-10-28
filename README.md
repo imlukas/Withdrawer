@@ -2,7 +2,7 @@
 Withdrawer is a way for players to withdraw their money or exp onto physical items, so they can use them, trade them, sell them or store them as they wish.
 
 Features:
-  - Money and EXP withdrawing in the simplest way possible.
+  - Money, EXP and HP withdrawing in the simplest way possible.
   - Bulk-Redeeming while pressing down the Shift Key + Right-Click
   - Most of the messages are configurable, such as plugin prefix.
   - The items are all configurable.

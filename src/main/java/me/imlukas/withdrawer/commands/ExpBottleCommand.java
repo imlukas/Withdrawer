@@ -70,17 +70,20 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
         }
-
-        int amount = parseAmount(args[1]);
-
-        if (expAmount * amount > maxExp) {
-            messages.sendStringMessage(player, "&c&l[Error]&7 Total EXP amount must be smaller than " + maxExp);
-            return true;
+        int amount = 1;
+        if (args.length == 2){
+            amount = parseAmount(args[1]);
+            if (expAmount * amount > maxExp) {
+                messages.sendStringMessage(player, "&c&l[Error]&7 Total EXP amount must be smaller than " + maxExp);
+                return true;
+            }
+            if (amount < 1) {
+                messages.sendMessage(player, "expbottle-withdraw.usage");
+                return true;
+            }
         }
-        if (amount < 1) {
-            messages.sendMessage(player, "expbottle-withdraw.usage");
-            return true;
-        }
+
+
         expBottleManager.give(player, expAmount, amount, false);
         return true;
     }

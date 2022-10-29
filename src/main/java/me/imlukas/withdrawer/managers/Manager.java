@@ -95,9 +95,10 @@ public abstract class Manager {
     public void sendActionBar(Player player, double value, boolean success, boolean console) {
         String currencySign = economyUtil.getCurrencySign();
         if (console && success) {
-            messages.sendActionBarMessage(player, type + "-withdraw.actionbar.console", (message) -> message
+            messages.sendActionBarMessage(player, type + "-withdraw.actionbar-console", (message) -> message
                     .replace("%value%", String.valueOf(value))
                     .replace("%currency_sign%", currencySign));
+            return;
         }
         if (success) {
             messages.sendActionBarMessage(player, type + "-withdraw.actionbar-success", (message) -> message
@@ -111,10 +112,10 @@ public abstract class Manager {
 
     public void sendGiftMessage(Player target, int value, int quantity) {
         String currencySign = economyUtil.getCurrencySign();
-        messages.sendMessage(target, type + "withdraw.gifted", (message) -> message
+        messages.sendMessage(target, type + "-withdraw.gifted", (message) -> message
                 .replace("%type%", "banknote")
-                .replace("%currencySign%", currencySign)
-                .replace("%amount%", String.valueOf(value))
+                .replace("%currency_sign%", currencySign)
+                .replace("%amount%", String.valueOf(value * quantity))
                 .replace("%quantity%", String.valueOf(quantity)));
 
     }

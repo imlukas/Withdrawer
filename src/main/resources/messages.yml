@@ -17,7 +17,7 @@ messages:
     feature-off: '&7%feature% is now &coff'
     reload: '&7Reloaded plugin configs'
   banknote-withdraw:
-    gifted: '&7You have been gifted &a%amount% %currency_sign% from an admin'
+    gifted: '&7You have been gifted &a%amount%%currency_sign%&7 from an admin'
     console: "&c%value%%currency_sign% &7have been withdrawn from your account"
     usage: '&cUsage: /withdrawmoney <amount> (quantity)'
     success:

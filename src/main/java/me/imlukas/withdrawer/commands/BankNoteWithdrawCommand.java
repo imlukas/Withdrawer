@@ -66,7 +66,7 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
             }
         }
 
-        int amount;
+        int amount = 1;
         if (args.length == 2) {
             try {
                 amount = Integer.parseInt(args[1]);
@@ -82,8 +82,6 @@ public class BankNoteWithdrawCommand implements CommandExecutor, TabCompleter {
                 messages.sendMessage(player, "banknote-withdraw.usage");
                 return true;
             }
-        } else {
-            amount = 1;
         }
         noteManager.give(player, money, amount, false); // gives the item to the player
         return true;

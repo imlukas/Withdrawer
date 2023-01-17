@@ -1,7 +1,7 @@
 package me.imlukas.withdrawer.commands;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
+import me.imlukas.withdrawer.utils.storage.MessagesFile;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

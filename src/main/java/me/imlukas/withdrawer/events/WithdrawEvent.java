@@ -1,6 +1,7 @@
 package me.imlukas.withdrawer.events;
 
 import lombok.Getter;
+import me.imlukas.withdrawer.constant.ItemType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -15,7 +16,7 @@ public class WithdrawEvent extends Event implements Cancellable {
     private final Player player;
     private final double amount;
     private final int quantity;
-    private final WithdrawType type;
+    private final ItemType type;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -29,7 +30,7 @@ public class WithdrawEvent extends Event implements Cancellable {
     }
 
 
-    public WithdrawEvent(Player player, double amount, int quantity, WithdrawType type) {
+    public WithdrawEvent(Player player, double amount, int quantity, ItemType type) {
         this.player = player;
         this.amount = amount;
         this.quantity = Math.max(quantity, 1);

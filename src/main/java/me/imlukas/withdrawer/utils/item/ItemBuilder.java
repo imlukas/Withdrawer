@@ -1,4 +1,4 @@
-package me.imlukas.withdrawer.utils.illusion.item;
+package me.imlukas.withdrawer.utils.item;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -31,7 +31,7 @@ public class ItemBuilder {
 
     static {
         try {
-            configurableValues.put("data", ItemBuilder.class.getMethod("data", int.class), "getInt");
+            configurableValues.put("item", ItemBuilder.class.getMethod("data", int.class), "getInt");
             configurableValues.put("name", ItemBuilder.class.getMethod("name", String.class), "getString");
             configurableValues.put("amount", ItemBuilder.class.getMethod("amount", int.class), "getInt");
             configurableValues.put("lore", ItemBuilder.class.getMethod("lore", List.class), "getStringList");
@@ -175,14 +175,14 @@ public class ItemBuilder {
     }
 
     public ItemBuilder skull(String name) {
-        Validate.isTrue(material.name().contains("SKULL") || material.name().contains("HEAD"), "Attempt to set skull data on non skull item");
+        Validate.isTrue(material.name().contains("SKULL") || material.name().contains("HEAD"), "Attempt to set skull item on non skull item");
         this.skullName = name;
         data(3);
         return this;
     }
 
     public ItemBuilder skullHash(String hash) {
-        Validate.isTrue(material.name().contains("SKULL") || material.name().contains("HEAD"), "Attempt to set skull data on non skull item");
+        Validate.isTrue(material.name().contains("SKULL") || material.name().contains("HEAD"), "Attempt to set skull item on non skull item");
         this.skullHash = hash;
         data(3);
         return this;

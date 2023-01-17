@@ -1,19 +1,32 @@
 package me.imlukas.withdrawer.utils;
 
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 
 
 public class HealthUtil {
-
     public void addHealth(Player player, int health) {
-        double oldHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(oldHealth + health);
+
+        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        if (attribute == null) {
+            return;
+        }
+
+        double oldHealth = attribute.getValue();
+        attribute.setBaseValue(oldHealth + health);
     }
 
+
     public void removeHealth(Player player, int health) {
-        double oldHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(oldHealth - health);
+
+        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        if (attribute == null) {
+            return;
+        }
+
+        double oldHealth = attribute.getValue();
+        attribute.setBaseValue(oldHealth - health);
     }
 
     public boolean checkHealth(Player player, int health) {

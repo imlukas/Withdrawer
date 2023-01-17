@@ -7,15 +7,15 @@ import me.imlukas.withdrawer.listeners.InventoryClickListener;
 import me.imlukas.withdrawer.listeners.ItemDropListener;
 import me.imlukas.withdrawer.listeners.PlayerInteractListener;
 import me.imlukas.withdrawer.listeners.PlayerJoinListener;
-import me.imlukas.withdrawer.managers.ExpBottle;
-import me.imlukas.withdrawer.managers.HealthItem;
-import me.imlukas.withdrawer.managers.Note;
+import me.imlukas.withdrawer.managers.impl.ExpBottle;
+import me.imlukas.withdrawer.managers.impl.HealthItem;
+import me.imlukas.withdrawer.managers.impl.Note;
 import me.imlukas.withdrawer.utils.EconomyUtil;
 import me.imlukas.withdrawer.utils.ExpUtil;
 import me.imlukas.withdrawer.utils.HealthUtil;
 import me.imlukas.withdrawer.utils.TextUtil;
-import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
-import me.imlukas.withdrawer.utils.illusion.storage.YMLBase;
+import me.imlukas.withdrawer.utils.storage.MessagesFile;
+import me.imlukas.withdrawer.utils.storage.YMLBase;
 import me.realized.tokenmanager.api.TokenManager;
 import net.milkbowl.vault.economy.Economy;
 import org.black_ixx.playerpoints.PlayerPoints;
@@ -36,7 +36,6 @@ public final class Withdrawer extends JavaPlugin {
     private Economy econ;
     private MessagesFile messages;
     private ConfigHandler configHandler;
-    private TextUtil textUtil;
     private EconomyUtil economyUtil;
     private ExpUtil expUtil;
     private HealthUtil healthUtil;
@@ -52,12 +51,12 @@ public final class Withdrawer extends JavaPlugin {
         expUtil = new ExpUtil();
         messages = new MessagesFile(this);
         configHandler = new ConfigHandler(this);
-        textUtil = new TextUtil(this);
         economyUtil = new EconomyUtil(this);
         healthUtil = new HealthUtil();
         noteManager = new Note(this);
         expBottleManager = new ExpBottle(this);
         healthItemManager = new HealthItem(this);
+
         System.out.println("[Withdrawer] Registered Classes!");
         updateConfig(this, messages);
         updateConfig(this, configHandler);
@@ -67,9 +66,6 @@ public final class Withdrawer extends JavaPlugin {
         System.out.println("[Withdrawer] Registered Commands!");
         registerListeners();
         System.out.println("[Withdrawer] Registered Listeners!");
-
-
-        // Plugin startup logic
 
     }
 

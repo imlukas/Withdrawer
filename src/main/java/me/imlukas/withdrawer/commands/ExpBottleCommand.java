@@ -1,8 +1,9 @@
 package me.imlukas.withdrawer.commands;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.managers.ExpBottle;
-import me.imlukas.withdrawer.utils.illusion.storage.MessagesFile;
+import me.imlukas.withdrawer.managers.impl.ExpBottle;
+import me.imlukas.withdrawer.utils.NumberUtil;
+import me.imlukas.withdrawer.utils.storage.MessagesFile;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -72,7 +73,7 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
         }
         int amount = 1;
         if (args.length == 2){
-            amount = parseAmount(args[1]);
+            amount = NumberUtil.parse(args[1]);
             if (expAmount * amount > maxExp) {
                 messages.sendStringMessage(player, "&c&l[Error]&7 Total EXP amount must be smaller than " + maxExp);
                 return true;
@@ -99,14 +100,14 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        int expAmount = parseAmount(args[1]);
+        int expAmount = NumberUtil.parse(args[1]);
 
         if (expAmount <= 0) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 Exp must be positive and bigger than zero");
             return;
         }
 
-        int amount = parseAmount(args[2]);
+        int amount = NumberUtil.parse(args[2]);
 
         if (amount <= 0) {
             messages.sendStringMessage(sender, "&c&l[Error]&7 amount must be positive and bigger than zero");
@@ -117,18 +118,6 @@ public class ExpBottleCommand implements CommandExecutor, TabCompleter {
         }
 
         expBottleManager.give(target, expAmount, amount, true);
-    }
-
-    private int parseAmount(String amount) {
-        int amountParsed;
-
-        try {
-            amountParsed = Integer.parseInt(amount);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-
-        return amountParsed;
     }
 
     @Override

@@ -1,9 +1,8 @@
-package me.imlukas.withdrawer.utils.illusion.storage;
+package me.imlukas.withdrawer.utils.storage;
 
 import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -20,15 +19,16 @@ public class MessagesFile extends YMLBase {
     @Getter
     private final String prefix, arrow;
     @Getter
-    private boolean usePrefix, lessIntrusive, useActionBar;
+    private boolean usePrefixConfig, lessIntrusive, useActionBar;
     private String msg;
+    private final Pattern pattern;
 
     public MessagesFile(JavaPlugin plugin) {
         super(plugin, new File(plugin.getDataFolder(), "messages.yml"), true);
-
-        prefix = StringEscapeUtils.unescapeJava(getConfiguration().getString("messages.prefix"));
-        arrow = StringEscapeUtils.unescapeJava(getConfiguration().getString("messages.arrow"));
-        usePrefix = getConfiguration().getBoolean("messages.use-prefix");
+        pattern = Pattern.compile("#[a-fA-F0-9]{6}");
+        prefix = getConfiguration().getString("messages.prefix");
+        arrow = getConfiguration().getString("messages.arrow");
+        usePrefixConfig = getConfiguration().getBoolean("messages.use-prefix");
         lessIntrusive = getConfiguration().getBoolean("messages.less-intrusive");
         useActionBar = getConfiguration().getBoolean("messages.actionbar.enabled");
 
@@ -39,7 +39,6 @@ public class MessagesFile extends YMLBase {
         int minorVer = Integer.parseInt(split[1]);
 
         if (minorVer >= 16) {
-            Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
             Matcher matcher = pattern.matcher(message);
 
             while (matcher.find()) {
@@ -51,20 +50,19 @@ public class MessagesFile extends YMLBase {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    private String setMessage(String name) {
-        return setMessage(name, (s) -> s);
+    private String setMessage(String name, boolean usePrefix) {
+        return setMessage(name, usePrefix, (s) -> s);
     }
 
-    private String setMessage(String name, Function<String, String> action) {
-        if (!getConfiguration().contains("messages." + name))
+    private String setMessage(String name, boolean usePrefix, Function<String, String> action) {
+        if (!getConfiguration().contains("messages." + name)) {
             return "";
-
-        if (usePrefix) {
+        }
+        msg = "";
+        if (usePrefixConfig && usePrefix) {
             msg = prefix + " " + arrow + " " + getMessage(name);
-        } else if (getMessage(name).contains("%prefix%")) {
-            msg = msg.replace("%prefix%", prefix + " " + arrow + getMessage(name));
         } else {
-            msg = getMessage(name);
+            msg = getMessage(name).replace("%prefix%", prefix);
         }
         msg = action.apply(msg);
         return setColor(msg);
@@ -75,55 +73,55 @@ public class MessagesFile extends YMLBase {
     }
 
     public void sendMessage(CommandSender player, String name) {
-        sendMessage(player, name, (s) -> s);
+        sendMessage(player, name, true, (s) -> s);
     }
-
+    public void sendMessage(CommandSender player, String name, boolean usePrefix) {
+        sendMessage(player, name, usePrefix, (s) -> s);
+    }
     public void sendMessage(CommandSender player, String name, Function<String, String> action) {
+        sendMessage(player, name, true, action);
+    }
+    public void sendMessage(CommandSender player, String name, boolean usePrefix, Function<String, String> action) {
+
+        if (useActionBar && player instanceof Player) {
+            sendActionBarMessage((Player) player, name, action);
+            return;
+        }
+
         if (getConfiguration().isList("messages." + name)) {
             for (String str : getConfiguration().getStringList("messages." + name)) {
-                msg = StringEscapeUtils.unescapeJava(str.replace("%prefix%", prefix));
+                msg = str.replace("%prefix%", prefix);
                 msg = action.apply(msg);
                 player.sendMessage(setColor(msg));
             }
             return;
         }
-        msg = setMessage(name, action);
+
+        msg = setMessage(name, usePrefix, action);
         player.sendMessage(msg);
     }
 
     public void sendActionBarMessage(Player player, String key) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(setMessage(key)));
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(setMessage(key, true)));
     }
 
     public void sendActionBarMessage(Player player, String key, Function<String, String> action) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(setMessage(key, action)));
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(setMessage(key, true, action)));
     }
 
     public String getMessage(String name) {
         return getConfiguration().getString("messages." + name);
     }
 
-    public boolean toggleLessIntrusive() {
-        boolean isEnabled = lessIntrusive;
-        if (isEnabled) {
-            getConfiguration().set("messages.less-intrusive", false);
-        } else {
-            getConfiguration().set("messages.less-intrusive", true);
-        }
-        save();
-        lessIntrusive = getConfiguration().getBoolean("messages.less-intrusive");
-        return !isEnabled;
-    }
-
     public boolean togglePrefix() {
-        boolean isEnabled = usePrefix;
+        boolean isEnabled = usePrefixConfig;
         if (isEnabled) {
             getConfiguration().set("messages.use-prefix", false);
         } else {
             getConfiguration().set("messages.use-prefix", true);
         }
         save();
-        usePrefix = getConfiguration().getBoolean("messages.use-prefix");
+        usePrefixConfig = getConfiguration().getBoolean("messages.use-prefix");
         return !isEnabled;
     }
 
@@ -136,6 +134,18 @@ public class MessagesFile extends YMLBase {
         }
         save();
         useActionBar = getConfiguration().getBoolean("messages.actionbar.enabled");
+        return !isEnabled;
+    }
+
+    public boolean toggleLessIntrusive() {
+        boolean isEnabled = lessIntrusive;
+        if (isEnabled) {
+            getConfiguration().set("messages.less-intrusive", false);
+        } else {
+            getConfiguration().set("messages.less-intrusive", true);
+        }
+        save();
+        lessIntrusive = getConfiguration().getBoolean("messages.less-intrusive");
         return !isEnabled;
     }
 }

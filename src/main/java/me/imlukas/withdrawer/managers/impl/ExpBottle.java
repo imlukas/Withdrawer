@@ -1,7 +1,8 @@
-package me.imlukas.withdrawer.managers;
+package me.imlukas.withdrawer.managers.impl;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.events.WithdrawType;
+import me.imlukas.withdrawer.constant.ItemType;
+import me.imlukas.withdrawer.managers.Manager;
 import org.bukkit.entity.Player;
 
 public class ExpBottle extends Manager {
@@ -13,7 +14,7 @@ public class ExpBottle extends Manager {
     public void give(Player player, int exp, int amount, boolean console) {
         int total = exp * amount;
         boolean success = false;
-        if (callEvent(player, total, amount, WithdrawType.EXPBOTTLE)) {
+        if (callEvent(player, total, amount, ItemType.EXPBOTTLE)) {
             return;
         }
         if (expUtil.hasExp(player, total)) {
@@ -28,10 +29,7 @@ public class ExpBottle extends Manager {
             System.out.println("The player does not have enough EXP!");
             return;
         }
-        if (messages.isUseActionBar()) {
-            sendActionBar(player, total, success, console);
-            return;
-        }
+
         sendMessages(player, total, success, console);
 
         if (console) {

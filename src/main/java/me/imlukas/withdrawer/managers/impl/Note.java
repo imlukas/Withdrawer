@@ -1,7 +1,8 @@
-package me.imlukas.withdrawer.managers;
+package me.imlukas.withdrawer.managers.impl;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.events.WithdrawType;
+import me.imlukas.withdrawer.constant.ItemType;
+import me.imlukas.withdrawer.managers.Manager;
 import org.bukkit.entity.Player;
 
 public class Note extends Manager {
@@ -13,7 +14,7 @@ public class Note extends Manager {
     public void give(Player player, double money, int amount, boolean console) {
         double total = money * amount;
         boolean success = false;
-        if (callEvent(player, total, amount, WithdrawType.BANKNOTE)) {
+        if (callEvent(player, total, amount, ItemType.BANKNOTE)) {
             return;
         }
         if (economyUtil.hasMoney(player, total)) {
@@ -28,10 +29,7 @@ public class Note extends Manager {
             System.out.println("The player does not have enough money!");
             return;
         }
-        if (messages.isUseActionBar()) {
-            sendActionBar(player, total, success, console);
-            return;
-        }
+
         sendMessages(player, total, success, console);
 
         if (console) {
@@ -41,9 +39,7 @@ public class Note extends Manager {
 
 
     public void gift(Player target, int value, int quantity) {
-
         giveItem(target, value, quantity);
         sendGiftMessage(target, value, quantity);
-
     }
 }

@@ -1,4 +1,4 @@
-package me.imlukas.withdrawer.utils.illusion.storage;
+package me.imlukas.withdrawer.utils.storage;
 
 import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;

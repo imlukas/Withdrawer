@@ -10,19 +10,14 @@ import java.util.regex.Pattern;
 
 public class TextUtil {
 
-    private final FileConfiguration config;
+    private static final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
-    public TextUtil(JavaPlugin main) {
-        this.config = main.getConfig();
-
-    }
-
-    public String setColor(String message) {
+    public static String setColor(String message) {
         String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
         int minorVer = Integer.parseInt(split[1]);
 
         if (minorVer >= 16) {
-            Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
+
             Matcher matcher = pattern.matcher(message);
 
             while (matcher.find()) {
@@ -34,7 +29,4 @@ public class TextUtil {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    public String getColorConfig(String key) {
-        return setColor(config.getString(key));
-    }
 }

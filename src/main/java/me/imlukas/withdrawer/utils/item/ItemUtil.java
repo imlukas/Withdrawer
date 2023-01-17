@@ -1,4 +1,4 @@
-package me.imlukas.withdrawer.utils.illusion.item;
+package me.imlukas.withdrawer.utils.item;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

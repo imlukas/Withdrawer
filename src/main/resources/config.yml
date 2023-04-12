@@ -1,6 +1,6 @@
-# Default is vault, Supported: vault, playerpoints, tokenmanager.
+# Default is vault, Supported: vault, playerpoints, tokenmanager. <-> write those names in the list.
 # be careful with this when reloading, might crash the plugin :)
-economy-plugin: vault
+economy-plugins: [vault, playerpoints, tokenmanager]
 
 banknote:
   name: "&bBank Note &e(Right-Click)"

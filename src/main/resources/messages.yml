@@ -3,16 +3,19 @@ messages:
   # redeem will only be "+money$" instead of the default message.
   less-intrusive: false
 
+  use-actionbar: true # if true, the messages will be sent to the actionbar instead of the chat
   use-prefix: true # NOTE: this does not disable %prefix% -- Messages in a list of messages will not have prefix by default. You need to use the %prefix%.
   prefix: "&d&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
   arrow: "->" # arrow to appear before the messages [Withdrawer] >> This is a message
-  actionbar:
-    enabled: true
 
-  global:
+  command:
     not-player: 'This command can only be used by a player'
     no-permission: '&cYou do not have permission to do this'
     player-not-found: 'Player(s) not found'
+    invalid-args: 'Invalid arguments'
+
+    invalid-economy-name: '&cInvalid economy name'
+  global:
     feature-on: '&7%feature% is now &aon'
     feature-off: '&7%feature% is now &coff'
     reload: '&7Reloaded plugin configs'

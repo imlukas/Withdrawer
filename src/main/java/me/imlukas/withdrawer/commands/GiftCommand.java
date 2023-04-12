@@ -5,7 +5,6 @@ import me.imlukas.withdrawer.managers.impl.ExpBottle;
 import me.imlukas.withdrawer.managers.impl.HealthItem;
 import me.imlukas.withdrawer.managers.impl.Note;
 import me.imlukas.withdrawer.utils.NumberUtil;
-import me.imlukas.withdrawer.utils.storage.MessagesFile;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

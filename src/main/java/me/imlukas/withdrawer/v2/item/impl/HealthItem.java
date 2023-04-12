@@ -16,7 +16,7 @@ public class HealthItem implements WithdrawableItem {
 
     @Override
     public ItemStack getItem() {
-        return plugin.getConfigHandler().getHealthItem();
+        return plugin.getDefaultItemsHandler().getHealthItem();
     }
 
     @Override

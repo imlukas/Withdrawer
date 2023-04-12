@@ -19,11 +19,11 @@ public final class ExpUtil {
      * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
      */
 
-    public boolean hasExp(Player player, int exp) {
+    public static boolean hasExp(Player player, int exp) {
         return getExp(player) >= exp;
     }
 
-    public int getExp(Player player) {
+    public static int getExp(Player player) {
         return getExpFromLevel(player.getLevel())
                 + Math.round(getExpToNext(player.getLevel()) * player.getExp());
     }
@@ -35,7 +35,7 @@ public final class ExpUtil {
      * @return the total experience calculated
      * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
      */
-    public int getExpFromLevel(int level) {
+    public static int getExpFromLevel(int level) {
         if (level > 30) {
             return (int) (4.5 * level * level - 162.5 * level + 2220);
         }
@@ -51,7 +51,7 @@ public final class ExpUtil {
      * @param exp the total experience
      * @return the level calculated
      */
-    public double getLevelFromExp(long exp) {
+    public static double getLevelFromExp(long exp) {
         int level = getIntLevelFromExp(exp);
 
         // Get remaining exp progressing towards next level. Cast to float for next bit of math.
@@ -71,7 +71,7 @@ public final class ExpUtil {
      * @param exp the total experience
      * @return the level calculated
      */
-    public int getIntLevelFromExp(long exp) {
+    public static int getIntLevelFromExp(long exp) {
         if (exp > 1395) {
             return (int) ((Math.sqrt(72 * exp - 54215D) + 325) / 18);
         }
@@ -90,7 +90,7 @@ public final class ExpUtil {
      * @param level the current level
      * @see <a href=http://minecraft.gamepedia.com/Experience#Leveling_up>Experience#Leveling_up</a>
      */
-    private int getExpToNext(int level) {
+    private static int getExpToNext(int level) {
         if (level >= 30) {
             // Simplified formula. Internal: 112 + (level - 30) * 9
             return level * 9 - 158;
@@ -116,7 +116,7 @@ public final class ExpUtil {
      * @param player the Player affected
      * @param exp    the amount of experience to add or remove
      */
-    public void changeExp(Player player, int exp) {
+    public static void changeExp(Player player, int exp) {
         exp += getExp(player);
 
         if (exp < 0) {

@@ -16,7 +16,7 @@ public class ExpItem implements WithdrawableItem {
 
     @Override
     public ItemStack getItem() {
-        return plugin.getConfigHandler().getExpItem();
+        return plugin.getDefaultItemsHandler().getExpItem();
     }
 
     @Override

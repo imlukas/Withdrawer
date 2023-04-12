@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 
 public class HealthUtil {
-    public void addHealth(Player player, int health) {
+    public static void addHealth(Player player, int health) {
 
         AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (attribute == null) {
@@ -18,7 +18,7 @@ public class HealthUtil {
     }
 
 
-    public void removeHealth(Player player, int health) {
+    public static void removeHealth(Player player, int health) {
 
         AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (attribute == null) {
@@ -29,13 +29,13 @@ public class HealthUtil {
         attribute.setBaseValue(oldHealth - health);
     }
 
-    public boolean checkHealth(Player player, int health) {
+    public static boolean checkHealth(Player player, int health) {
         int oldHealth = (int) (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - 1);
 
         return !(oldHealth <= health);
     }
 
-    public double getHealth(Player player) {
+    public static double getHealth(Player player) {
         return player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
     }
 }

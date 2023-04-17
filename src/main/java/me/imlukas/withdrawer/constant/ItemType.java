@@ -3,7 +3,7 @@ package me.imlukas.withdrawer.constant;
 public enum ItemType {
 
     BANKNOTE("banknote"),
-    EXPBOTTLE("expbottle"),
+    EXP("expbottle"),
     HEALTH("health");
 
     private final String lowercase;

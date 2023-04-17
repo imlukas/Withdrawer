@@ -1,22 +1,19 @@
-package me.imlukas.withdrawer.events;
+package me.imlukas.withdrawer.v2.events;
 
 import lombok.Getter;
 import me.imlukas.withdrawer.constant.ItemType;
+import me.imlukas.withdrawer.v2.item.WithdrawableItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 @Getter
-public class WithdrawEvent extends Event implements Cancellable {
+public class RedeemEvent extends Event implements Cancellable {
 
     private boolean cancelled = false;
-
-
     private final Player player;
-    private final double amount;
-    private final int quantity;
-    private final ItemType type;
+    private final WithdrawableItem withdrawableItem;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -29,12 +26,17 @@ public class WithdrawEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-
-    public WithdrawEvent(Player player, double amount, int quantity, ItemType type) {
+    public RedeemEvent(Player player, WithdrawableItem withdrawableItem) {
         this.player = player;
-        this.amount = amount;
-        this.quantity = Math.max(quantity, 1);
-        this.type = type;
+        this.withdrawableItem = withdrawableItem;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public WithdrawableItem getWithdrawableItem() {
+        return withdrawableItem;
     }
 
     @Override
@@ -46,5 +48,4 @@ public class WithdrawEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         cancelled = cancel;
     }
-
 }

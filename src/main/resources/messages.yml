@@ -8,6 +8,10 @@ messages:
   prefix: "&d&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
   arrow: "->" # arrow to appear before the messages [Withdrawer] >> This is a message
 
+  banknote:
+    gifted: "&7You have been gifted %amount%%curreny_sign% from %gifter%"
+
+    no-money: "&cYou do not have enough money"
   command:
     not-player: 'This command can only be used by a player'
     no-permission: '&cYou do not have permission to do this'

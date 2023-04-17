@@ -51,7 +51,7 @@ public class PlayerInteractListener implements Listener {
             setRedeemProperties(player, nbtItem, ItemType.BANKNOTE);
         } else if (nbtItem.hasKey("expbottle-value")) {
             event.setCancelled(true);
-            setRedeemProperties(player, nbtItem, ItemType.EXPBOTTLE);
+            setRedeemProperties(player, nbtItem, ItemType.EXP);
         } else if (nbtItem.hasKey("health-value")) {
             event.setCancelled(true);
             setRedeemProperties(player, nbtItem, ItemType.HEALTH);
@@ -96,7 +96,7 @@ public class PlayerInteractListener implements Listener {
             playSounds(player, type);
         }
 
-        if (type == ItemType.EXPBOTTLE) {
+        if (type == ItemType.EXP) {
             expUtil.changeExp(player, (int) value);
         } else if (type == ItemType.BANKNOTE) {
             economyUtil.giveMoney(player, value);
@@ -112,7 +112,7 @@ public class PlayerInteractListener implements Listener {
         String currentExp = String.valueOf(expUtil.getExp(player));
         String currentHealth = String.valueOf(healthUtil.getHealth(player) / 2);
         if (messages.isLessIntrusive()) {
-            if (type == ItemType.EXPBOTTLE) {
+            if (type == ItemType.EXP) {
                 messages.sendStringMessage(player, "&a+" + value + "EXP");
             } else if (type == ItemType.BANKNOTE) {
                 messages.sendStringMessage(player, "&a+" + value + currencySign);

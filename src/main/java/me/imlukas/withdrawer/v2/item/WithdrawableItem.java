@@ -9,13 +9,17 @@ import java.util.UUID;
 public interface WithdrawableItem {
 
     UUID getUuid();
-    ItemStack getItem();
+
+    ItemStackWrapper getWrappedItem();
+    ItemStack getItemStack();
     int getValue();
+
+    int getAmount();
     ItemType getType();
 
-
+    boolean isGifted();
 
     public void withdraw(Player player);
 
-    public void redeem(Player player);
+    public void redeem(Player player, boolean isShift);
 }

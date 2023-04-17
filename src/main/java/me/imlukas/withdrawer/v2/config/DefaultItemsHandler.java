@@ -4,6 +4,7 @@ import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.constant.ItemType;
 import me.imlukas.withdrawer.utils.TextUtil;
 import me.imlukas.withdrawer.utils.item.ItemBuilder;
+import me.imlukas.withdrawer.v2.item.ItemStackWrapper;
 import me.imlukas.withdrawer.v2.utils.storage.YMLBase;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +15,7 @@ public class DefaultItemsHandler extends YMLBase {
 
     private final List<Material> consumables = new ArrayList<>(Arrays.asList(Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION));
 
-    private final Map<String, ItemStack> defaultItems = new HashMap<>();
+    private final Map<ItemType, ItemStack> defaultItems = new HashMap<>();
 
     public DefaultItemsHandler(Withdrawer plugin) {
         super(plugin, "config.yml");
@@ -22,13 +23,13 @@ public class DefaultItemsHandler extends YMLBase {
     }
 
     private void load() {
-        defaultItems.put(ItemType.BANKNOTE.getLowercase(), getBankNoteItem());
-        defaultItems.put(ItemType.HEALTH.getLowercase(), getHealthItem());
-        defaultItems.put(ItemType.EXPBOTTLE.getLowercase(), getExpItem());
+        defaultItems.put(ItemType.BANKNOTE, getBankNoteItem());
+        defaultItems.put(ItemType.HEALTH, getHealthItem());
+        defaultItems.put(ItemType.EXP, getExpItem());
     }
 
-    public ItemStack getItem(String identifier) {
-        return defaultItems.get(identifier).clone();
+    public ItemStackWrapper getWrapper(ItemType itemType) {
+        return new ItemStackWrapper(defaultItems.get(itemType).clone());
     }
 
     private ItemStack getBankNoteItem() {
@@ -50,10 +51,10 @@ public class DefaultItemsHandler extends YMLBase {
     }
 
     private ItemStack getExpItem() {
-        Material itemMaterial = getItemMaterial(ItemType.EXPBOTTLE);
+        Material itemMaterial = getItemMaterial(ItemType.EXP);
 
         return new ItemBuilder(itemMaterial)
-                .name(TextUtil.setColor(getConfiguration().getString(ItemType.EXPBOTTLE.getLowercase() + ".name")))
+                .name(TextUtil.setColor(getConfiguration().getString(ItemType.EXP.getLowercase() + ".name")))
                 .glowing(true)
                 .build();
     }

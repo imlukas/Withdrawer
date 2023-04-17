@@ -40,7 +40,7 @@ public class TextUtils {
      * @return The parsed integer
      */
     public static int parseInt(String stringToParse, Predicate<Integer> predicate) { // not really a text utility, but it's used in a text utility
-        int parsed = 0;
+        int parsed = 1;
         try {
             parsed = Integer.parseInt(stringToParse);
         } catch (NumberFormatException e) {

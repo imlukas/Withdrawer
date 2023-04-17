@@ -3,7 +3,7 @@ package me.imlukas.withdrawer.v2.commands;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.v2.economy.EconomyManager;
 import me.imlukas.withdrawer.v2.economy.IEconomy;
-import me.imlukas.withdrawer.v2.item.impl.BankNoteItem;
+import me.imlukas.withdrawer.v2.item.impl.MoneyItem;
 import me.imlukas.withdrawer.v2.item.registry.WithdrawableItemsRegistry;
 import me.imlukas.withdrawer.v2.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.v2.utils.storage.MessagesFile;
@@ -38,19 +38,18 @@ public class WithdrawMoneyCommand implements SimpleCommand {
 
         value = TextUtils.parseInt(args[0], (integer -> integer > 0));
 
-        int amount = 0;
-        if (args[1].isEmpty()) {
-            messages.sendMessage(sender, "command.invalid-args");
+        int amount = 1;
+        if (!args[1].isEmpty()) {
+            amount = TextUtils.parseInt(args[1], (integer -> integer > 0));
         }
-        amount = TextUtils.parseInt(args[1], (integer -> integer > 0));
 
         IEconomy economy = economyManager.getFirstEconomy();
         if (!args[2].isEmpty()) {
             economy = getEconomy(args[0]);
         }
 
-        BankNoteItem bankNoteItem = new BankNoteItem(plugin, value, economy);
-        bankNoteItem.getItem().setAmount(amount);
+        MoneyItem bankNoteItem = new MoneyItem(plugin, value, amount, economy);
+        bankNoteItem.getItemStack().setAmount(amount);
         itemsRegistry.addItem(bankNoteItem);
     }
 

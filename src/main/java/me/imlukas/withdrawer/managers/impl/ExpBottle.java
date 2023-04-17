@@ -14,7 +14,7 @@ public class ExpBottle extends Manager {
     public void give(Player player, int exp, int amount, boolean console) {
         int total = exp * amount;
         boolean success = false;
-        if (callEvent(player, total, amount, ItemType.EXPBOTTLE)) {
+        if (callEvent(player, total, amount, ItemType.EXP)) {
             return;
         }
         if (expUtil.hasExp(player, total)) {

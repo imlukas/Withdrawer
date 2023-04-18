@@ -1,4 +1,12 @@
-# [Withdrawer](https://www.spigotmc.org/resources/withdrawer.103986/).
+# <p align="center">[Withdrawer](https://www.spigotmc.org/resources/withdrawer.103986/)</p>
+
+<div align="center">
+
+![GitHub Repo stars](https://img.shields.io/github/stars/imlukas/Withdrawer?style=for-the-badge) 
+![GitHub watchers](https://img.shields.io/github/watchers/imlukas/Withdrawer?style=for-the-badge) 
+![GitHub issues](https://img.shields.io/github/issues/imlukas/Withdrawer?style=for-the-badge)
+
+</div>
 Withdrawer is a way for players to withdraw their money or exp onto physical items, so they can use them, trade them, sell them or store them as they wish.
 
 Features:

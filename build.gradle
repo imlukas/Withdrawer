@@ -6,7 +6,7 @@ plugins {
 tasks.build.dependsOn('shadowJar')
 
 group = 'imlukas'
-version = '1.6.1'
+version = '2.0'
 
 repositories {
     mavenCentral()
@@ -42,7 +42,8 @@ dependencies {
     annotationProcessor('org.projectlombok:lombok:1.18.24')
 
     compileOnly 'com.mojang:authlib:1.5.21'
-    implementation 'de.tr7zw:item-nbt-api-plugin:2.10.0'
+    implementation 'de.tr7zw:item-nbt-api-plugin:2.11.2'
+    implementation 'org.reflections:reflections:0.10.2'
     compileOnly fileTree(dir: "libs", include: ["*.jar"])
     compileOnly 'com.github.Archy-X:AureliumSkills:Beta1.3.10'
 }

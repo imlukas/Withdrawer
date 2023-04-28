@@ -4,31 +4,4 @@ main: me.imlukas.withdrawer.Withdrawer
 api-version: 1.16
 softdepend: [ Essentials, PlayerPoints, Vault ]
 authors: [ imlukas ]
-description: Withdraw money and exp trough items!
-commands:
-  withdrawmoney:
-    usage: </command>
-    description: "Withdraw money"
-    aliases:
-      - wdmoney
-  withdrawxp:
-    usage: </command>
-    description: "Withdraw xp"
-    aliases:
-      - wdxp
-  withdrawhp:
-    usage: </command>
-    description: "Withdraw hp"
-    aliases:
-      - wdhp
-      -
-  withdrawgift:
-    usage: </command>
-    description: "Withdraw gift"
-    aliases:
-      - wdgift
-  withdrawer:
-    usage: </command>
-    description: "Withdrawer commands"
-    aliases:
-      - wd
+description: Withdraw money, exp and hp from items!

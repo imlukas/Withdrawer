@@ -8,15 +8,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class YMLBase {
 
-    @Getter
-    protected File file;
     private final boolean existsOnSource;
     private final JavaPlugin plugin;
     @Getter
     private final FileConfiguration configuration;
+    @Getter
+    protected File file;
 
     public YMLBase(JavaPlugin plugin, String name) {
         this(plugin, new File(plugin.getDataFolder(), name), true);
@@ -43,9 +44,10 @@ public class YMLBase {
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            if (existsOnSource)
-                plugin.saveResource(file.getAbsolutePath().replace(plugin.getDataFolder().getAbsolutePath() + File.separator, ""), false);
-            else {
+            if (existsOnSource) {
+                plugin.saveResource(file.getAbsolutePath()
+                        .replace(plugin.getDataFolder().getAbsolutePath() + File.separator, ""), false);
+            } else {
                 try {
                     file.createNewFile();
                 } catch (IOException e) {
@@ -61,5 +63,26 @@ public class YMLBase {
         }
 
         return cfg;
+    }
+
+    public void writeUnsetValues() {
+        if(!existsOnSource) {
+            return;
+        }
+
+        String inputName = file.getAbsolutePath().replace(plugin.getDataFolder().getAbsolutePath() + File.separator, "");
+
+        try(InputStreamReader reader = new InputStreamReader(plugin.getResource(inputName))) {
+            YamlConfiguration source = YamlConfiguration.loadConfiguration(reader);
+
+            for(String key : source.getKeys(true)) {
+                if(!configuration.contains(key)) {
+                    configuration.addDefault(key, source.get(key));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

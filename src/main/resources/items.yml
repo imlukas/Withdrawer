@@ -1,0 +1,74 @@
+money:
+  # List of all available materials.
+  # if material is a BARRIER it means something is wrong.
+  # do not use consumables, such as potions and food.
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+  type: PAPER
+  name: '&bBank Note &e(Right-Click)'
+  lore:
+    - '&b&lValue: &7%value%$'
+    - '&b&lSigner: &7%owner%'
+    - ' '
+    - '&e&l(Shift-Right-Click) &7to bulk-open'
+  glowing: true # Defines if the item has enchantment glint.
+
+  min: 100 # minimum value of the banknote
+  max: 10000 # maximum value of the banknote
+
+
+  # List of all the available sounds.
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+  sounds:
+    withdraw:
+      sound: BLOCK_NOTE_BLOCK_PLING
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      enabled: true
+  redeem:
+    message: '&aYou have redeemed &e%value%$ &afrom the banknote.'
+    command: 'player: say %player% has redeemed %value%$ from the banknote.'
+
+expbottle:
+  type: EXPERIENCE_BOTTLE
+  name: '&bExp Bottle &e&l(Right-Click)'
+  lore:
+    - '&b&lValue: &7%value%EXP'
+    - ' '
+    - '&e&l(Shift-Right-Click) &7to bulk-open'
+  glowing: true
+
+
+  min: 100 # minimum value of the exp bottle
+  max: 10000 # maximum value of the exp bottle
+
+
+
+  sounds:
+    withdraw:
+      sound: BLOCK_NOTE_BLOCK_PLING
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      enabled: true
+  redeem: {}
+
+
+health:
+  type: REDSTONE
+  name: '&bHP Jar &e&l(Right-Click)'
+  lore:
+    - '&b&lHP Stored: &7%value% HP'
+    - ' '
+    - '&cThis item can''t be bulk-opened.'
+  glowing: true
+
+  min: 1
+
+  sounds:
+    withdraw:
+      sound: BLOCK_NOTE_BLOCK_PLING
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      enabled: true

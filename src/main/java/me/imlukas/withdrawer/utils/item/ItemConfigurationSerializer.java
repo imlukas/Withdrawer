@@ -24,7 +24,7 @@ public class ItemConfigurationSerializer {
         if (section.contains(key)) {
             T value = section.getObject(key, clazz);
 
-            if(value == null) {
+            if (value == null) {
                 return;
             }
 

@@ -2,7 +2,6 @@ package me.imlukas.withdrawer.listener;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.economy.EconomyManager;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemInitializers;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
@@ -19,6 +18,7 @@ import java.util.UUID;
 public class ConnectionListener implements Listener {
     private final WithdrawableItemInitializers defaultWithdrawables;
     private final WithdrawableItemsStorage itemsStorage;
+
     public ConnectionListener(Withdrawer plugin) {
         this.defaultWithdrawables = plugin.getDefaultWithdrawables();
         this.itemsStorage = plugin.getWithdrawableItemsStorage();

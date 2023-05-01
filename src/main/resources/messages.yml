@@ -1,57 +1,44 @@
 messages:
-  # if true the messages will be simpler and less intrusive
-  # redeem will only be "+money$" instead of the default message.
-  less-intrusive: false
-
+  less-intrusive: false # if true the messages will be simpler and less intrusive
   use-actionbar: true # if true, the messages will be sent to the actionbar instead of the chat
-  use-prefix: true # NOTE: this does not disable %prefix% -- Messages in a list of messages will not have prefix by default. You need to use the %prefix%.
+  use-prefix: true # NOTE: this does not disable %prefix% - Messages in a list of messages will not have prefix by default. You need to use the %prefix%.
   prefix: "&d&l[Withdrawer]" # prefix to appear besides the messages, use %prefix% to force a prefix onto a message
   arrow: "->" # arrow to appear before the messages [Withdrawer] >> This is a message
 
-  money:
-    gifted: "&7You have been gifted %amount%%currency% from %gifter%"
-    no-money: "&cYou do not have enough money"
-    redeem: "&7You redeemed %amount%%currency%!"
-    withdraw: "&7You withdrew %amount%%currency% from your account"
-
+  # Global messages
+  global:
+    feature-on: '&7%feature% is now &aon'
+    feature-off: '&7%feature% is now &coff'
+    reload: '&7Reloaded plugin configs'
   command:
     not-player: 'This command can only be used by a player'
     no-permission: '&cYou do not have permission to do this'
     player-not-found: 'Player(s) not found'
     invalid-args: 'Invalid arguments'
-
     invalid-economy-name: '&cInvalid economy name'
-  global:
-    feature-on: '&7%feature% is now &aon'
-    feature-off: '&7%feature% is now &coff'
-    reload: '&7Reloaded plugin configs'
 
-  banknote-withdraw:
-    gifted: '&7You have been gifted &a%amount%%currency_sign%&7 from an admin'
-    console: "&c%value%%currency_sign% &7has been withdrawn from your account by an admin"
-    usage: '&cUsage: /withdrawmoney <amount> (quantity)'
-    success: '&7You withdrew &a%value%%currency_sign%&7 from your account'
-    error: '&7You do not have enough money'
+  # Item messages
+  money:
+    gifted: "&7%gifter% gifted you a Money Item with the value of %amount%%currency%"
+    no-money: "&cYou do not have enough money"
+    redeem: "&7You redeemed %amount%%currency%!"
+    redeem-less-intrusive: "&a+%amount%%currency%"
+    withdraw: "&7You withdrew %amount%%currency% from your account"
+    withdraw-less-intrusive: "&c-%amount%%currency%"
 
-  banknote-redeem:
-    message: '&7You redeemed &a%value%%currency_sign%&7!'
+  exp:
+    gifted: "&7%gifter% gifted you an EXP Item with the value of %amount% EXP"
+    no-exp: "&cYou do not have enough EXP"
+    redeem: "&7You redeemed %amount% EXP!"
+    redeem-less-intrusive: "&a+%amount% EXP"
+    withdraw: "&7You withdrew %amount% EXP"
+    withdraw-less-intrusive: "&c-%amount% EXP"
 
-  expbottle-withdraw:
-    gifted: '&7You have been gifted &a%amount% EXP from an admin'
-    console: "&c%value% has been withdrawn from you."
-    usage: '&cUsage: /withdrawxp <exp> (quantity)'
-    success: '&7You withdrew &a%value%EXP&7!'
-    error: '&7You do not have enough EXP'
+  health:
+    gifted: "&7%gifter% gifted you a HP Item with the value of %amount% HP"
+    no-health: "&cYou do not have enough HP"
+    redeem: "&7You redeemed %amount% HP!"
+    redeem-less-intrusive: "&a+%amount% HP"
+    withdraw: "&7You withdrew %amount% HP"
+    withdraw-less-intrusive: "&c-%amount% HP"
 
-  expbottle-redeem:
-    message: '&7You redeemed &a%value%EXP&7!'
-
-  health-withdraw:
-    gifted: '&7You have been gifted &a%amount% HP from an admin'
-    console: "&c%value% has been withdrawn from you by an admin."
-    usage: '&cUsage: /withdrawhp <amount of hearts>'
-    success: '&7You withdrew &a%value% HP!&7'
-    error: '&7You do not have enough HP'
-
-  health-redeem:
-    message: '&7You redeemed &a%value% HP&7!'

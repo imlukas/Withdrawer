@@ -66,17 +66,17 @@ public class YMLBase {
     }
 
     public void writeUnsetValues() {
-        if(!existsOnSource) {
+        if (!existsOnSource) {
             return;
         }
 
         String inputName = file.getAbsolutePath().replace(plugin.getDataFolder().getAbsolutePath() + File.separator, "");
 
-        try(InputStreamReader reader = new InputStreamReader(plugin.getResource(inputName))) {
+        try (InputStreamReader reader = new InputStreamReader(plugin.getResource(inputName))) {
             YamlConfiguration source = YamlConfiguration.loadConfiguration(reader);
 
-            for(String key : source.getKeys(true)) {
-                if(!configuration.contains(key)) {
+            for (String key : source.getKeys(true)) {
+                if (!configuration.contains(key)) {
                     configuration.addDefault(key, source.get(key));
                 }
             }

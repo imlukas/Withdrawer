@@ -2,7 +2,6 @@ package me.imlukas.withdrawer.item.wrapper;
 
 import de.tr7zw.nbtapi.NBTItem;
 import lombok.Getter;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -21,12 +20,12 @@ public class ItemStackWrapper {
         setAmount(amount);
         nbtItem.applyNBT(itemStack);
     }
+
     public ItemStackWrapper(NBTItem item) {
         this.itemStack = item.getItem();
         this.nbtItem = item;
         nbtItem.applyNBT(itemStack);
     }
-
 
 
     public void setValue(int value) {

@@ -7,9 +7,11 @@ import org.bukkit.entity.Player;
 public class Vault implements IEconomy {
 
     private final Economy vaultEconomy;
+
     public Vault(Economy economy) {
         this.vaultEconomy = economy;
     }
+
     @Override
     public String getIdentifier() {
         return "Vault";

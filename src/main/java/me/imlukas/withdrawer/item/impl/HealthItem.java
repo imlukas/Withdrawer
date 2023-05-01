@@ -8,16 +8,13 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class HealthItem extends WithdrawableItem {
-    private final Withdrawer plugin;
 
     public HealthItem(Withdrawer plugin, NBTItem nbtItem) {
         super(plugin, nbtItem);
-        this.plugin = plugin;
     }
 
     public HealthItem(Withdrawer plugin, UUID uuid, int value, int amount) {
         super(plugin, uuid, value, amount);
-        this.plugin = plugin;
     }
 
     @Override
@@ -27,16 +24,20 @@ public class HealthItem extends WithdrawableItem {
 
     @Override
     public void withdraw(Player player) {
-
+        if (!setupWithdraw(player)) {
+            return;
+        }
     }
 
     @Override
     public void gift(Player gifter, Player target) {
-
+        if (!setupGift(gifter, target)) {
+            return;
+        }
     }
 
     @Override
     public void redeem(Player player, boolean isShift) {
-
+        int totalValue = setupRedeem(player, isShift);
     }
 }

@@ -3,7 +3,9 @@ package me.imlukas.withdrawer.item.registry;
 import me.imlukas.withdrawer.item.Withdrawable;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class WithdrawableItemsStorage {
 

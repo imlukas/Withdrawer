@@ -1,0 +1,34 @@
+sounds:
+  money:
+    withdraw:
+      sound: BLOCK_NOTE_BLOCK_PLING
+      volume: 1
+      pitch: 1
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true
+  exp:
+    withdraw:
+      sound: BLOCK_NOTE_BLOCK_PLING
+      volume: 1
+      pitch: 1
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true
+  health:
+    withdraw:
+      sound: BLOCK_NOTE_BLOCK_PLING
+      volume: 1
+      pitch: 1
+      enabled: true
+    redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true

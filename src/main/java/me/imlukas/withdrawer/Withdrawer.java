@@ -2,7 +2,9 @@ package me.imlukas.withdrawer;
 
 import de.tr7zw.nbtapi.NBTItem;
 import lombok.Getter;
+import me.imlukas.withdrawer.commands.WithdrawHealthCommand;
 import me.imlukas.withdrawer.commands.WithdrawMoneyCommand;
+import me.imlukas.withdrawer.commands.WithdrawXpCommand;
 import me.imlukas.withdrawer.config.DefaultItemsHandler;
 import me.imlukas.withdrawer.config.PluginSettings;
 import me.imlukas.withdrawer.economy.EconomyManager;
@@ -12,13 +14,14 @@ import me.imlukas.withdrawer.item.impl.HealthItem;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemInitializers;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
+import me.imlukas.withdrawer.listener.ConnectionListener;
 import me.imlukas.withdrawer.listener.HealthResetListener;
 import me.imlukas.withdrawer.listener.ItemDropListener;
-import me.imlukas.withdrawer.listener.ConnectionListener;
 import me.imlukas.withdrawer.listener.RedeemListener;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.command.impl.CommandManager;
-import me.imlukas.withdrawer.utils.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.SoundManager;
 import me.imlukas.withdrawer.utils.storage.YMLBase;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -36,6 +39,7 @@ import java.util.function.Function;
 public final class Withdrawer extends JavaPlugin {
 
     private MessagesFile messages;
+    private SoundManager sounds;
     private PluginSettings pluginSettings;
     private CommandManager commandManager;
     private EconomyManager economyManager;
@@ -50,21 +54,24 @@ public final class Withdrawer extends JavaPlugin {
         commandManager = new CommandManager(this);
 
         messages = new MessagesFile(this);
+        sounds = new SoundManager(this);
         pluginSettings = new PluginSettings(getConfig());
         withdrawableItemsStorage = new WithdrawableItemsStorage();
         defaultItemsHandler = new DefaultItemsHandler(this);
 
         defaultWithdrawables = new WithdrawableItemInitializers();
 
-        addDefaultWithdrawable("money", (item) -> new MoneyItem(this, item));
-        addDefaultWithdrawable("exp", (item) -> new ExpItem(this, item));
-        addDefaultWithdrawable("health", (item) -> new HealthItem(this, item));
+        registerDefaultWithdrawable("money", (item) -> new MoneyItem(this, item));
+        registerDefaultWithdrawable("exp", (item) -> new ExpItem(this, item));
+        registerDefaultWithdrawable("health", (item) -> new HealthItem(this, item));
 
         updateConfig(this, messages);
         updateConfig(this, defaultItemsHandler);
         System.out.println("[Withdrawer] Updated Config!");
 
         registerCommand(new WithdrawMoneyCommand(this));
+        registerCommand(new WithdrawXpCommand(this));
+        registerCommand(new WithdrawHealthCommand(this));
         System.out.println("[Withdrawer] Registered Commands!");
 
         registerListener(new HealthResetListener());
@@ -82,7 +89,7 @@ public final class Withdrawer extends JavaPlugin {
 
     }
 
-    public void addDefaultWithdrawable(String name, Function<NBTItem, WithdrawableItem> function) {
+    public void registerDefaultWithdrawable(String name, Function<NBTItem, WithdrawableItem> function) {
         defaultWithdrawables.addDefault(name, function);
     }
 

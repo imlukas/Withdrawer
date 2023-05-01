@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class WithdrawableItemInitializers {
-    
+
     private final Map<String, Function<NBTItem, WithdrawableItem>> initializers = new HashMap<>();
-    
+
     public void addDefault(String identifier, Function<NBTItem, WithdrawableItem> supplier) {
         initializers.put(identifier, supplier);
     }

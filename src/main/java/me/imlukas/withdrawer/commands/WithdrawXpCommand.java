@@ -4,7 +4,7 @@ import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.economy.EconomyManager;
 import me.imlukas.withdrawer.economy.IEconomy;
 import me.imlukas.withdrawer.events.WithdrawEvent;
-import me.imlukas.withdrawer.item.impl.MoneyItem;
+import me.imlukas.withdrawer.item.impl.ExpItem;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
@@ -15,19 +15,17 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class WithdrawMoneyCommand implements SimpleCommand {
+public class WithdrawXpCommand implements SimpleCommand {
 
     private final Withdrawer plugin;
-    private final EconomyManager economyManager;
 
-    public WithdrawMoneyCommand(Withdrawer plugin) {
+    public WithdrawXpCommand(Withdrawer plugin) {
         this.plugin = plugin;
-        this.economyManager = plugin.getEconomyManager();
     }
 
     @Override
     public String getIdentifier() {
-        return "withdraw.money.*.*.*";
+        return "withdraw.xp.*.*";
     }
 
     @Override
@@ -43,26 +41,15 @@ public class WithdrawMoneyCommand implements SimpleCommand {
             amount = TextUtils.parseInt(args[1], (integer -> integer > 0));
         }
 
-        IEconomy economy = economyManager.getFirstEconomy();
-        if (!args[2].isEmpty()) {
-            economy = getEconomy(args[2]);
-        }
+        ExpItem expItem = new ExpItem(plugin, UUID.randomUUID(), value, amount);
 
-        MoneyItem moneyItem = new MoneyItem(plugin, UUID.randomUUID(), value, amount, economy);
-
-        WithdrawEvent withdrawEvent = new WithdrawEvent(player, moneyItem);
+        WithdrawEvent withdrawEvent = new WithdrawEvent(player, expItem);
         Bukkit.getPluginManager().callEvent(withdrawEvent);
 
         if (withdrawEvent.isCancelled()) {
             return;
         }
 
-        moneyItem.withdraw(player);
+        expItem.withdraw(player);
     }
-
-    private IEconomy getEconomy(String economy) {
-        return economyManager.getEconomy(economy);
-    }
-
-
 }

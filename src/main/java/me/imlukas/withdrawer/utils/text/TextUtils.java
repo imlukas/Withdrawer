@@ -28,8 +28,9 @@ public class TextUtils {
 
     /**
      * Parses a String to an integer, throwing an IllegalArgumentException if the String is not a valid integer.
+     *
      * @param stringToParse The String to parse
-     * @param predicate A Predicate to test the parsed integer against
+     * @param predicate     A Predicate to test the parsed integer against
      * @return The parsed integer
      */
     public static int parseInt(String stringToParse, Predicate<Integer> predicate) { // not really a text utility, but it's used in a text utility

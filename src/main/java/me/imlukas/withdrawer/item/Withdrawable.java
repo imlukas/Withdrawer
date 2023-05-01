@@ -11,10 +11,10 @@ public interface Withdrawable {
     UUID getUuid();
 
     ItemStackWrapper getWrappedItem();
-    ItemStack getItemStack();
-    int getValue();
 
-    int getAmount();
+    ItemStack getItemStack();
+
+    int getValue();
 
     String getConfigName();
 

@@ -1,7 +1,6 @@
 package me.imlukas.withdrawer.events;
 
 import lombok.Getter;
-import me.imlukas.withdrawer.item.Withdrawable;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

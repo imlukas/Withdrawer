@@ -1,6 +1,5 @@
-package me.imlukas.withdrawer.utils.messages;
+package me.imlukas.withdrawer.utils.interactions.messages;
 
-import lombok.Getter;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.utils.storage.YMLBase;
 import me.imlukas.withdrawer.utils.text.Placeholder;
@@ -11,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 
 import java.io.File;
 import java.util.Collection;
@@ -23,7 +21,7 @@ public class MessagesFile extends YMLBase {
 
     private final Pattern pattern;
     private final String prefix, arrow;
-    private boolean usePrefixConfig, useActionBar;
+    protected boolean usePrefixConfig, useActionBar, isLessIntrusive;
     private String msg;
     private final AutomatedMessages automatedMessages;
 
@@ -34,6 +32,7 @@ public class MessagesFile extends YMLBase {
         arrow = StringEscapeUtils.unescapeJava(getConfiguration().getString("messages.arrow"));
         usePrefixConfig = getConfiguration().getBoolean("messages.use-prefix");
         useActionBar = getConfiguration().getBoolean("messages.use-actionbar");
+        isLessIntrusive = getConfiguration().getBoolean("messages.less-intrusive");
 
         automatedMessages = new AutomatedMessages(this);
         writeUnsetValues();
@@ -119,15 +118,17 @@ public class MessagesFile extends YMLBase {
         }
 
         msg = setMessage(name, action);
-        if (useActionBar && sender instanceof Player player) {
+        if (useActionBar && sender instanceof Player player && !isLessIntrusive) {
             sendActionbarStringMessage(player, msg);
             return;
         }
         sender.sendMessage(msg);
     }
+
     public void sendActionbarStringMessage(Player player, String msg) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
     }
+
     public void sendActionBarMessage(Player player, String key) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(setMessage(key)));
     }

@@ -15,21 +15,7 @@ money:
   min: 100 # minimum value of the banknote
   max: 10000 # maximum value of the banknote
 
-
-  # List of all the available sounds.
-  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
-  sounds:
-    withdraw:
-      sound: BLOCK_NOTE_BLOCK_PLING
-      enabled: true
-    redeem:
-      sound: ENTITY_PLAYER_LEVELUP
-      enabled: true
-  redeem:
-    message: '&aYou have redeemed &e%value%$ &afrom the banknote.'
-    command: 'player: say %player% has redeemed %value%$ from the banknote.'
-
-expbottle:
+exp:
   type: EXPERIENCE_BOTTLE
   name: '&bExp Bottle &e&l(Right-Click)'
   lore:
@@ -38,21 +24,8 @@ expbottle:
     - '&e&l(Shift-Right-Click) &7to bulk-open'
   glowing: true
 
-
-  min: 100 # minimum value of the exp bottle
-  max: 10000 # maximum value of the exp bottle
-
-
-
-  sounds:
-    withdraw:
-      sound: BLOCK_NOTE_BLOCK_PLING
-      enabled: true
-    redeem:
-      sound: ENTITY_PLAYER_LEVELUP
-      enabled: true
-  redeem: {}
-
+  min: 100
+  max: 10000
 
 health:
   type: REDSTONE
@@ -64,11 +37,3 @@ health:
   glowing: true
 
   min: 1
-
-  sounds:
-    withdraw:
-      sound: BLOCK_NOTE_BLOCK_PLING
-      enabled: true
-    redeem:
-      sound: ENTITY_PLAYER_LEVELUP
-      enabled: true

@@ -3,7 +3,6 @@ package me.imlukas.withdrawer.listener;
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.events.RedeemEvent;
-import me.imlukas.withdrawer.item.Withdrawable;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import org.bukkit.Bukkit;

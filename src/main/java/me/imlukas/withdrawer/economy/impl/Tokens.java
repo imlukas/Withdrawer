@@ -10,6 +10,7 @@ public class Tokens implements IEconomy {
     public Tokens(TokenManager tokenManager) {
         this.tokenManager = tokenManager;
     }
+
     @Override
     public String getIdentifier() {
         return "TokenManager";

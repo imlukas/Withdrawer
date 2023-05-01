@@ -19,6 +19,7 @@ import java.util.*;
 
 /**
  * The ItemBuilder class is a utility class for creating {@link ItemStack}s.
+ *
  * @author Illusion
  */
 public class ItemBuilder {

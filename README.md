@@ -7,38 +7,35 @@
 ![GitHub issues](https://img.shields.io/github/issues/imlukas/Withdrawer?style=for-the-badge)
 
 </div>
-Withdrawer is a way for players to withdraw their money, hp or exp onto physical items, so they can redeem them, trade them, sell them or store them as they wish.
+Withdrawer is a way for players to withdraw their money, exp, hp or others onto physical items, so they can redeem them, trade them, sell them or store them as they wish.
 <p></p>
 
 ### Features:
-  - Money, EXP and HP withdrawing in the simplest way possible.
-  - Bulk-Redeeming while pressing down the Shift Key
-  - Messages are all configurable, such as plugin prefix.
+  - Withdraw your money, exp or hp onto items!
+  - Use the API to implement a new item that fits your needs!
+  - Bulk-Redeeming while pressing down the Shift Key.
+  - Messages and Sounds are all configurable, such as plugin prefix.
   - The items are all configurable.
+
+### Features for the future:
+  - Make statistics to track which items are withdrawed/redeemed more, items withdrawed/redeemed by players and all of that.
+  - Add placeholder support for those statistics.
   
 ----------------------------
 
 ### Commands:
- - wd or withdrawer - shows the plugin version / author.
-   - wd (help) - shows the commands for the plugin.
- - wdmoney (money) - gives you a bank note with the specified value.
-   - wdmoney (money) [amount] - gives you x(amount) of notes with the specified value.
- - wdxp (xp) - gives you a xp item with the specified value.
-   - wdxp (xp) [amount] - gives you x(amount) of xp item(s) with the specified value.
- - wdhp (hp) - gives you a health item that can be reedemed for health.
+ - withdrawer - shows the plugin version / author.
+   - withdrawer (help) - shows the commands for the plugin.
+ - withdraw/wd (item-type) (value) - gives you an item based on the type with the specific value.
+   - withdraw/wd (item-type) (value) [amount] - gives you x(amount) of the item with the specified value.
  
 ### Permissions:
-  - withdrawer.redeem.expbottle
-    - withdrawer.redeem.expbottle.bulk 
-  - withdrawer.withdraw.expbottle
-  - withdrawer.redeem.banknote
-    - withdrawer.redeem.banknote.bulk
-  - withdrawer.withdraw.banknote
-  - withdrawer.redeem.health
-  - withdrawer.withdraw.health
+  - withdrawer.redeem.(item-identifier)
+  - withdrawer.withdraw.(item-identifier)
+  - withdrawer.gift.(item-identifier)
+
 ### Bypass Permissions
-  - withdrawer.bypass.minmax.banknote
-  - withdrawer.bypass.minmax.expbottle	
+  - withdrawer.bypass.minmax.(item-identifier)
   - withdrawer.bypass.crafting
   - withdrawer.bypass.drop
 

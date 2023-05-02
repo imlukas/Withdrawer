@@ -68,6 +68,15 @@ public class Placeholder<T> {
         return list;
     }
 
+    public List<String> replace(List<String> text, T object) {
+        List<String> replaced = new ArrayList<>();
+
+        for (String line : text) {
+            replaced.add(replace(line, object));
+        }
+
+        return replaced;
+    }
 
     public String replace(String text, T object) {
         if (text == null)

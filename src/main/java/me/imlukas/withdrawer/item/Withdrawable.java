@@ -1,6 +1,6 @@
 package me.imlukas.withdrawer.item;
 
-import me.imlukas.withdrawer.item.wrapper.ItemStackWrapper;
+import me.imlukas.withdrawer.item.wrapper.NBTItemWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,9 +10,9 @@ public interface Withdrawable {
 
     UUID getUuid();
 
-    ItemStackWrapper getWrappedItem();
+    NBTItemWrapper getNBTWrapper();
 
-    ItemStack getItemStack();
+    ItemStack getDisplayItem();
 
     int getValue();
 

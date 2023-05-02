@@ -3,7 +3,6 @@ package me.imlukas.withdrawer.item.impl;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.economy.EconomyManager;
 import me.imlukas.withdrawer.economy.IEconomy;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import org.bukkit.entity.Player;
@@ -23,7 +22,7 @@ public class MoneyItem extends WithdrawableItem {
 
     public MoneyItem(Withdrawer plugin, UUID uuid, int value, int amount, IEconomy economy) {
         super(plugin, uuid, value, amount);
-        getWrappedItem().setString("withdrawer-economy", economy.getIdentifier());
+        getNBTWrapper().setString("withdrawer-economy", economy.getIdentifier());
         this.economy = economy;
         setWithdrawPredicate(player -> economy.hasMoney(player, value));
     }
@@ -45,7 +44,7 @@ public class MoneyItem extends WithdrawableItem {
         }
 
         economy.withdrawFrom(player, totalValue);
-        sendWithdrawInteractions(player, totalValue);
+        sendWithdrawInteractions(player, totalValue, economy.getCurrencySymbol());
     }
 
     @Override
@@ -56,7 +55,7 @@ public class MoneyItem extends WithdrawableItem {
         }
 
         economy.withdrawFrom(gifter, totalValue);
-        sendGiftedInteractions(gifter, target, totalValue, getEconomy().getCurrencySymbol());
+        sendGiftedInteractions(gifter, target, totalValue, economy.getCurrencySymbol());
     }
 
     @Override

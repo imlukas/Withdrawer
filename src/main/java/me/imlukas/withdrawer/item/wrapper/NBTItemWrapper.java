@@ -7,21 +7,22 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 @Getter
-public class ItemStackWrapper {
+public class NBTItemWrapper {
 
     private final ItemStack itemStack;
     private final NBTItem nbtItem;
 
-    public ItemStackWrapper(ItemStack item, int value, int amount, UUID uuid) {
+    public NBTItemWrapper(ItemStack item, String itemType, int value, int amount, UUID uuid) {
         this.itemStack = item;
         this.nbtItem = new NBTItem(item);
         setValue(value);
         setUUID(uuid);
         setAmount(amount);
+        setString("withdrawer-type", itemType);
         nbtItem.applyNBT(itemStack);
     }
 
-    public ItemStackWrapper(NBTItem item) {
+    public NBTItemWrapper(NBTItem item) {
         this.itemStack = item.getItem();
         this.nbtItem = item;
         nbtItem.applyNBT(itemStack);

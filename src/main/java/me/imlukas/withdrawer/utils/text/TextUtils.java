@@ -38,11 +38,13 @@ public class TextUtils {
         try {
             parsed = Integer.parseInt(stringToParse);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number: " + stringToParse);
+            System.err.println("Invalid number: " + stringToParse);
+            return 1;
         }
 
         if (!predicate.test(parsed)) {
-            throw new IllegalArgumentException("Invalid number: " + stringToParse);
+            System.err.println("Invalid number: " + stringToParse);
+            return 1;
         }
 
         return parsed;

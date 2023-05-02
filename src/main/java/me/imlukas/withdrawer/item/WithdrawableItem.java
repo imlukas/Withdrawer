@@ -2,12 +2,15 @@ package me.imlukas.withdrawer.item;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.item.wrapper.ItemStackWrapper;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.item.wrapper.NBTItemWrapper;
 import me.imlukas.withdrawer.utils.interactions.SoundManager;
+import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.text.Placeholder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -17,7 +20,8 @@ public abstract class WithdrawableItem implements Withdrawable {
     protected final MessagesFile messages;
     protected final SoundManager sounds;
 
-    private final ItemStackWrapper itemStackWrapper;
+    private final ItemStack displayItem;
+    private final NBTItemWrapper NBTItemWrapper;
     private final UUID uuid;
     private final int value;
 
@@ -31,8 +35,8 @@ public abstract class WithdrawableItem implements Withdrawable {
         this.value = nbtItem.getInteger("withdrawer-value");
         this.amount = nbtItem.getItem().getAmount();
 
-        this.itemStackWrapper = new ItemStackWrapper(nbtItem);
-
+        this.displayItem = nbtItem.getItem().clone();
+        this.NBTItemWrapper = new NBTItemWrapper(nbtItem);
         this.messages = withdrawer.getMessages();
         this.sounds = withdrawer.getSounds();
     }
@@ -43,7 +47,8 @@ public abstract class WithdrawableItem implements Withdrawable {
         this.value = value;
         this.amount = amount;
 
-        this.itemStackWrapper = plugin.getDefaultItemsHandler().createWrapper(getConfigName(), value, amount, uuid);
+        this.NBTItemWrapper = plugin.getDefaultItemsHandler().createWrapper(getConfigName(), value, amount, uuid);
+        this.displayItem = NBTItemWrapper.getItemStack().clone();
         this.messages = withdrawer.getMessages();
         this.sounds = withdrawer.getSounds();
     }
@@ -52,14 +57,18 @@ public abstract class WithdrawableItem implements Withdrawable {
         return amount;
     }
 
-    @Override
-    public ItemStackWrapper getWrappedItem() {
-        return itemStackWrapper;
+    public ItemStack getImmutableItem() {
+        return NBTItemWrapper.getItemStack().clone();
     }
 
     @Override
-    public ItemStack getItemStack() {
-        return itemStackWrapper.getItemStack();
+    public NBTItemWrapper getNBTWrapper() {
+        return NBTItemWrapper;
+    }
+
+    @Override
+    public ItemStack getDisplayItem() {
+        return displayItem;
     }
 
     @Override
@@ -79,7 +88,7 @@ public abstract class WithdrawableItem implements Withdrawable {
 
     public void setAsGifted(boolean isGifted) {
         this.isGifted = isGifted;
-        getWrappedItem().setBoolean("withdrawer-gifted", isGifted);
+        getNBTWrapper().setBoolean("withdrawer-gifted", isGifted);
     }
 
     public void setWithdrawPredicate(Predicate<Player> withdrawPredicate) {
@@ -95,6 +104,10 @@ public abstract class WithdrawableItem implements Withdrawable {
         Prevents code repetition on item implementations.
      */
     public int setupRedeem(Player player, boolean isShift) {
+        if (!player.hasPermission("withdrawer.redeem." + getConfigName())) {
+            messages.sendMessage(player, "global.no-permission");
+            return 0;
+        }
         int totalValue = value;
 
         if (isShift || amount == 1) {
@@ -104,19 +117,26 @@ public abstract class WithdrawableItem implements Withdrawable {
 
         if (!isShift && amount > 1 ) {
             amount--;
-            player.getInventory().getItemInMainHand().setAmount(amount);
+            displayItem.setAmount(amount);
+            player.updateInventory();
         }
 
+        updateLore(player);
         return totalValue;
     }
 
     public boolean setupGift(Player gifter, Player target) {
-        setAsGifted(true);
         if (!withdrawPredicate.test(gifter)) {
             messages.sendMessage(gifter, getConfigName() + ".no-money");
             return false;
         }
 
+        if (!gifter.hasPermission("withdrawer.gift." + getConfigName())) {
+            messages.sendMessage(gifter, "global.no-permission");
+            return false;
+        }
+
+        setAsGifted(true);
         addItem(target);
         return true;
     }
@@ -127,20 +147,46 @@ public abstract class WithdrawableItem implements Withdrawable {
             return false;
         }
 
+        if (!player.hasPermission("withdrawer.withdraw." + getConfigName())) {
+            messages.sendMessage(player, "global.no-permission");
+            return false;
+        }
+
         addItem(player);
         return true;
     }
 
     private void addItem(Player player) {
         plugin.getWithdrawableItemsStorage().addItem(this);
-        player.getInventory().addItem(getItemStack());
+        updateLore(player);
+        player.getInventory().addItem(displayItem);
     }
 
     private void removeItem(Player player) {
         plugin.getWithdrawableItemsStorage().removeItem(this);
-        player.getInventory().removeItem(getItemStack());
+        player.getInventory().removeItem(displayItem);
     }
 
+    /**
+     * Updates the display item's lore.
+     * @param player The player with the item (used for placeholders.)
+     */
+    private void updateLore(Player player) {
+        ItemStack item = getImmutableItem();
+        ItemMeta itemMeta  = item.getItemMeta();
+
+        List<Placeholder<Player>> placeholders = List.of(new Placeholder<>("value", String.valueOf(value)),
+        new Placeholder<>("total-value", String.valueOf(value * amount)));
+
+        List<String> lore = itemMeta.getLore();
+
+        for (Placeholder<Player> placeholder : placeholders) {
+            lore = placeholder.replace(lore, player);
+        }
+
+        itemMeta.setLore(lore);
+        displayItem.setItemMeta(itemMeta);
+    }
 
     // Interactions (Messages and Sounds)
     public void sendRedeemInteractions(Player player, int totalAmount) {

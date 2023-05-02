@@ -27,14 +27,17 @@ repositories {
     maven {
         url = 'https://libraries.minecraft.net/'
     }
+
+    maven {
+        name = 'placeholderapi'
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
 }
 
 dependencies {
-
-
     compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
-
+    compileOnly 'me.clip:placeholderapi:2.11.3'
     compileOnly(group: 'com.github.Realizedd', name: 'TokenManager', version: '3.2.4') {
         transitive = false
     }

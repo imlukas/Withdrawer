@@ -7,7 +7,6 @@ money:
   name: '&bBank Note &e(Right-Click)'
   lore:
     - '&b&lValue: &7%value%$'
-    - '&b&lSigner: &7%owner%'
     - ' '
     - '&e&l(Shift-Right-Click) &7to bulk-open'
   glowing: true # Defines if the item has enchantment glint.

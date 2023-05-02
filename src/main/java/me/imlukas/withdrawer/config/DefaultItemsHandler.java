@@ -1,7 +1,8 @@
 package me.imlukas.withdrawer.config;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.item.wrapper.ItemStackWrapper;
+import me.imlukas.withdrawer.item.wrapper.NBTItemWrapper;
+import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
 import me.imlukas.withdrawer.utils.item.ItemBuilder;
 import me.imlukas.withdrawer.utils.storage.YMLBase;
 import org.bukkit.Material;
@@ -11,12 +12,13 @@ import java.util.*;
 
 public class DefaultItemsHandler extends YMLBase {
 
+    private final MessagesFile messages;
     private final List<Material> consumables = new ArrayList<>(Arrays.asList(Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION));
-
     private final Map<String, ItemStack> defaultItems = new HashMap<>();
 
     public DefaultItemsHandler(Withdrawer plugin) {
         super(plugin, "items.yml");
+        this.messages = plugin.getMessages();
         load();
     }
 
@@ -26,8 +28,8 @@ public class DefaultItemsHandler extends YMLBase {
         }
     }
 
-    public ItemStackWrapper createWrapper(String identifier, int value, int amount, UUID uuid) {
-        return new ItemStackWrapper(defaultItems.get(identifier).clone(), value, amount, uuid);
+    public NBTItemWrapper createWrapper(String identifier, int value, int amount, UUID uuid) {
+        return new NBTItemWrapper(defaultItems.get(identifier).clone(), identifier, value, amount, uuid);
     }
 
     private ItemStack getItem(String identifier) {
@@ -41,9 +43,14 @@ public class DefaultItemsHandler extends YMLBase {
     }
 
     private boolean checkMaterial(Material itemMaterial) {
-        if (itemMaterial == null || itemMaterial.isEdible() || consumables.contains(itemMaterial)) {
-            return false;
-        }
-        return true;
+        return itemMaterial != null && !itemMaterial.isEdible() && !consumables.contains(itemMaterial);
+    }
+
+    public int getMinValue(String identifier) {
+        return getConfiguration().getInt(identifier + ".min-value");
+    }
+
+    public int getMaxValue(String identifier) {
+        return getConfiguration().getInt(identifier + ".max-value");
     }
 }

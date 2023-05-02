@@ -8,16 +8,14 @@ import me.imlukas.withdrawer.commands.WithdrawXpCommand;
 import me.imlukas.withdrawer.config.DefaultItemsHandler;
 import me.imlukas.withdrawer.config.PluginSettings;
 import me.imlukas.withdrawer.economy.EconomyManager;
+import me.imlukas.withdrawer.hooks.PlaceholderHook;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.impl.ExpItem;
 import me.imlukas.withdrawer.item.impl.HealthItem;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemInitializers;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
-import me.imlukas.withdrawer.listener.ConnectionListener;
-import me.imlukas.withdrawer.listener.HealthResetListener;
-import me.imlukas.withdrawer.listener.ItemDropListener;
-import me.imlukas.withdrawer.listener.RedeemListener;
+import me.imlukas.withdrawer.listener.*;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.command.impl.CommandManager;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
@@ -50,6 +48,7 @@ public final class Withdrawer extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         economyManager = new EconomyManager(this);
         commandManager = new CommandManager(this);
 
@@ -78,7 +77,10 @@ public final class Withdrawer extends JavaPlugin {
         registerListener(new ItemDropListener(this));
         registerListener(new RedeemListener(this));
         registerListener(new ConnectionListener(this));
+        registerListener(new CraftingVillagerListener(this));
         System.out.println("[Withdrawer] Registered Listeners!");
+
+        new PlaceholderHook(this).register();
     }
 
     @Override

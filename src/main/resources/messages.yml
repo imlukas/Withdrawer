@@ -10,11 +10,14 @@ messages:
     feature-on: '&7%feature% is now &aon'
     feature-off: '&7%feature% is now &coff'
     reload: '&7Reloaded plugin configs'
+    no-permission: '&cYou do not have permission to do this'
+
   command:
     not-player: 'This command can only be used by a player'
     no-permission: '&cYou do not have permission to do this'
     player-not-found: 'Player(s) not found'
     invalid-args: 'Invalid arguments'
+    invalid-values: 'The values must be between %min% and %max%'
     invalid-economy-name: '&cInvalid economy name'
 
   # Item messages

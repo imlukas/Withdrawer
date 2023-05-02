@@ -2,6 +2,6 @@ name: Withdrawer
 version: '${version}'
 main: me.imlukas.withdrawer.Withdrawer
 api-version: 1.16
-softdepend: [ Essentials, PlayerPoints, Vault ]
+softdepend: [ Essentials, PlayerPoints, Vault, PlaceholderAPI ]
 authors: [ imlukas ]
 description: Withdraw money, exp and hp from items!

@@ -52,6 +52,11 @@ public class ExpItem extends WithdrawableItem {
     @Override
     public void redeem(Player player, boolean isShift) {
         int totalValue = setupRedeem(player, isShift);
+
+        if (totalValue == 0) {
+            return;
+        }
+
         ExpUtil.changeExp(player, totalValue);
         sendRedeemInteractions(player, totalValue);
     }

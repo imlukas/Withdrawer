@@ -10,8 +10,6 @@ public interface Withdrawable {
 
     UUID getUuid();
 
-    NBTItemWrapper getNBTWrapper();
-
     ItemStack getDisplayItem();
 
     int getValue();

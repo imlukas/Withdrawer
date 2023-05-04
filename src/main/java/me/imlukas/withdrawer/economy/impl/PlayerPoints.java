@@ -14,12 +14,12 @@ public class PlayerPoints implements IEconomy {
 
     @Override
     public String getIdentifier() {
-        return "PlayerPoints";
+        return "playerpoints";
     }
 
     @Override
     public String getCurrencySymbol() {
-        return "PP";
+        return "Points";
     }
 
     @Override

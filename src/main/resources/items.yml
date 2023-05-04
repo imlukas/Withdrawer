@@ -4,9 +4,9 @@ money:
   # do not use consumables, such as potions and food.
   # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   type: PAPER
-  name: '&bBank Note &e(Right-Click)'
+  name: '&bMoney Item &e(Right-Click)'
   lore:
-    - '&b&lValue: &7%value%$'
+    - '&b&lValue: &7%value%%currency%'
     - ' '
     - '&e&l(Shift-Right-Click) &7to bulk-open'
   glowing: true # Defines if the item has enchantment glint.

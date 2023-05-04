@@ -1,39 +1,36 @@
-package me.imlukas.withdrawer.commands;
+package me.imlukas.withdrawer.commands.withdraw;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.config.DefaultItemsHandler;
-import me.imlukas.withdrawer.economy.EconomyManager;
-import me.imlukas.withdrawer.economy.IEconomy;
-import me.imlukas.withdrawer.events.WithdrawEvent;
-import me.imlukas.withdrawer.item.impl.HealthItem;
-import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
+import me.imlukas.withdrawer.config.ItemHandler;
+import me.imlukas.withdrawer.api.events.WithdrawEvent;
+import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
 import me.imlukas.withdrawer.utils.text.Placeholder;
 import me.imlukas.withdrawer.utils.text.TextUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.function.BiFunction;
 
-public class WithdrawHealthCommand implements SimpleCommand {
+public class WithdrawCommand implements SimpleCommand {
 
-    private final Withdrawer plugin;
     private final MessagesFile messages;
-    private final DefaultItemsHandler itemsHandler;
+    private final ItemHandler itemsHandler;
+    private final String identifier;
+    private final BiFunction<Integer, Integer, WithdrawableItem> itemFunction;
 
-    public WithdrawHealthCommand(Withdrawer plugin) {
-        this.plugin = plugin;
+    public WithdrawCommand(Withdrawer plugin, String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
         this.messages = plugin.getMessages();
-        this.itemsHandler = plugin.getDefaultItemsHandler();
+        this.itemsHandler = plugin.getItemHandler();
+        this.identifier = identifier;
+        this.itemFunction = itemFunction;
     }
-
     @Override
     public String getIdentifier() {
-        return "withdraw.hp.*.*";
+        return "withdraw." + identifier + ".*.*";
     }
 
     @Override
@@ -49,20 +46,29 @@ public class WithdrawHealthCommand implements SimpleCommand {
             amount = TextUtils.parseInt(args[1], (integer -> integer > 0));
         }
 
-        HealthItem hpItem = new HealthItem(plugin, UUID.randomUUID(), value, amount);
+        while (amount > 64) {
+            amount -= 64;
+            giveItem(player, value, 64);
+        }
 
-        if (!checkValues(player, value * amount, hpItem.getConfigName())) {
+        giveItem(player, value, amount);
+    }
+
+    private void giveItem(Player player, int value, int amount) {
+        WithdrawableItem withdrawableItem = itemFunction.apply(amount, value);
+
+        if (!checkValues(player, value * amount, withdrawableItem.getConfigName())) {
             return;
         }
 
-        WithdrawEvent withdrawEvent = new WithdrawEvent(player, hpItem);
+        WithdrawEvent withdrawEvent = new WithdrawEvent(player, withdrawableItem);
         Bukkit.getPluginManager().callEvent(withdrawEvent);
 
         if (withdrawEvent.isCancelled()) {
             return;
         }
 
-        hpItem.withdraw(player);
+        withdrawableItem.withdraw(player);
     }
 
     public boolean checkValues(Player player, int totalValue, String identifier) {
@@ -77,12 +83,10 @@ public class WithdrawHealthCommand implements SimpleCommand {
                 new Placeholder<>("max", String.valueOf(max)));
 
         if (totalValue < min || totalValue > max) {
-            messages.sendMessage(player, "command.invalid-value", placeholders);
+            messages.sendMessage(player, "command.invalid-values", placeholders);
             return false;
         }
 
         return true;
     }
-
-
 }

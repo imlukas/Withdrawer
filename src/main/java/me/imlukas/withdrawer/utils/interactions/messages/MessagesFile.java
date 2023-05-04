@@ -67,10 +67,10 @@ public class MessagesFile extends YMLBase {
         if (!getConfiguration().contains("messages." + name))
             return "";
         msg = getMessage(name);
-        if (usePrefixConfig) {
+        if (usePrefixConfig && !isLessIntrusive) {
             msg = prefix + " " + arrow + " " + getMessage(name);
         } else {
-            msg = getMessage(name).replace("%prefix%", prefix);
+            msg = msg.replace("%prefix%", prefix);
         }
         msg = action.apply(msg);
         return setColor(msg);
@@ -143,26 +143,25 @@ public class MessagesFile extends YMLBase {
 
 
     public boolean togglePrefix() {
-        boolean isEnabled = usePrefixConfig;
-        if (isEnabled) {
-            getConfiguration().set("messages.use-prefix", false);
-        } else {
-            getConfiguration().set("messages.use-prefix", true);
-        }
-        save();
-        usePrefixConfig = !isEnabled;
-        return !isEnabled;
+        return toggle("prefix", usePrefixConfig);
     }
 
     public boolean toggleActionBar() {
-        boolean isEnabled = useActionBar;
+        return toggle("actionbar", useActionBar);
+    }
+
+    public boolean toggleLessIntrusive() {
+        return toggle("less-intrusive", isLessIntrusive);
+    }
+
+    public boolean toggle(String type, boolean isEnabled) {
         if (isEnabled) {
-            getConfiguration().set("messages.actionbar.enabled", false);
+            getConfiguration().set("messages.use-" + type, false);
         } else {
-            getConfiguration().set("messages.actionbar.enabled", true);
+            getConfiguration().set("messages.use-" + type, true);
         }
+
         save();
-        useActionBar = !isEnabled;
         return !isEnabled;
     }
 }

@@ -13,12 +13,12 @@ public class Tokens implements IEconomy {
 
     @Override
     public String getIdentifier() {
-        return "TokenManager";
+        return "tokens";
     }
 
     @Override
     public String getCurrencySymbol() {
-        return "TM";
+        return "Tokens";
     }
 
     @Override

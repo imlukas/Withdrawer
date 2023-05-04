@@ -25,6 +25,7 @@ public class AutomatedMessages {
 
         if (messages.isLessIntrusive) {
             messages.sendMessage(player, itemType + ".redeem-less-intrusive", placeholders);
+            return;
         }
 
         messages.sendMessage(player, itemType + ".redeem", placeholders);
@@ -41,6 +42,7 @@ public class AutomatedMessages {
 
         if (messages.isLessIntrusive) {
             messages.sendMessage(player, itemType + ".withdraw-less-intrusive", placeholders);
+            return;
         }
 
         messages.sendMessage(player, itemType + ".withdraw", placeholders);

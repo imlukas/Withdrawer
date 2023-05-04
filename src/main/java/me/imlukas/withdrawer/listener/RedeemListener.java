@@ -2,13 +2,14 @@ package me.imlukas.withdrawer.listener;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.events.RedeemEvent;
+import me.imlukas.withdrawer.api.events.RedeemEvent;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,13 +27,19 @@ public class RedeemListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack interactedItem = event.getItem();
+        Action action = event.getAction();
         boolean isShift = player.isSneaking();
+
+        if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
 
         if (interactedItem == null) {
             return;
         }
 
         NBTItem nbtItem = new NBTItem(interactedItem);
+
         UUID withdrawbleItemUUID = nbtItem.getUUID("withdrawer-uuid");
 
         if (withdrawbleItemUUID == null) {

@@ -2,10 +2,13 @@ package me.imlukas.withdrawer;
 
 import de.tr7zw.nbtapi.NBTItem;
 import lombok.Getter;
-import me.imlukas.withdrawer.commands.WithdrawHealthCommand;
-import me.imlukas.withdrawer.commands.WithdrawMoneyCommand;
-import me.imlukas.withdrawer.commands.WithdrawXpCommand;
-import me.imlukas.withdrawer.config.DefaultItemsHandler;
+import me.imlukas.withdrawer.api.WithdrawerAPI;
+import me.imlukas.withdrawer.commands.*;
+import me.imlukas.withdrawer.commands.gift.GiftCommand;
+import me.imlukas.withdrawer.commands.gift.GiftMoneyCommand;
+import me.imlukas.withdrawer.commands.withdraw.WithdrawCommand;
+import me.imlukas.withdrawer.commands.withdraw.WithdrawMoneyCommand;
+import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.config.PluginSettings;
 import me.imlukas.withdrawer.economy.EconomyManager;
 import me.imlukas.withdrawer.hooks.PlaceholderHook;
@@ -31,23 +34,28 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Getter
 public final class Withdrawer extends JavaPlugin {
 
+    private static WithdrawerAPI API;
+    private static Withdrawer instance;
     private MessagesFile messages;
     private SoundManager sounds;
     private PluginSettings pluginSettings;
     private CommandManager commandManager;
     private EconomyManager economyManager;
-    private DefaultItemsHandler defaultItemsHandler;
+    private ItemHandler itemHandler;
 
     private WithdrawableItemsStorage withdrawableItemsStorage;
-    private WithdrawableItemInitializers defaultWithdrawables;
+    private WithdrawableItemInitializers itemInitializers;
 
     @Override
     public void onEnable() {
+        instance = this;
+        API = new WithdrawerAPI(this);
         saveDefaultConfig();
         economyManager = new EconomyManager(this);
         commandManager = new CommandManager(this);
@@ -55,47 +63,70 @@ public final class Withdrawer extends JavaPlugin {
         messages = new MessagesFile(this);
         sounds = new SoundManager(this);
         pluginSettings = new PluginSettings(getConfig());
-        withdrawableItemsStorage = new WithdrawableItemsStorage();
-        defaultItemsHandler = new DefaultItemsHandler(this);
 
-        defaultWithdrawables = new WithdrawableItemInitializers();
+        itemInitializers = new WithdrawableItemInitializers();
 
         registerDefaultWithdrawable("money", (item) -> new MoneyItem(this, item));
         registerDefaultWithdrawable("exp", (item) -> new ExpItem(this, item));
         registerDefaultWithdrawable("health", (item) -> new HealthItem(this, item));
 
+        withdrawableItemsStorage = new WithdrawableItemsStorage(this).load();
+        itemHandler = new ItemHandler(this);
+
         updateConfig(this, messages);
-        updateConfig(this, defaultItemsHandler);
+        updateConfig(this, itemHandler);
         System.out.println("[Withdrawer] Updated Config!");
 
+        registerCommand(new WithdrawCommand(this, "xp", (value, amount) -> new ExpItem(this, UUID.randomUUID(), value, amount)));
+        registerCommand(new WithdrawCommand(this, "hp", (value, amount) -> new HealthItem(this, UUID.randomUUID(), value, amount)));
         registerCommand(new WithdrawMoneyCommand(this));
-        registerCommand(new WithdrawXpCommand(this));
-        registerCommand(new WithdrawHealthCommand(this));
-        System.out.println("[Withdrawer] Registered Commands!");
+
+        registerCommand(new GiftCommand(this, "xp", (value, amount) -> new ExpItem(this, UUID.randomUUID(), value, amount)));
+        registerCommand(new GiftCommand(this, "hp", (value, amount) -> new HealthItem(this, UUID.randomUUID(), value, amount)));
+        registerCommand(new GiftMoneyCommand(this));
+
+        registerCommand(new HelpCommand(this));
+        registerCommand(new ReloadCommand(this));
+        registerCommand(new ToggleCommand(this));
 
         registerListener(new HealthResetListener());
         registerListener(new ItemDropListener(this));
         registerListener(new RedeemListener(this));
         registerListener(new ConnectionListener(this));
         registerListener(new CraftingVillagerListener(this));
-        System.out.println("[Withdrawer] Registered Listeners!");
 
         new PlaceholderHook(this).register();
     }
 
     @Override
     public void onDisable() {
-        HandlerList.unregisterAll(this);
-        reloadConfig();
+        commandManager = null;
+        economyManager = null;
+
         messages = null;
+        sounds = null;
+        pluginSettings = null;
+        itemHandler = null;
+        itemInitializers = null;
+
+        reloadConfig();
+        HandlerList.unregisterAll(this);
 
     }
 
-    public void registerDefaultWithdrawable(String name, Function<NBTItem, WithdrawableItem> function) {
-        defaultWithdrawables.addDefault(name, function);
+    public static Withdrawer getInstance() {
+        return instance;
     }
 
-    private void registerCommand(SimpleCommand command) {
+    public static WithdrawerAPI getWithdrawerAPI() {
+        return API;
+    }
+
+    private void registerDefaultWithdrawable(String name, Function<NBTItem, WithdrawableItem> function) {
+        itemInitializers.addDefault(name, function);
+    }
+
+    public void registerCommand(SimpleCommand command) {
         commandManager.register(command);
     }
 

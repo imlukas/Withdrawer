@@ -42,5 +42,9 @@ public class HealthItem extends WithdrawableItem {
     @Override
     public void redeem(Player player, boolean isShift) {
         int totalValue = setupRedeem(player, isShift);
+
+        if (totalValue == 0) {
+            return;
+        }
     }
 }

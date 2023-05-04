@@ -14,18 +14,16 @@ public class NBTItemWrapper {
 
     public NBTItemWrapper(ItemStack item, String itemType, int value, int amount, UUID uuid) {
         this.itemStack = item;
+        itemStack.setAmount(amount);
         this.nbtItem = new NBTItem(item);
         setValue(value);
         setUUID(uuid);
-        setAmount(amount);
         setString("withdrawer-type", itemType);
-        nbtItem.applyNBT(itemStack);
     }
 
     public NBTItemWrapper(NBTItem item) {
         this.itemStack = item.getItem();
         this.nbtItem = item;
-        nbtItem.applyNBT(itemStack);
     }
 
 
@@ -49,19 +47,11 @@ public class NBTItemWrapper {
         nbtItem.applyNBT(itemStack);
     }
 
-    public void setAmount(int amount) {
-        itemStack.setAmount(amount);
-    }
-
     public int getValue() {
         return nbtItem.getInteger("withdrawer-value");
     }
 
     public UUID getUUID() {
         return nbtItem.getUUID("withdrawer-uuid");
-    }
-
-    public int getAmount() {
-        return itemStack.getAmount();
     }
 }

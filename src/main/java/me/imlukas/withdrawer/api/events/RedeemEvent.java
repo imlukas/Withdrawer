@@ -1,4 +1,4 @@
-package me.imlukas.withdrawer.events;
+package me.imlukas.withdrawer.api.events;
 
 import lombok.Getter;
 import me.imlukas.withdrawer.item.WithdrawableItem;

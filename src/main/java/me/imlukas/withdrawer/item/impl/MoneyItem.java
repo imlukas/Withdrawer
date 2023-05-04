@@ -6,7 +6,10 @@ import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.economy.IEconomy;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class MoneyItem extends WithdrawableItem {
@@ -18,13 +21,16 @@ public class MoneyItem extends WithdrawableItem {
         super(plugin, item);
         this.economy = plugin.getEconomyManager().getEconomy(item.getString("withdrawer-economy"));
         setWithdrawPredicate(player -> economy.hasMoney(player, value));
+        getItemPlaceholders().addPlaceholder("currency", economy.getCurrencySymbol());
     }
 
     public MoneyItem(Withdrawer plugin, UUID uuid, int value, int amount, IEconomy economy) {
         super(plugin, uuid, value, amount);
-        getNBTWrapper().setString("withdrawer-economy", economy.getIdentifier());
         this.economy = economy;
+        getNBTItem().setString("withdrawer-economy", economy.getIdentifier());
+        applyNBT();
         setWithdrawPredicate(player -> economy.hasMoney(player, value));
+        getItemPlaceholders().addPlaceholder("currency", economy.getCurrencySymbol());
     }
 
     public IEconomy getEconomy() {
@@ -61,6 +67,11 @@ public class MoneyItem extends WithdrawableItem {
     @Override
     public void redeem(Player player, boolean isShift) {
         int totalValue = setupRedeem(player, isShift);
+
+        if (totalValue == 0) {
+            return;
+        }
+
         economy.giveTo(player, totalValue);
         sendRedeemInteractions(player, totalValue, getEconomy().getCurrencySymbol());
     }

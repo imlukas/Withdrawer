@@ -36,6 +36,10 @@ public class EconomyManager {
         return registeredEconomies.get(identifier);
     }
 
+    public List<String> getEconomyIdentifiers() {
+        return registeredEconomies.keySet().stream().toList();
+    }
+
     public IEconomy getFirstEconomy() {
         return registeredEconomies.values().iterator().next();
     }

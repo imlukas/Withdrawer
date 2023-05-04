@@ -10,13 +10,13 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public class DefaultItemsHandler extends YMLBase {
+public class ItemHandler extends YMLBase {
 
     private final MessagesFile messages;
     private final List<Material> consumables = new ArrayList<>(Arrays.asList(Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION));
     private final Map<String, ItemStack> defaultItems = new HashMap<>();
 
-    public DefaultItemsHandler(Withdrawer plugin) {
+    public ItemHandler(Withdrawer plugin) {
         super(plugin, "items.yml");
         this.messages = plugin.getMessages();
         load();
@@ -26,6 +26,10 @@ public class DefaultItemsHandler extends YMLBase {
         for (String identifier : getConfiguration().getKeys(false)) {
             defaultItems.put(identifier, getItem(identifier));
         }
+    }
+
+    public ItemStack get(String identifier) {
+        return defaultItems.get(identifier).clone();
     }
 
     public NBTItemWrapper createWrapper(String identifier, int value, int amount, UUID uuid) {
@@ -47,10 +51,10 @@ public class DefaultItemsHandler extends YMLBase {
     }
 
     public int getMinValue(String identifier) {
-        return getConfiguration().getInt(identifier + ".min-value");
+        return getConfiguration().getInt(identifier + ".min");
     }
 
     public int getMaxValue(String identifier) {
-        return getConfiguration().getInt(identifier + ".max-value");
+        return getConfiguration().getInt(identifier + ".max");
     }
 }

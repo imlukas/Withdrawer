@@ -20,7 +20,7 @@ public class ConnectionListener implements Listener {
     private final WithdrawableItemsStorage itemsStorage;
 
     public ConnectionListener(Withdrawer plugin) {
-        this.defaultWithdrawables = plugin.getDefaultWithdrawables();
+        this.defaultWithdrawables = plugin.getItemInitializers();
         this.itemsStorage = plugin.getWithdrawableItemsStorage();
     }
 

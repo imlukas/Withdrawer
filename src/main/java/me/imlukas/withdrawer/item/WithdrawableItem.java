@@ -2,15 +2,12 @@ package me.imlukas.withdrawer.item;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.item.wrapper.NBTItemWrapper;
 import me.imlukas.withdrawer.utils.interactions.SoundManager;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
-import me.imlukas.withdrawer.utils.text.Placeholder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -20,10 +17,12 @@ public abstract class WithdrawableItem implements Withdrawable {
     protected final MessagesFile messages;
     protected final SoundManager sounds;
 
-    private final ItemStack displayItem;
-    private final NBTItemWrapper NBTItemWrapper;
     private final UUID uuid;
     private final int value;
+
+    private final ItemPlaceholders itemPlaceholders;
+    private final ItemStack displayItem;
+    private final NBTItem nbtItem;
 
     protected Predicate<Player> withdrawPredicate;
     protected int amount;
@@ -35,10 +34,15 @@ public abstract class WithdrawableItem implements Withdrawable {
         this.value = nbtItem.getInteger("withdrawer-value");
         this.amount = nbtItem.getItem().getAmount();
 
-        this.displayItem = nbtItem.getItem().clone();
-        this.NBTItemWrapper = new NBTItemWrapper(nbtItem);
         this.messages = withdrawer.getMessages();
         this.sounds = withdrawer.getSounds();
+
+        this.itemPlaceholders = new ItemPlaceholders(Map.of(
+                "value", String.valueOf(value),
+                "amount", String.valueOf(amount)));
+
+        this.nbtItem = nbtItem;
+        this.displayItem = nbtItem.getItem();
     }
 
     protected WithdrawableItem(Withdrawer withdrawer, UUID uuid, int value, int amount) {
@@ -47,28 +51,45 @@ public abstract class WithdrawableItem implements Withdrawable {
         this.value = value;
         this.amount = amount;
 
-        this.NBTItemWrapper = plugin.getDefaultItemsHandler().createWrapper(getConfigName(), value, amount, uuid);
-        this.displayItem = NBTItemWrapper.getItemStack().clone();
         this.messages = withdrawer.getMessages();
         this.sounds = withdrawer.getSounds();
+        this.itemPlaceholders = new ItemPlaceholders(Map.of(
+                "value", String.valueOf(value),
+                "amount", String.valueOf(amount)));
+
+        this.displayItem = withdrawer.getItemHandler().get(getConfigName());
+        displayItem.setAmount(amount);
+        this.nbtItem = createNBTItem(displayItem);
+        applyNBT();
+    }
+
+    public NBTItem createNBTItem(ItemStack item) {
+        NBTItem nbtItem = new NBTItem(item);
+        nbtItem.setUUID("withdrawer-uuid", uuid);
+        nbtItem.setInteger("withdrawer-value", value);
+        nbtItem.setString("withdrawer-type", getConfigName());
+        return nbtItem;
+    }
+
+    public void applyNBT() {
+        nbtItem.applyNBT(displayItem);
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public ItemStack getImmutableItem() {
-        return NBTItemWrapper.getItemStack().clone();
-    }
-
-    @Override
-    public NBTItemWrapper getNBTWrapper() {
-        return NBTItemWrapper;
+    public ItemPlaceholders getItemPlaceholders() {
+        return itemPlaceholders;
     }
 
     @Override
     public ItemStack getDisplayItem() {
         return displayItem;
+    }
+
+    public NBTItem getNBTItem() {
+        return nbtItem;
     }
 
     @Override
@@ -88,7 +109,6 @@ public abstract class WithdrawableItem implements Withdrawable {
 
     public void setAsGifted(boolean isGifted) {
         this.isGifted = isGifted;
-        getNBTWrapper().setBoolean("withdrawer-gifted", isGifted);
     }
 
     public void setWithdrawPredicate(Predicate<Player> withdrawPredicate) {
@@ -117,11 +137,9 @@ public abstract class WithdrawableItem implements Withdrawable {
 
         if (!isShift && amount > 1 ) {
             amount--;
-            displayItem.setAmount(amount);
-            player.updateInventory();
+            player.getInventory().getItemInMainHand().setAmount(amount);
         }
 
-        updateLore(player);
         return totalValue;
     }
 
@@ -157,35 +175,14 @@ public abstract class WithdrawableItem implements Withdrawable {
     }
 
     private void addItem(Player player) {
+        itemPlaceholders.replace(displayItem);
         plugin.getWithdrawableItemsStorage().addItem(this);
-        updateLore(player);
         player.getInventory().addItem(displayItem);
     }
 
     private void removeItem(Player player) {
         plugin.getWithdrawableItemsStorage().removeItem(this);
-        player.getInventory().removeItem(displayItem);
-    }
-
-    /**
-     * Updates the display item's lore.
-     * @param player The player with the item (used for placeholders.)
-     */
-    private void updateLore(Player player) {
-        ItemStack item = getImmutableItem();
-        ItemMeta itemMeta  = item.getItemMeta();
-
-        List<Placeholder<Player>> placeholders = List.of(new Placeholder<>("value", String.valueOf(value)),
-        new Placeholder<>("total-value", String.valueOf(value * amount)));
-
-        List<String> lore = itemMeta.getLore();
-
-        for (Placeholder<Player> placeholder : placeholders) {
-            lore = placeholder.replace(lore, player);
-        }
-
-        itemMeta.setLore(lore);
-        displayItem.setItemMeta(itemMeta);
+        player.getInventory().removeItem(player.getInventory().getItemInMainHand());
     }
 
     // Interactions (Messages and Sounds)

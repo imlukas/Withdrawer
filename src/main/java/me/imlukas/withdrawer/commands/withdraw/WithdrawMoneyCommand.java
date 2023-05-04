@@ -1,10 +1,10 @@
-package me.imlukas.withdrawer.commands;
+package me.imlukas.withdrawer.commands.withdraw;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.config.DefaultItemsHandler;
+import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.economy.EconomyManager;
 import me.imlukas.withdrawer.economy.IEconomy;
-import me.imlukas.withdrawer.events.WithdrawEvent;
+import me.imlukas.withdrawer.api.events.WithdrawEvent;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
@@ -15,20 +15,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class WithdrawMoneyCommand implements SimpleCommand {
 
     private final Withdrawer plugin;
     private final MessagesFile messages;
-    private final DefaultItemsHandler itemsHandler;
+    private final ItemHandler itemsHandler;
     private final EconomyManager economyManager;
 
     public WithdrawMoneyCommand(Withdrawer plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
-        this.itemsHandler = plugin.getDefaultItemsHandler();
+        this.itemsHandler = plugin.getItemHandler();
         this.economyManager = plugin.getEconomyManager();
+    }
+
+    @Override
+    public Map<Integer, List<String>> tabCompleteWildcards() {
+        return Map.of(3, economyManager.getEconomyIdentifiers());
     }
 
     @Override
@@ -54,6 +60,15 @@ public class WithdrawMoneyCommand implements SimpleCommand {
             economy = getEconomy(args[2]);
         }
 
+        while(amount > 64) {
+            amount -= 64;
+            giveItem(player, value, 64, economy);
+        }
+
+        giveItem(player, value, amount, economy);
+    }
+
+    private void giveItem(Player player, int value, int amount, IEconomy economy) {
         MoneyItem moneyItem = new MoneyItem(plugin, UUID.randomUUID(), value, amount, economy);
 
         if (!checkValues(player, value * amount, moneyItem.getConfigName())) {
@@ -86,7 +101,7 @@ public class WithdrawMoneyCommand implements SimpleCommand {
                 new Placeholder<>("max", String.valueOf(max)));
 
         if (totalValue < min || totalValue > max) {
-            messages.sendMessage(player, "command.invalid-value", placeholders);
+            messages.sendMessage(player, "command.invalid-values", placeholders);
             return false;
         }
 

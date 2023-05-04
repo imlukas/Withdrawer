@@ -9,15 +9,21 @@ messages:
   global:
     feature-on: '&7%feature% is now &aon'
     feature-off: '&7%feature% is now &coff'
-    reload: '&7Reloaded plugin configs'
+    reload: '&7Reloaded plugin!'
     no-permission: '&cYou do not have permission to do this'
+    help:
+      - '&7/withdrawer help &8- &fShows this help message'
+      - '&7/withdrawer reload &8- &fReloads the plugin'
+      - '&7/gift <item-type> <player> <value> (amount) - &fGifts a player an item'
+      - '&7/withdraw <item-type> <value> (amount) - &fWithdraws an item from your account'
+      - '&7&m------------------------'
 
   command:
-    not-player: 'This command can only be used by a player'
+    not-player: '&cThis command can only be used by a player'
     no-permission: '&cYou do not have permission to do this'
-    player-not-found: 'Player(s) not found'
-    invalid-args: 'Invalid arguments'
-    invalid-values: 'The values must be between %min% and %max%'
+    player-not-found: '&cPlayer(s) not found'
+    invalid-args: '&cInvalid arguments'
+    invalid-values: '&cThe values must be between %min% and %max%'
     invalid-economy-name: '&cInvalid economy name'
 
   # Item messages

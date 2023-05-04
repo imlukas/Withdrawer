@@ -14,7 +14,7 @@ public class Vault implements IEconomy {
 
     @Override
     public String getIdentifier() {
-        return "Vault";
+        return "vault";
     }
 
     @Override

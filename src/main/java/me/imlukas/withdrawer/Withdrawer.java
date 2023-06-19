@@ -6,6 +6,8 @@ import me.imlukas.withdrawer.api.WithdrawerAPI;
 import me.imlukas.withdrawer.commands.*;
 import me.imlukas.withdrawer.commands.gift.GiftCommand;
 import me.imlukas.withdrawer.commands.gift.GiftMoneyCommand;
+import me.imlukas.withdrawer.commands.give.GiveCommand;
+import me.imlukas.withdrawer.commands.give.GiveMoneyCommand;
 import me.imlukas.withdrawer.commands.withdraw.WithdrawCommand;
 import me.imlukas.withdrawer.commands.withdraw.WithdrawMoneyCommand;
 import me.imlukas.withdrawer.config.ItemHandler;
@@ -34,7 +36,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.UUID;
 import java.util.function.Function;
 
 @Getter
@@ -84,6 +85,10 @@ public final class Withdrawer extends JavaPlugin {
         registerCommand(new GiftCommand(this, "xp", (value, amount) -> new ExpItem(this, value, amount)));
         registerCommand(new GiftCommand(this, "hp", (value, amount) -> new HealthItem(this, value, amount)));
         registerCommand(new GiftMoneyCommand(this));
+
+        registerCommand(new GiveCommand(this, "xp", (value, amount) -> new ExpItem(this, value, amount)));
+        registerCommand(new GiveCommand(this, "hp", (value, amount) -> new HealthItem(this, value, amount)));
+        registerCommand(new GiveMoneyCommand(this));
 
         registerCommand(new HelpCommand(this));
         registerCommand(new ReloadCommand(this));

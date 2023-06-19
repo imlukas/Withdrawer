@@ -57,6 +57,9 @@ public abstract class WithdrawableItem implements Withdrawable {
 
         createItemPlaceholders();
     }
+    public void give(Player player) {
+        addItem(player);
+    }
 
     public void createItemPlaceholders() {
         this.itemPlaceholders = new ItemPlaceholders(Map.of(
@@ -171,7 +174,7 @@ public abstract class WithdrawableItem implements Withdrawable {
         return true;
     }
 
-    private void addItem(Player player) {
+    public void addItem(Player player) {
         itemPlaceholders.replace(displayItem);
         plugin.getWithdrawableItemsStorage().addItem(this);
         player.getInventory().addItem(displayItem);

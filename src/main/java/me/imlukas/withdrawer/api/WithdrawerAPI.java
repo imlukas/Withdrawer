@@ -2,15 +2,15 @@ package me.imlukas.withdrawer.api;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.commands.give.GiveCommand;
+import me.imlukas.withdrawer.commands.gift.GiftCommand;
 import me.imlukas.withdrawer.commands.withdraw.WithdrawCommand;
 import me.imlukas.withdrawer.config.ItemHandler;
-import me.imlukas.withdrawer.economy.EconomyManager;
 import me.imlukas.withdrawer.economy.IEconomy;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemInitializers;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import org.bukkit.command.CommandExecutor;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -40,6 +40,40 @@ public class WithdrawerAPI {
      */
     public void registerWithdrawCommand(String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
         plugin.registerCommand(new WithdrawCommand(plugin, identifier, itemFunction));
+    }
+
+    /**
+     * Registers a give command with the given identifier and item function<br>
+     * The identifier is used for tab complete and to get config values.<br>
+     * <b>This is a general implementation for a give command, you can always create your own.</b>
+     * @param identifier The identifier of the command
+     * @param itemFunction The function to create the item, takes a value and an amount, returns a new WithdrawableItem.
+     */
+    public void registerGiveCommand(String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
+        plugin.registerCommand(new GiveCommand(plugin, identifier, itemFunction));
+    }
+
+    /**
+     * Registers a gift command with the given identifier and item function<br>
+     * The identifier is used for tab complete and to get config values.<br>
+     * <b>This is a general implementation for a gift command, you can always create your own.</b>
+     * @param identifier The identifier of the command
+     * @param itemFunction The function to create the item, takes a value and an amount, returns a new WithdrawableItem.
+     */
+    public void registerGiftCommand(String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
+        plugin.registerCommand(new GiftCommand(plugin, identifier, itemFunction));
+    }
+
+    /**
+     * Registers a command for withdraw, gift and give. You can always create your own commands.<br>
+     * You can register individual commands using the other available methods.
+     * @param identifier The identifier of the command
+     * @param itemFunction The function to create the item, takes a value and an amount, returns a new WithdrawableItem.
+     */
+    public void registerDefaultCommands(String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
+        plugin.registerCommand(new WithdrawCommand(plugin, identifier, itemFunction));
+        plugin.registerCommand(new GiveCommand(plugin, identifier, itemFunction));
+        plugin.registerCommand(new GiftCommand(plugin, identifier, itemFunction));
     }
 
     /**

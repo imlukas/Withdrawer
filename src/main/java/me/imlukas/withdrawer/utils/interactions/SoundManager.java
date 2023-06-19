@@ -19,6 +19,10 @@ public class SoundManager extends YMLBase {
     }
 
     public void playSound(Player player, String key) {
+        if (!soundsSections.getBoolean(key + ".enabled")) {
+            return;
+        }
+
         int volume = soundsSections.getInt(key + ".volume") == 0 ? 1 : soundsSections.getInt(key + ".volume");
         int pitch = soundsSections.getInt(key + ".pitch") == 0 ? 1 : soundsSections.getInt(key + ".pitch");
 

@@ -21,7 +21,7 @@ public class MessagesFile extends YMLBase {
 
     private final Pattern pattern;
     private final String prefix, arrow;
-    protected boolean usePrefixConfig, useActionBar, isLessIntrusive;
+    protected boolean usePrefix, useActionBar, isLessIntrusive;
     private String msg;
     private final AutomatedMessages automatedMessages;
 
@@ -30,7 +30,7 @@ public class MessagesFile extends YMLBase {
         pattern = Pattern.compile("#[a-fA-F0-9]{6}");
         prefix = StringEscapeUtils.unescapeJava(getConfiguration().getString("messages.prefix"));
         arrow = StringEscapeUtils.unescapeJava(getConfiguration().getString("messages.arrow"));
-        usePrefixConfig = getConfiguration().getBoolean("messages.use-prefix");
+        usePrefix = getConfiguration().getBoolean("messages.use-prefix");
         useActionBar = getConfiguration().getBoolean("messages.use-actionbar");
         isLessIntrusive = getConfiguration().getBoolean("messages.less-intrusive");
 
@@ -67,7 +67,7 @@ public class MessagesFile extends YMLBase {
         if (!getConfiguration().contains("messages." + name))
             return "";
         msg = getMessage(name);
-        if (usePrefixConfig && !isLessIntrusive) {
+        if (usePrefix && !isLessIntrusive) {
             msg = prefix + " " + arrow + " " + getMessage(name);
         } else {
             msg = msg.replace("%prefix%", prefix);
@@ -118,7 +118,7 @@ public class MessagesFile extends YMLBase {
         }
 
         msg = setMessage(name, action);
-        if (useActionBar && sender instanceof Player player && !isLessIntrusive) {
+        if (useActionBar && sender instanceof Player player) {
             sendActionbarStringMessage(player, msg);
             return;
         }
@@ -143,15 +143,15 @@ public class MessagesFile extends YMLBase {
 
 
     public boolean togglePrefix() {
-        return toggle("prefix", usePrefixConfig);
+        return usePrefix = toggle("prefix", usePrefix);
     }
 
     public boolean toggleActionBar() {
-        return toggle("actionbar", useActionBar);
+        return useActionBar = toggle("actionbar", useActionBar);
     }
 
     public boolean toggleLessIntrusive() {
-        return toggle("less-intrusive", isLessIntrusive);
+        return isLessIntrusive = toggle("less-intrusive", isLessIntrusive);
     }
 
     public boolean toggle(String type, boolean isEnabled) {

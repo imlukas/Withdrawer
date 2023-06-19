@@ -18,6 +18,7 @@ public interface Withdrawable {
 
     boolean isGifted();
 
+    boolean canWithdraw(Player player);
     public void withdraw(Player player);
 
     public void gift(Player gifter, Player target);

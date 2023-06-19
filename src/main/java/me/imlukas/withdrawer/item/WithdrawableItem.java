@@ -20,11 +20,10 @@ public abstract class WithdrawableItem implements Withdrawable {
     private final UUID uuid;
     private final int value;
 
-    private final ItemPlaceholders itemPlaceholders;
+    private ItemPlaceholders itemPlaceholders;
     private final ItemStack displayItem;
     private final NBTItem nbtItem;
 
-    protected Predicate<Player> withdrawPredicate;
     protected int amount;
     private boolean isGifted = false;
 
@@ -37,30 +36,32 @@ public abstract class WithdrawableItem implements Withdrawable {
         this.messages = withdrawer.getMessages();
         this.sounds = withdrawer.getSounds();
 
-        this.itemPlaceholders = new ItemPlaceholders(Map.of(
-                "value", String.valueOf(value),
-                "amount", String.valueOf(amount)));
-
-        this.nbtItem = nbtItem;
         this.displayItem = nbtItem.getItem();
+        this.nbtItem = nbtItem;
+        createItemPlaceholders();
     }
 
-    protected WithdrawableItem(Withdrawer withdrawer, UUID uuid, int value, int amount) {
+    protected WithdrawableItem(Withdrawer withdrawer, int value, int amount) {
         this.plugin = withdrawer;
-        this.uuid = uuid;
+        this.uuid = UUID.randomUUID();
         this.value = value;
         this.amount = amount;
 
         this.messages = withdrawer.getMessages();
         this.sounds = withdrawer.getSounds();
-        this.itemPlaceholders = new ItemPlaceholders(Map.of(
-                "value", String.valueOf(value),
-                "amount", String.valueOf(amount)));
 
         this.displayItem = withdrawer.getItemHandler().get(getConfigName());
         displayItem.setAmount(amount);
         this.nbtItem = createNBTItem(displayItem);
         applyNBT();
+
+        createItemPlaceholders();
+    }
+
+    public void createItemPlaceholders() {
+        this.itemPlaceholders = new ItemPlaceholders(Map.of(
+                "value", String.valueOf(value),
+                "amount", String.valueOf(amount)));
     }
 
     public NBTItem createNBTItem(ItemStack item) {
@@ -111,10 +112,6 @@ public abstract class WithdrawableItem implements Withdrawable {
         this.isGifted = isGifted;
     }
 
-    public void setWithdrawPredicate(Predicate<Player> withdrawPredicate) {
-        this.withdrawPredicate = withdrawPredicate;
-    }
-
     /*
         These methods handle item setup for the three possible actions:
         - Redeem
@@ -144,7 +141,7 @@ public abstract class WithdrawableItem implements Withdrawable {
     }
 
     public boolean setupGift(Player gifter, Player target) {
-        if (!withdrawPredicate.test(gifter)) {
+        if (!canWithdraw(gifter)) {
             messages.sendMessage(gifter, getConfigName() + ".no-money");
             return false;
         }
@@ -160,7 +157,7 @@ public abstract class WithdrawableItem implements Withdrawable {
     }
 
     public boolean setupWithdraw(Player player) {
-        if (!withdrawPredicate.test(player)) {
+        if (!canWithdraw(player)) {
             messages.sendMessage(player, getConfigName() + ".no-money");
             return false;
         }

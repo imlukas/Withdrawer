@@ -69,7 +69,7 @@ public class WithdrawMoneyCommand implements SimpleCommand {
     }
 
     private void giveItem(Player player, int value, int amount, IEconomy economy) {
-        MoneyItem moneyItem = new MoneyItem(plugin, UUID.randomUUID(), value, amount, economy);
+        MoneyItem moneyItem = new MoneyItem(plugin, value, amount, economy);
 
         if (!checkValues(player, value * amount, moneyItem.getConfigName())) {
             return;

@@ -9,7 +9,7 @@ money:
     - '&b&lValue: &7%value%%currency%'
     - ' '
     - '&e&l(Shift-Right-Click) &7to bulk-open'
-  glowing: true # Defines if the item has enchantment glint.
+  glow: true # Defines if the item has enchantment glint.
 
   min: 100 # minimum value of the banknote
   max: 10000 # maximum value of the banknote
@@ -21,18 +21,18 @@ exp:
     - '&b&lValue: &7%value%EXP'
     - ' '
     - '&e&l(Shift-Right-Click) &7to bulk-open'
-  glowing: true
+  glow: true
 
   min: 100
   max: 10000
 
-health:
+hp:
   type: REDSTONE
   name: '&bHP Jar &e&l(Right-Click)'
   lore:
     - '&b&lHP Stored: &7%value% HP'
     - ' '
     - '&cThis item can''t be bulk-opened.'
-  glowing: true
+  glow: true
 
   min: 1

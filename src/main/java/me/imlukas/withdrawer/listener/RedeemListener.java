@@ -46,6 +46,8 @@ public class RedeemListener implements Listener {
             return;
         }
 
+        event.setCancelled(true);
+
         WithdrawableItem withdrawable = itemsRegistry.getItem(withdrawbleItemUUID);
 
         if (withdrawable == null) {

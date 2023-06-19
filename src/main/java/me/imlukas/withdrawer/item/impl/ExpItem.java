@@ -14,17 +14,20 @@ public class ExpItem extends WithdrawableItem {
 
     public ExpItem(Withdrawer plugin, NBTItem nbtItem) {
         super(plugin, nbtItem);
-        setWithdrawPredicate(player -> ExpUtil.hasExp(player, value));
     }
 
-    public ExpItem(Withdrawer plugin, UUID uuid, int value, int amount) {
-        super(plugin, uuid, value, amount);
-        setWithdrawPredicate(player -> ExpUtil.hasExp(player, value));
+    public ExpItem(Withdrawer plugin, int value, int amount) {
+        super(plugin, value, amount);
     }
 
     @Override
     public String getConfigName() {
         return "exp";
+    }
+
+    @Override
+    public boolean canWithdraw(Player player) {
+        return ExpUtil.hasExp(player, amount * value);
     }
 
     @Override

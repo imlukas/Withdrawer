@@ -21,7 +21,7 @@ sounds:
       volume: 1
       pitch: 1
       enabled: true
-  health:
+  hp:
     withdraw:
       sound: BLOCK_NOTE_BLOCK_PLING
       volume: 1

@@ -13,16 +13,11 @@ public class ItemPlaceholders {
 
     private final Map<String, String> placeholders = new HashMap<>();
 
-    public ItemPlaceholders() {
-
-    }
-
     public ItemPlaceholders(Map<String, String> defaults) {
         placeholders.putAll(defaults);
     }
 
     public void addPlaceholder(String placeholder, String value) {
-
         if (placeholder.startsWith("%") && placeholder.endsWith("%")) {
             placeholder = placeholder.substring(1, placeholder.length() - 1);
         }

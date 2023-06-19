@@ -39,21 +39,22 @@ public class GiftMoneyCommand implements SimpleCommand {
     @Override
     public void execute(CommandSender sender, String... args) {
         Player gifter = (Player) sender;
-        int value = 1;
-        if (!args[0].isEmpty()) {
-            value = TextUtils.parseInt(args[0], (integer -> integer > 0));
-        }
-
-        if (args[1].isEmpty()) {
+        if (args[0].isEmpty()) {
             messages.sendMessage(gifter, "command.invalid-args");
             return;
         }
 
-        Player target = Bukkit.getPlayer(args[1]);
+        Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
             messages.sendMessage(gifter, "command.player-not-found");
             return;
+        }
+
+
+        int value = 1;
+        if (!args[1].isEmpty()) {
+            value = TextUtils.parseInt(args[0], (integer -> integer > 0));
         }
 
         int amount = 1;
@@ -76,7 +77,7 @@ public class GiftMoneyCommand implements SimpleCommand {
 
     private void giveItem(Player gifter, Player target, int iterations, int value, int amount, IEconomy economy) {
         for (int i = 0; i < iterations; i++) {
-            MoneyItem moneyItem = new MoneyItem(plugin, UUID.randomUUID(), value, amount, economy);
+            MoneyItem moneyItem = new MoneyItem(plugin, value, amount, economy);
 
             if (!checkValues(gifter, value * amount, moneyItem.getConfigName())) {
                 return;

@@ -68,7 +68,7 @@ public final class Withdrawer extends JavaPlugin {
 
         registerDefaultWithdrawable("money", (item) -> new MoneyItem(this, item));
         registerDefaultWithdrawable("exp", (item) -> new ExpItem(this, item));
-        registerDefaultWithdrawable("health", (item) -> new HealthItem(this, item));
+        registerDefaultWithdrawable("hp", (item) -> new HealthItem(this, item));
 
         withdrawableItemsStorage = new WithdrawableItemsStorage(this).load();
         itemHandler = new ItemHandler(this);
@@ -77,12 +77,12 @@ public final class Withdrawer extends JavaPlugin {
         updateConfig(this, itemHandler);
         System.out.println("[Withdrawer] Updated Config!");
 
-        registerCommand(new WithdrawCommand(this, "xp", (value, amount) -> new ExpItem(this, UUID.randomUUID(), value, amount)));
-        registerCommand(new WithdrawCommand(this, "hp", (value, amount) -> new HealthItem(this, UUID.randomUUID(), value, amount)));
+        registerCommand(new WithdrawCommand(this, "xp", (value, amount) -> new ExpItem(this, value, amount)));
+        registerCommand(new WithdrawCommand(this, "hp", (value, amount) -> new HealthItem(this, value, amount)));
         registerCommand(new WithdrawMoneyCommand(this));
 
-        registerCommand(new GiftCommand(this, "xp", (value, amount) -> new ExpItem(this, UUID.randomUUID(), value, amount)));
-        registerCommand(new GiftCommand(this, "hp", (value, amount) -> new HealthItem(this, UUID.randomUUID(), value, amount)));
+        registerCommand(new GiftCommand(this, "xp", (value, amount) -> new ExpItem(this, value, amount)));
+        registerCommand(new GiftCommand(this, "hp", (value, amount) -> new HealthItem(this, value, amount)));
         registerCommand(new GiftMoneyCommand(this));
 
         registerCommand(new HelpCommand(this));

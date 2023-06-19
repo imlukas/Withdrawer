@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class WithdrawableItemsStorage {
+
+    private final Map<UUID, WithdrawableItem> withdrawableItems = new HashMap<>();
     private final WithdrawableItemInitializers defaultWithdrawables;
 
     public WithdrawableItemsStorage(Withdrawer plugin) {
@@ -21,7 +23,6 @@ public class WithdrawableItemsStorage {
     }
 
     public WithdrawableItemsStorage load() {
-        long ms = System.nanoTime() / 1000000;
         for (Player player : Bukkit.getOnlinePlayers()) {
             Inventory inventory = player.getInventory();
 
@@ -44,8 +45,6 @@ public class WithdrawableItemsStorage {
 
         return this;
     }
-
-    private final Map<UUID, WithdrawableItem> withdrawableItems = new HashMap<>();
 
     public void addItem(WithdrawableItem item) {
         withdrawableItems.put(item.getUuid(), item);

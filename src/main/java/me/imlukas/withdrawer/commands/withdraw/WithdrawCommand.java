@@ -55,7 +55,7 @@ public class WithdrawCommand implements SimpleCommand {
     }
 
     private void giveItem(Player player, int value, int amount) {
-        WithdrawableItem withdrawableItem = itemFunction.apply(amount, value);
+        WithdrawableItem withdrawableItem = itemFunction.apply(value, amount);
 
         if (!checkValues(player, value * amount, withdrawableItem.getConfigName())) {
             return;

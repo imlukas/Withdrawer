@@ -20,16 +20,14 @@ public class MoneyItem extends WithdrawableItem {
     public MoneyItem(Withdrawer plugin, NBTItem item) {
         super(plugin, item);
         this.economy = plugin.getEconomyManager().getEconomy(item.getString("withdrawer-economy"));
-        setWithdrawPredicate(player -> economy.hasMoney(player, value));
         getItemPlaceholders().addPlaceholder("currency", economy.getCurrencySymbol());
     }
 
-    public MoneyItem(Withdrawer plugin, UUID uuid, int value, int amount, IEconomy economy) {
-        super(plugin, uuid, value, amount);
+    public MoneyItem(Withdrawer plugin, int value, int amount, IEconomy economy) {
+        super(plugin, value, amount);
         this.economy = economy;
         getNBTItem().setString("withdrawer-economy", economy.getIdentifier());
         applyNBT();
-        setWithdrawPredicate(player -> economy.hasMoney(player, value));
         getItemPlaceholders().addPlaceholder("currency", economy.getCurrencySymbol());
     }
 
@@ -40,6 +38,11 @@ public class MoneyItem extends WithdrawableItem {
     @Override
     public String getConfigName() {
         return "money";
+    }
+
+    @Override
+    public boolean canWithdraw(Player player) {
+        return economy.hasMoney(player, amount * value);
     }
 
     @Override

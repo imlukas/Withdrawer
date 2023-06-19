@@ -12,17 +12,20 @@ public class HealthItem extends WithdrawableItem {
 
     public HealthItem(Withdrawer plugin, NBTItem nbtItem) {
         super(plugin, nbtItem);
-        setWithdrawPredicate(player -> HealthUtil.checkHealth(player, getValue()));
     }
 
-    public HealthItem(Withdrawer plugin, UUID uuid, int value, int amount) {
-        super(plugin, uuid, value, amount);
-        setWithdrawPredicate(player -> HealthUtil.checkHealth(player, getValue()));
+    public HealthItem(Withdrawer plugin, int value, int amount) {
+        super(plugin, value, amount);
     }
 
     @Override
     public String getConfigName() {
-        return "health";
+        return "hp";
+    }
+
+    @Override
+    public boolean canWithdraw(Player player) {
+        return HealthUtil.checkHealth(player, amount * getValue());
     }
 
     @Override
@@ -30,6 +33,9 @@ public class HealthItem extends WithdrawableItem {
         if (!setupWithdraw(player)) {
             return;
         }
+
+        HealthUtil.removeHealth(player, amount * getValue());
+        sendWithdrawInteractions(player, amount * getValue());
     }
 
     @Override
@@ -37,6 +43,9 @@ public class HealthItem extends WithdrawableItem {
         if (!setupGift(gifter, target)) {
             return;
         }
+
+        HealthUtil.addHealth(target, getValue());
+        sendGiftedInteractions(gifter, target, getValue());
     }
 
     @Override
@@ -46,5 +55,8 @@ public class HealthItem extends WithdrawableItem {
         if (totalValue == 0) {
             return;
         }
+
+        HealthUtil.addHealth(player, totalValue);
+        sendRedeemInteractions(player, totalValue);
     }
 }

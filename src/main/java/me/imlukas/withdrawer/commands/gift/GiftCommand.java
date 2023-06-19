@@ -29,6 +29,11 @@ public class GiftCommand implements SimpleCommand {
     }
 
     @Override
+    public String getPermission() {
+        return "withdrawer.gift." + identifier;
+    }
+
+    @Override
     public String getIdentifier() {
         return "gift." + identifier + ".*.*.*";
     }

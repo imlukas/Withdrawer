@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 public abstract class WithdrawableItem implements Withdrawable {
 
@@ -57,6 +56,7 @@ public abstract class WithdrawableItem implements Withdrawable {
 
         createItemPlaceholders();
     }
+
     public void give(Player player) {
         addItem(player);
     }
@@ -124,9 +124,11 @@ public abstract class WithdrawableItem implements Withdrawable {
         Prevents code repetition on item implementations.
      */
     public int setupRedeem(Player player, boolean isShift) {
-        if (!player.hasPermission("withdrawer.redeem." + getConfigName())) {
-            messages.sendMessage(player, "global.no-permission");
-            return 0;
+        if (!player.hasPermission("withdrawer.redeem.*")) {
+            if (!player.hasPermission("withdrawer.redeem." + getConfigName())) {
+                messages.sendMessage(player, "global.no-permission");
+                return 0;
+            }
         }
         int totalValue = value;
 
@@ -135,7 +137,7 @@ public abstract class WithdrawableItem implements Withdrawable {
             removeItem(player);
         }
 
-        if (!isShift && amount > 1 ) {
+        if (!isShift && amount > 1) {
             amount--;
             player.getInventory().getItemInMainHand().setAmount(amount);
         }
@@ -148,10 +150,11 @@ public abstract class WithdrawableItem implements Withdrawable {
             messages.sendMessage(gifter, getConfigName() + ".no-money");
             return false;
         }
-
-        if (!gifter.hasPermission("withdrawer.gift." + getConfigName())) {
-            messages.sendMessage(gifter, "global.no-permission");
-            return false;
+        if (!gifter.hasPermission("withdrawer.gift.*")) {
+            if (!gifter.hasPermission("withdrawer.gift." + getConfigName())) {
+                messages.sendMessage(gifter, "global.no-permission");
+                return false;
+            }
         }
 
         setAsGifted(true);
@@ -165,9 +168,11 @@ public abstract class WithdrawableItem implements Withdrawable {
             return false;
         }
 
-        if (!player.hasPermission("withdrawer.withdraw." + getConfigName())) {
-            messages.sendMessage(player, "global.no-permission");
-            return false;
+        if (!player.hasPermission("withdrawer.withdraw.*")) {
+            if (!player.hasPermission("withdrawer.withdraw." + getConfigName())) {
+                messages.sendMessage(player, "global.no-permission");
+                return false;
+            }
         }
 
         addItem(player);

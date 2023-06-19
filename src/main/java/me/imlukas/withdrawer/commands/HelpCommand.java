@@ -17,6 +17,11 @@ public class HelpCommand implements SimpleCommand {
     }
 
     @Override
+    public String getPermission() {
+        return "withdrawer.help";
+    }
+
+    @Override
     public String getIdentifier() {
         return "withdrawer.help";
     }

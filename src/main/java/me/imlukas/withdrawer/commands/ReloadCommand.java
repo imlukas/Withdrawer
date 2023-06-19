@@ -16,6 +16,11 @@ public class ReloadCommand implements SimpleCommand {
     }
 
     @Override
+    public String getPermission() {
+        return "withdrawer.reload";
+    }
+
+    @Override
     public String getIdentifier() {
         return "withdrawer.reload";
     }

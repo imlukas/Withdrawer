@@ -28,6 +28,7 @@ public class WithdrawCommand implements SimpleCommand {
         this.identifier = identifier;
         this.itemFunction = itemFunction;
     }
+
     @Override
     public String getIdentifier() {
         return "withdraw." + identifier + ".*.*";

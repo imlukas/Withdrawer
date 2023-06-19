@@ -38,6 +38,15 @@ public class GiveMoneyCommand implements SimpleCommand {
             return;
         }
 
+        if (sender instanceof Player player) {
+            if (!player.hasPermission("withdrawer.give.*")) {
+                if (!player.hasPermission("withdrawer.give.money")) {
+                    messages.sendMessage(player, "command.no-permission");
+                    return;
+                }
+            }
+        }
+
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {

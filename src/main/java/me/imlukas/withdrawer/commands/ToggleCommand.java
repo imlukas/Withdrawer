@@ -23,6 +23,11 @@ public class ToggleCommand implements SimpleCommand {
     }
 
     @Override
+    public String getPermission() {
+        return "withdrawer.toggle";
+    }
+
+    @Override
     public String getIdentifier() {
         return "withdrawer.toggle.*";
     }

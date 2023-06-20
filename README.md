@@ -19,5 +19,5 @@
 
 [Plugin Wiki](https://github.com/imlukas/Withdrawer/wiki)
 
-![Plugin working GIF](https://media.giphy.com/media/CVflLRSCW1KGa2UjEi/giphy.gif)
+![Plugin working GIF](https://i.imgur.com/fYqqCyu.gif)
   

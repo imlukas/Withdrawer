@@ -32,7 +32,7 @@ messages:
     no-money: "&cYou do not have enough money"
     redeem: "&7You redeemed %amount%%currency%!"
     redeem-less-intrusive: "&a+%amount%%currency%"
-    withdraw: "&7You withdrew %amount%%currency% from your account"
+    withdraw: "&7You withdrew %amount%%currency%"
     withdraw-less-intrusive: "&c-%amount%%currency%"
 
   exp:

@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class GiftMoneyCommand implements SimpleCommand {
@@ -30,6 +31,13 @@ public class GiftMoneyCommand implements SimpleCommand {
         this.itemsHandler = plugin.getItemHandler();
         this.economyManager = plugin.getEconomyManager();
     }
+
+    @Override
+    public Map<Integer, List<String>> tabCompleteWildcards() {
+        return Map.of(1, List.of("10", "100", "1000"),
+                3, economyManager.getEconomyIdentifiers());
+    }
+
 
     @Override
     public String getPermission() {

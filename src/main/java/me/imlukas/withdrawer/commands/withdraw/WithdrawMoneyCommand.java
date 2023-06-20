@@ -34,7 +34,8 @@ public class WithdrawMoneyCommand implements SimpleCommand {
 
     @Override
     public Map<Integer, List<String>> tabCompleteWildcards() {
-        return Map.of(3, economyManager.getEconomyIdentifiers());
+        return Map.of(1, List.of("10", "100", "1000"),
+                3, economyManager.getEconomyIdentifiers());
     }
 
     @Override

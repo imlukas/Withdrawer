@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 public class GiftCommand implements SimpleCommand {
@@ -26,6 +27,10 @@ public class GiftCommand implements SimpleCommand {
         this.itemsHandler = plugin.getItemHandler();
         this.identifier = identifier;
         this.itemFunction = itemFunction;
+    }
+    @Override
+    public Map<Integer, List<String>> tabCompleteWildcards() {
+        return Map.of(1, List.of("10", "100", "1000"));
     }
 
     @Override

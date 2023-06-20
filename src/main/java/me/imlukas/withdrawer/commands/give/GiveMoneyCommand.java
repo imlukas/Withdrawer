@@ -12,6 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 public class GiveMoneyCommand implements SimpleCommand {
@@ -24,6 +26,12 @@ public class GiveMoneyCommand implements SimpleCommand {
         this.plugin = plugin;
         this.economyManager = plugin.getEconomyManager();
         this.messages = plugin.getMessages();
+    }
+
+    @Override
+    public Map<Integer, List<String>> tabCompleteWildcards() {
+        return Map.of(1, List.of("10", "100", "1000"),
+                3, economyManager.getEconomyIdentifiers());
     }
 
     @Override

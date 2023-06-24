@@ -9,12 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ToggleCommand implements SimpleCommand {
-    private final Withdrawer plugin;
     private final MessagesFile messages;
 
     public ToggleCommand(Withdrawer plugin) {
         this.messages = plugin.getMessages();
-        this.plugin = plugin;
     }
 
     @Override
@@ -42,7 +40,7 @@ public class ToggleCommand implements SimpleCommand {
         String type = args[0];
         boolean isToggled = false;
 
-        switch(type) {
+        switch (type) {
             case "actionbar" -> isToggled = messages.toggleActionBar();
             case "less-intrusive" -> isToggled = messages.toggleLessIntrusive();
             case "prefix" -> isToggled = messages.togglePrefix();

@@ -1,8 +1,8 @@
 package me.imlukas.withdrawer.commands.gift;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.api.events.GiftEvent;
+import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
@@ -28,6 +28,7 @@ public class GiftCommand implements SimpleCommand {
         this.identifier = identifier;
         this.itemFunction = itemFunction;
     }
+
     @Override
     public Map<Integer, List<String>> tabCompleteWildcards() {
         return Map.of(1, List.of("10", "100", "1000"));
@@ -40,7 +41,7 @@ public class GiftCommand implements SimpleCommand {
 
     @Override
     public String getIdentifier() {
-        return "gift." + identifier + ".*.*.*";
+        return "wd.gift." + identifier + ".*.*.*";
     }
 
     @Override
@@ -61,12 +62,12 @@ public class GiftCommand implements SimpleCommand {
 
         int value = 1;
         if (!args[1].isEmpty()) {
-            value = TextUtils.parseInt(args[0], (integer -> integer > 0));
+            value = TextUtils.parseInt(args[1], (integer -> integer > 0));
         }
 
         int amount = 1;
         if (!args[2].isEmpty()) {
-            amount = TextUtils.parseInt(args[1], (integer -> integer > 0));
+            amount = TextUtils.parseInt(args[2], (integer -> integer > 0));
         }
 
         while (amount > 64) {

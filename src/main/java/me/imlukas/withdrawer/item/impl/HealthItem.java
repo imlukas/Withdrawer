@@ -1,17 +1,15 @@
 package me.imlukas.withdrawer.item.impl;
 
-import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.HealthUtil;
+import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class HealthItem extends WithdrawableItem {
 
-    public HealthItem(Withdrawer plugin, NBTItem nbtItem) {
-        super(plugin, nbtItem);
+    public HealthItem(Withdrawer plugin, PDCWrapper pdcWrapper) {
+        super(plugin, pdcWrapper);
     }
 
     public HealthItem(Withdrawer plugin, int value, int amount) {
@@ -30,33 +28,39 @@ public class HealthItem extends WithdrawableItem {
 
     @Override
     public void withdraw(Player player) {
-        if (!setupWithdraw(player)) {
+        if (!preparator.setupWithdraw(player)) {
             return;
         }
 
         HealthUtil.removeHealth(player, amount * getValue());
-        sendWithdrawInteractions(player, amount * getValue());
+        interactions.sendWithdrawInteractions(player, amount * getValue());
     }
 
     @Override
     public void gift(Player gifter, Player target) {
-        if (!setupGift(gifter, target)) {
+        if (!preparator.setupGift(gifter, target)) {
             return;
         }
 
         HealthUtil.addHealth(target, getValue());
-        sendGiftedInteractions(gifter, target, getValue());
+        interactions.sendGiftedInteractions(gifter, target, getValue());
     }
 
     @Override
     public void redeem(Player player, boolean isShift) {
-        int totalValue = setupRedeem(player, isShift);
+        int totalValue = preparator.setupRedeem(player, isShift);
 
         if (totalValue == 0) {
             return;
         }
 
         HealthUtil.addHealth(player, totalValue);
-        sendRedeemInteractions(player, totalValue);
+        interactions.sendRedeemInteractions(player, totalValue);
+    }
+
+    @Override
+    public void give(Player player, int amount) {
+        addItem(player);
+        interactions.sendGiveInteractions(player, amount);
     }
 }

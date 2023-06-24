@@ -1,10 +1,10 @@
 package me.imlukas.withdrawer.commands.withdraw;
 
 import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.api.events.WithdrawEvent;
 import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.economy.EconomyManager;
 import me.imlukas.withdrawer.economy.IEconomy;
-import me.imlukas.withdrawer.api.events.WithdrawEvent;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class WithdrawMoneyCommand implements SimpleCommand {
 
@@ -61,7 +60,7 @@ public class WithdrawMoneyCommand implements SimpleCommand {
             economy = getEconomy(args[2]);
         }
 
-        while(amount > 64) {
+        while (amount > 64) {
             amount -= 64;
             giveItem(player, value, 64, economy);
         }

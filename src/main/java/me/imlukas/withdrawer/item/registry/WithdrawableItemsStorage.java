@@ -1,9 +1,9 @@
 package me.imlukas.withdrawer.item.registry;
 
-import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.item.Withdrawable;
 import me.imlukas.withdrawer.item.WithdrawableItem;
+import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -15,10 +15,12 @@ import java.util.UUID;
 
 public class WithdrawableItemsStorage {
 
+    private final Withdrawer plugin;
     private final Map<UUID, WithdrawableItem> withdrawableItems = new HashMap<>();
     private final WithdrawableItemInitializers defaultWithdrawables;
 
     public WithdrawableItemsStorage(Withdrawer plugin) {
+        this.plugin = plugin;
         this.defaultWithdrawables = plugin.getItemInitializers();
     }
 
@@ -31,7 +33,7 @@ public class WithdrawableItemsStorage {
                     continue;
                 }
 
-                NBTItem nbtItem = new NBTItem(itemStack);
+                PDCWrapper nbtItem = new PDCWrapper(plugin, itemStack);
                 UUID itemUUID = nbtItem.getUUID("withdrawer-uuid");
 
                 if (itemUUID == null) {
@@ -47,7 +49,7 @@ public class WithdrawableItemsStorage {
     }
 
     public void addItem(WithdrawableItem item) {
-        withdrawableItems.put(item.getUuid(), item);
+        withdrawableItems.put(item.getUUID(), item);
     }
 
     public void removeItem(UUID uuid) {
@@ -55,7 +57,7 @@ public class WithdrawableItemsStorage {
     }
 
     public void removeItem(Withdrawable item) {
-        withdrawableItems.remove(item.getUuid());
+        withdrawableItems.remove(item.getUUID());
     }
 
     public WithdrawableItem getItem(UUID uuid) {

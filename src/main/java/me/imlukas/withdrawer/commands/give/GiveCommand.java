@@ -1,12 +1,9 @@
 package me.imlukas.withdrawer.commands.give;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.api.events.GiftEvent;
-import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
-import me.imlukas.withdrawer.utils.text.Placeholder;
 import me.imlukas.withdrawer.utils.text.TextUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -27,6 +24,7 @@ public class GiveCommand implements SimpleCommand {
         this.identifier = identifier;
         this.itemFunction = itemFunction;
     }
+
     @Override
     public Map<Integer, List<String>> tabCompleteWildcards() {
         return Map.of(1, List.of("10", "100", "1000"));
@@ -34,7 +32,7 @@ public class GiveCommand implements SimpleCommand {
 
     @Override
     public String getIdentifier() {
-        return "give." + identifier + ".*.*.*";
+        return "wd.give." + identifier + ".*.*.*";
     }
 
     @Override
@@ -62,13 +60,13 @@ public class GiveCommand implements SimpleCommand {
 
         int value = 1;
         if (!args[1].isEmpty()) {
-            value = TextUtils.parseInt(args[0], (integer -> integer > 0));
+            value = TextUtils.parseInt(args[1], (integer -> integer > 0));
         }
 
         int amount = 1;
         if (!args[2].isEmpty()) {
-            amount = TextUtils.parseInt(args[1], (integer -> integer > 0));
-        }
+            amount = TextUtils.parseInt(args[2], (integer -> integer > 0));
+    }
 
         while (amount > 64) {
             amount -= 64;
@@ -80,6 +78,8 @@ public class GiveCommand implements SimpleCommand {
 
     private void giveItem(Player target, int value, int amount) {
         WithdrawableItem withdrawableItem = itemFunction.apply(value, amount);
-        withdrawableItem.give(target);
+        withdrawableItem.give(target, value * amount);
+
+
     }
 }

@@ -1,10 +1,10 @@
 package me.imlukas.withdrawer;
 
-import de.tr7zw.nbtapi.NBTItem;
 import lombok.Getter;
-import lombok.With;
 import me.imlukas.withdrawer.api.WithdrawerAPI;
-import me.imlukas.withdrawer.commands.*;
+import me.imlukas.withdrawer.commands.HelpCommand;
+import me.imlukas.withdrawer.commands.ReloadCommand;
+import me.imlukas.withdrawer.commands.ToggleCommand;
 import me.imlukas.withdrawer.commands.gift.GiftCommand;
 import me.imlukas.withdrawer.commands.gift.GiftMoneyCommand;
 import me.imlukas.withdrawer.commands.give.GiveCommand;
@@ -14,7 +14,6 @@ import me.imlukas.withdrawer.commands.withdraw.WithdrawMoneyCommand;
 import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.config.PluginSettings;
 import me.imlukas.withdrawer.economy.EconomyManager;
-import me.imlukas.withdrawer.item.Withdrawable;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.impl.ExpItem;
 import me.imlukas.withdrawer.item.impl.HealthItem;
@@ -24,8 +23,9 @@ import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import me.imlukas.withdrawer.listener.*;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.command.impl.CommandManager;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
 import me.imlukas.withdrawer.utils.interactions.SoundManager;
+import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import me.imlukas.withdrawer.utils.storage.YMLBase;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -44,7 +44,6 @@ import java.util.function.Function;
 public final class Withdrawer extends JavaPlugin {
 
     private static WithdrawerAPI API;
-    private static Withdrawer instance;
     private MessagesFile messages;
     private SoundManager sounds;
     private PluginSettings pluginSettings;
@@ -57,7 +56,6 @@ public final class Withdrawer extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = this;
         API = new WithdrawerAPI(this);
         saveDefaultConfig();
         economyManager = new EconomyManager(this);
@@ -100,7 +98,7 @@ public final class Withdrawer extends JavaPlugin {
         registerCommand(new ToggleCommand(this));
 
         registerListener(new HealthResetListener());
-        registerListener(new ItemDropListener(this));
+        registerListener(new ItemPickupAndDropListener(this));
         registerListener(new RedeemListener(this));
         registerListener(new ConnectionListener(this));
         registerListener(new CraftingVillagerListener(this));
@@ -122,15 +120,11 @@ public final class Withdrawer extends JavaPlugin {
 
     }
 
-    public static Withdrawer getInstance() {
-        return instance;
-    }
-
     public static WithdrawerAPI getWithdrawerAPI() {
         return API;
     }
 
-    private void registerDefaultWithdrawable(String name, Function<NBTItem, WithdrawableItem> function) {
+    private void registerDefaultWithdrawable(String name, Function<PDCWrapper, WithdrawableItem> function) {
         itemInitializers.addDefault(name, function);
     }
 

@@ -1,33 +1,27 @@
 package me.imlukas.withdrawer.item.impl;
 
 
-import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.economy.IEconomy;
 import me.imlukas.withdrawer.item.WithdrawableItem;
+import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class MoneyItem extends WithdrawableItem {
 
     private final IEconomy economy;
     private final int value = getValue();
 
-    public MoneyItem(Withdrawer plugin, NBTItem item) {
-        super(plugin, item);
-        this.economy = plugin.getEconomyManager().getEconomy(item.getString("withdrawer-economy"));
+    public MoneyItem(Withdrawer plugin, PDCWrapper pdcWrapper) {
+        super(plugin, pdcWrapper);
+        this.economy = plugin.getEconomyManager().getEconomy(pdcWrapper.getString("withdrawer-economy"));
         getItemPlaceholders().addPlaceholder("currency", economy.getCurrencySymbol());
     }
 
     public MoneyItem(Withdrawer plugin, int value, int amount, IEconomy economy) {
         super(plugin, value, amount);
         this.economy = economy;
-        getNBTItem().setString("withdrawer-economy", economy.getIdentifier());
-        applyNBT();
+        getPDCWrapper().setString("withdrawer-economy", economy.getIdentifier());
         getItemPlaceholders().addPlaceholder("currency", economy.getCurrencySymbol());
     }
 
@@ -48,34 +42,40 @@ public class MoneyItem extends WithdrawableItem {
     @Override
     public void withdraw(Player player) {
         int totalValue = value * getAmount();
-        if (!setupWithdraw(player)) {
+        if (!preparator.setupWithdraw(player)) {
             return;
         }
 
         economy.withdrawFrom(player, totalValue);
-        sendWithdrawInteractions(player, totalValue, economy.getCurrencySymbol());
+        interactions.sendWithdrawInteractions(player, totalValue, economy.getCurrencySymbol());
     }
 
     @Override
     public void gift(Player gifter, Player target) {
         int totalValue = value * getAmount();
-        if (!setupGift(gifter, target)) {
+        if (!preparator.setupGift(gifter, target)) {
             return;
         }
 
         economy.withdrawFrom(gifter, totalValue);
-        sendGiftedInteractions(gifter, target, totalValue, economy.getCurrencySymbol());
+        interactions.sendGiftedInteractions(gifter, target, totalValue, economy.getCurrencySymbol());
     }
 
     @Override
     public void redeem(Player player, boolean isShift) {
-        int totalValue = setupRedeem(player, isShift);
+        int totalValue = preparator.setupRedeem(player, isShift);
 
         if (totalValue == 0) {
             return;
         }
 
         economy.giveTo(player, totalValue);
-        sendRedeemInteractions(player, totalValue, getEconomy().getCurrencySymbol());
+        interactions.sendRedeemInteractions(player, totalValue, getEconomy().getCurrencySymbol());
+    }
+
+    @Override
+    public void give(Player player, int amount) {
+        addItem(player);
+        interactions.sendGiveInteractions(player, amount, getEconomy().getCurrencySymbol());
     }
 }

@@ -3,23 +3,20 @@ package me.imlukas.withdrawer.utils.interactions.messages;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.utils.storage.YMLBase;
 import me.imlukas.withdrawer.utils.text.Placeholder;
+import me.imlukas.withdrawer.utils.text.TextUtils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.function.Function;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessagesFile extends YMLBase {
 
-    private final Pattern pattern;
     private final String prefix, arrow;
     protected boolean usePrefix, useActionBar, isLessIntrusive;
     private String msg;
@@ -27,36 +24,17 @@ public class MessagesFile extends YMLBase {
 
     public MessagesFile(Withdrawer plugin) {
         super(plugin, new File(plugin.getDataFolder(), "messages.yml"), true);
-        pattern = Pattern.compile("#[a-fA-F0-9]{6}");
-        prefix = StringEscapeUtils.unescapeJava(getConfiguration().getString("messages.prefix"));
-        arrow = StringEscapeUtils.unescapeJava(getConfiguration().getString("messages.arrow"));
+        prefix = getConfiguration().getString("messages.prefix");
+        arrow = getConfiguration().getString("messages.arrow");
         usePrefix = getConfiguration().getBoolean("messages.use-prefix");
         useActionBar = getConfiguration().getBoolean("messages.use-actionbar");
         isLessIntrusive = getConfiguration().getBoolean("messages.less-intrusive");
 
         automatedMessages = new AutomatedMessages(this);
-        writeUnsetValues();
-
     }
 
     public AutomatedMessages getAutomatedMessages() {
         return automatedMessages;
-    }
-
-    public String setColor(String message) {
-        String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
-        int minorVer = Integer.parseInt(split[1]);
-
-        if (minorVer >= 16) {
-            Matcher matcher = pattern.matcher(message);
-
-            while (matcher.find()) {
-                String color = message.substring(matcher.start(), matcher.end());
-                message = message.replace(color, net.md_5.bungee.api.ChatColor.of(color) + "");
-                matcher = pattern.matcher(message);
-            }
-        }
-        return ChatColor.translateAlternateColorCodes('&', message);
     }
 
     private String setMessage(String name) {
@@ -73,11 +51,11 @@ public class MessagesFile extends YMLBase {
             msg = msg.replace("%prefix%", prefix);
         }
         msg = action.apply(msg);
-        return setColor(msg);
+        return TextUtils.color(msg);
     }
 
     public void sendStringMessage(CommandSender player, String msg) {
-        player.sendMessage(setColor(msg));
+        player.sendMessage(TextUtils.color(msg));
     }
 
     public void sendMessage(CommandSender sender, String name) {
@@ -112,7 +90,7 @@ public class MessagesFile extends YMLBase {
             for (String str : getConfiguration().getStringList("messages." + name)) {
                 msg = StringEscapeUtils.unescapeJava(str.replace("%prefix%", prefix));
                 msg = action.apply(msg);
-                sender.sendMessage(setColor(msg));
+                sender.sendMessage(TextUtils.color(msg));
             }
             return;
         }

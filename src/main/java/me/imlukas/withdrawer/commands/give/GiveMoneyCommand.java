@@ -3,7 +3,6 @@ package me.imlukas.withdrawer.commands.give;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.economy.EconomyManager;
 import me.imlukas.withdrawer.economy.IEconomy;
-import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 public class GiveMoneyCommand implements SimpleCommand {
 
@@ -36,7 +34,7 @@ public class GiveMoneyCommand implements SimpleCommand {
 
     @Override
     public String getIdentifier() {
-        return "give.money.*.*.*.*";
+        return "wd.give.money.*.*.*.*";
     }
 
     @Override
@@ -64,17 +62,17 @@ public class GiveMoneyCommand implements SimpleCommand {
 
         int value = 1;
         if (!args[1].isEmpty()) {
-            value = TextUtils.parseInt(args[0], (integer -> integer > 0));
+            value = TextUtils.parseInt(args[1], (integer -> integer > 0));
         }
 
         int amount = 1;
         if (!args[2].isEmpty()) {
-            amount = TextUtils.parseInt(args[1], (integer -> integer > 0));
+            amount = TextUtils.parseInt(args[2], (integer -> integer > 0));
         }
 
         IEconomy economy = economyManager.getFirstEconomy();
         if (!args[3].isEmpty()) {
-            economy = getEconomy(args[2]);
+            economy = getEconomy(args[3]);
         }
 
         while (amount > 64) {
@@ -87,7 +85,7 @@ public class GiveMoneyCommand implements SimpleCommand {
 
     private void giveItem(Player target, int value, int amount, IEconomy economy) {
         MoneyItem moneyItem = new MoneyItem(plugin, value, amount, economy);
-        moneyItem.give(target);
+        moneyItem.give(target, value * amount);
     }
 
     private IEconomy getEconomy(String economy) {

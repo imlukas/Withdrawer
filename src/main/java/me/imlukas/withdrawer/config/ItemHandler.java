@@ -1,8 +1,6 @@
 package me.imlukas.withdrawer.config;
 
 import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.item.wrapper.NBTItemWrapper;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
 import me.imlukas.withdrawer.utils.item.ItemBuilder;
 import me.imlukas.withdrawer.utils.storage.YMLBase;
 import org.bukkit.Material;
@@ -12,13 +10,11 @@ import java.util.*;
 
 public class ItemHandler extends YMLBase {
 
-    private final MessagesFile messages;
     private final List<Material> consumables = new ArrayList<>(Arrays.asList(Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION));
     private final Map<String, ItemStack> defaultItems = new HashMap<>();
 
     public ItemHandler(Withdrawer plugin) {
         super(plugin, "items.yml");
-        this.messages = plugin.getMessages();
         load();
     }
 
@@ -30,10 +26,6 @@ public class ItemHandler extends YMLBase {
 
     public ItemStack get(String identifier) {
         return defaultItems.get(identifier).clone();
-    }
-
-    public NBTItemWrapper createWrapper(String identifier, int value, int amount, UUID uuid) {
-        return new NBTItemWrapper(defaultItems.get(identifier).clone(), identifier, value, amount, uuid);
     }
 
     private ItemStack getItem(String identifier) {

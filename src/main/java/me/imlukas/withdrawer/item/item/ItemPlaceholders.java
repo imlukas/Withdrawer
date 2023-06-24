@@ -1,6 +1,5 @@
-package me.imlukas.withdrawer.item;
+package me.imlukas.withdrawer.item.item;
 
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

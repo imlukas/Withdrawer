@@ -1,10 +1,10 @@
 package me.imlukas.withdrawer.listener;
 
-import de.tr7zw.nbtapi.NBTItem;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemInitializers;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
+import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,10 +16,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 public class ConnectionListener implements Listener {
+    private final Withdrawer plugin;
     private final WithdrawableItemInitializers defaultWithdrawables;
     private final WithdrawableItemsStorage itemsStorage;
 
     public ConnectionListener(Withdrawer plugin) {
+        this.plugin = plugin;
         this.defaultWithdrawables = plugin.getItemInitializers();
         this.itemsStorage = plugin.getWithdrawableItemsStorage();
     }
@@ -34,14 +36,14 @@ public class ConnectionListener implements Listener {
                 continue;
             }
 
-            NBTItem nbtItem = new NBTItem(itemStack);
-            UUID itemUUID = nbtItem.getUUID("withdrawer-uuid");
+            PDCWrapper pdcWrapper = new PDCWrapper(plugin, itemStack);
+            UUID itemUUID = pdcWrapper.getUUID("withdrawer-uuid");
 
             if (itemUUID == null) {
                 continue;
             }
 
-            WithdrawableItem item = defaultWithdrawables.getNewItemInstance(nbtItem);
+            WithdrawableItem item = defaultWithdrawables.getNewItemInstance(pdcWrapper);
             itemsStorage.addItem(item);
         }
     }
@@ -56,8 +58,8 @@ public class ConnectionListener implements Listener {
                 continue;
             }
 
-            NBTItem nbtItem = new NBTItem(itemStack);
-            UUID itemUUID = nbtItem.getUUID("withdrawer-uuid");
+            PDCWrapper pdcWrapper = new PDCWrapper(plugin, itemStack);
+            UUID itemUUID = pdcWrapper.getUUID("withdrawer-uuid");
 
             if (itemUUID == null) {
                 continue;

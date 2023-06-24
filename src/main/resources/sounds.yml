@@ -10,6 +10,16 @@ sounds:
       volume: 1
       pitch: 1
       enabled: true
+    gifted:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true
+    given:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true
   exp:
     withdraw:
       sound: BLOCK_NOTE_BLOCK_PLING
@@ -21,6 +31,16 @@ sounds:
       volume: 1
       pitch: 1
       enabled: true
+    gifted:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true
+    given:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true
   hp:
     withdraw:
       sound: BLOCK_NOTE_BLOCK_PLING
@@ -28,6 +48,16 @@ sounds:
       pitch: 1
       enabled: true
     redeem:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true
+    gifted:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1
+      pitch: 1
+      enabled: true
+    given:
       sound: ENTITY_PLAYER_LEVELUP
       volume: 1
       pitch: 1

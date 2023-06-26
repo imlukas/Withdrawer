@@ -1,6 +1,8 @@
 package me.imlukas.withdrawer.utils;
 
 import lombok.Getter;
+import org.bukkit.World;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 
 /**
@@ -127,6 +129,17 @@ public final class ExpUtil {
         int level = (int) levelAndExp;
         player.setLevel(level);
         player.setExp((float) (levelAndExp - level));
+    }
+
+
+    /**
+     * Drop experience at a Player's location.
+     * @param player the Player
+     * @param exp the amount of experience to drop
+     */
+    public static void dropExp(Player player, int exp) {
+        World world = player.getWorld();
+        world.spawn(player.getLocation(), ExperienceOrb.class).setExperience(exp);
     }
 
 }

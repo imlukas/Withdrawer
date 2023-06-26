@@ -5,6 +5,7 @@ economy-plugins: [vault]
 crafting: false # can items be used on crafting table
 drop: false # can items be dropped
 villager-trade: false # can items be used on villager trades
+xp-drop: false # should xp items drop xp when redeemed
 
 
 

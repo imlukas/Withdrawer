@@ -58,7 +58,11 @@ public class ExpItem extends WithdrawableItem {
             return;
         }
 
-        ExpUtil.changeExp(player, totalValue);
+        if (plugin.getPluginSettings().isXpDropable()) {
+            ExpUtil.dropExp(player, totalValue);
+        } else {
+            ExpUtil.changeExp(player, totalValue);
+        }
         interactions.sendRedeemInteractions(player, totalValue);
     }
 

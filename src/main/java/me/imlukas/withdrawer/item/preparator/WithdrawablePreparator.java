@@ -3,7 +3,12 @@ package me.imlukas.withdrawer.item.preparator;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.sql.SQLOutput;
+import java.util.UUID;
 
 public class WithdrawablePreparator {
     /*
@@ -14,10 +19,12 @@ public class WithdrawablePreparator {
     Basically, just value checking and other stuff that doesn't need to be made over and over again.
     Prevents code repetition on item implementations.
  */
+    private final Withdrawer plugin;
     private final MessagesFile messages;
     private final WithdrawableItem item;
 
     public WithdrawablePreparator(Withdrawer withdrawer, WithdrawableItem item) {
+        this.plugin = withdrawer;
         this.messages = withdrawer.getMessages();
         this.item = item;
     }
@@ -34,18 +41,28 @@ public class WithdrawablePreparator {
             }
         }
         int totalValue = value;
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        int amountInHand = itemInHand.getAmount();
 
         if (isShift || amount == 1) {
-            totalValue *= amount;
-            removeItem(player);
+
+            if (amountInHand < amount) {
+                totalValue *= amountInHand;
+                item.setAmount(amount - amountInHand);
+            }
+
+            if (amountInHand >= amount) {
+                totalValue *= amount;
+                removeWithdrawable(player);
+            }
+
+            player.getInventory().setItemInMainHand(null);
+            return totalValue;
         }
 
-        if (!isShift && amount > 1) {
-            amount--;
-            item.setAmount(amount);
-            player.getInventory().getItemInMainHand().setAmount(amount);
-        }
-
+        int amountLeft = amountInHand - 1;
+        itemInHand.setAmount(amountLeft);
+        item.setAmount(amountLeft);
         return totalValue;
     }
 
@@ -85,7 +102,7 @@ public class WithdrawablePreparator {
         return true;
     }
 
-    public void removeItem(Player player) {
+    public void removeWithdrawable(Player player) {
         item.removeItem(player);
     }
 

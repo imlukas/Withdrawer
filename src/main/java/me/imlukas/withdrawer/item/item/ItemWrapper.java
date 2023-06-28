@@ -18,11 +18,12 @@ public class ItemWrapper {
         this.item = item;
     }
 
-    public void setupPDC(UUID uuid, int value, int amount) {
+    public void setupPDC(UUID uuid, int value, int amount, String configName) {
         PDCWrapper.modifyItem(plugin, item, pdcWrapper -> {
             pdcWrapper.setUUID("withdrawer-uuid", uuid);
             pdcWrapper.setInteger("withdrawer-value", value);
             pdcWrapper.setInteger("withdrawer-amount", amount);
+            pdcWrapper.setString("withdrawer-type", configName);
         });
 
         setAmount(amount);

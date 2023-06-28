@@ -1,5 +1,6 @@
 package me.imlukas.withdrawer.utils.text;
 
+
 import net.md_5.bungee.api.ChatColor;
 
 import java.util.function.Predicate;

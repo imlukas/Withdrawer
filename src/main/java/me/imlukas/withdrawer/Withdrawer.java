@@ -71,11 +71,10 @@ public final class Withdrawer extends JavaPlugin {
         registerDefaultWithdrawable("exp", (item) -> new ExpItem(this, item));
         registerDefaultWithdrawable("hp", (item) -> new HealthItem(this, item));
 
-        withdrawableItemsStorage = new WithdrawableItemsStorage(this).load();
+        withdrawableItemsStorage = new WithdrawableItemsStorage(this);
         itemHandler = new ItemHandler(this);
 
-        updateConfig(this, messages);
-        updateConfig(this, itemHandler);
+        updateConfig(this, messages, itemHandler);
         System.out.println("[Withdrawer] Updated Config!");
 
         BiFunction<Integer, Integer, WithdrawableItem> expFunction = (value, amount) -> new ExpItem(this, value, amount);
@@ -102,6 +101,8 @@ public final class Withdrawer extends JavaPlugin {
         registerListener(new RedeemListener(this));
         registerListener(new ConnectionListener(this));
         registerListener(new CraftingVillagerListener(this));
+        // registerListener(new StackingListener(this));
+        registerListener(new ItemRegistryListener(this));
     }
 
     @Override
@@ -136,21 +137,23 @@ public final class Withdrawer extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(listener, this);
     }
 
-    private void updateConfig(JavaPlugin plugin, YMLBase base) {
-        File file = base.getFile();
-        InputStream stream = plugin.getResource(file.getAbsolutePath().replace(plugin.getDataFolder().getAbsolutePath() + File.separator, ""));
+    private void updateConfig(JavaPlugin plugin, YMLBase... base) {
+        for (YMLBase ymlBase : base) {
+            File file = ymlBase.getFile();
+            InputStream stream = plugin.getResource(file.getAbsolutePath().replace(plugin.getDataFolder().getAbsolutePath() + File.separator, ""));
 
-        if (stream == null)
-            return;
+            if (stream == null)
+                return;
 
-        FileConfiguration cfg = base.getConfiguration();
-        FileConfiguration other = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
+            FileConfiguration cfg = ymlBase.getConfiguration();
+            FileConfiguration other = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
 
-        for (String key : other.getKeys(true)) {
-            if (!cfg.isSet(key)) {
-                cfg.set(key, other.get(key));
+            for (String key : other.getKeys(true)) {
+                if (!cfg.isSet(key)) {
+                    cfg.set(key, other.get(key));
+                }
             }
+            ymlBase.save();
         }
-        base.save();
     }
 }

@@ -22,9 +22,10 @@ public class WithdrawableItemsStorage {
     public WithdrawableItemsStorage(Withdrawer plugin) {
         this.plugin = plugin;
         this.defaultWithdrawables = plugin.getItemInitializers();
+        load();
     }
 
-    public WithdrawableItemsStorage load() {
+    public void load() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             Inventory inventory = player.getInventory();
 
@@ -44,8 +45,6 @@ public class WithdrawableItemsStorage {
                 addItem(item);
             }
         }
-
-        return this;
     }
 
     public void addItem(WithdrawableItem item) {
@@ -64,8 +63,11 @@ public class WithdrawableItemsStorage {
         return withdrawableItems.get(uuid);
     }
 
-
     public Map<UUID, WithdrawableItem> getItems() {
         return withdrawableItems;
+    }
+
+    public boolean containsItem(UUID uuid) {
+        return withdrawableItems.containsKey(uuid);
     }
 }

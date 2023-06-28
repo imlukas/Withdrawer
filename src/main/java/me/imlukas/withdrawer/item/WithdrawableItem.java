@@ -49,7 +49,7 @@ public abstract class WithdrawableItem implements Withdrawable {
         this.value = value;
         this.amount = amount;
 
-        this.itemWrapper.setupPDC(uuid, value, amount);
+        this.itemWrapper.setupPDC(uuid, value, amount, getConfigName());
         createItemPlaceholders();
     }
 

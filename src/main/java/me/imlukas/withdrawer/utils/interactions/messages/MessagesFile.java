@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.Collection;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 
 public class MessagesFile extends YMLBase {
 

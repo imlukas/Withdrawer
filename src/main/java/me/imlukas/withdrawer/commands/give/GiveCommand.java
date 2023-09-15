@@ -1,6 +1,7 @@
 package me.imlukas.withdrawer.commands.give;
 
 import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.api.events.GiveEvent;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
@@ -42,6 +43,7 @@ public class GiveCommand implements SimpleCommand {
             return;
         }
 
+
         if (sender instanceof Player player) {
             if (!player.hasPermission("withdrawer.give.*")) {
                 if (!player.hasPermission("withdrawer.give." + identifier)) {
@@ -66,20 +68,27 @@ public class GiveCommand implements SimpleCommand {
         int amount = 1;
         if (!args[2].isEmpty()) {
             amount = TextUtils.parseInt(args[2], (integer -> integer > 0));
-    }
+        }
 
         while (amount > 64) {
             amount -= 64;
-            giveItem(target, value, 64);
+            giveItem(sender, target, value, 64);
         }
 
-        giveItem(target, value, amount);
+        giveItem(sender, target, value, amount);
     }
 
-    private void giveItem(Player target, int value, int amount) {
+    private void giveItem(CommandSender sender, Player target, int value, int amount) {
         WithdrawableItem withdrawableItem = itemFunction.apply(value, amount);
+
+        GiveEvent giveEvent = new GiveEvent(sender, target, withdrawableItem);
+
+        Bukkit.getPluginManager().callEvent(giveEvent);
+
+        if (giveEvent.isCancelled()) {
+            return;
+        }
+
         withdrawableItem.give(target, value * amount);
-
-
     }
 }

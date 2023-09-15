@@ -47,6 +47,7 @@ public class AutomatedMessages {
 
         messages.sendMessage(target, itemType + ".gifted", placeholders);
     }
+
     public void sendGiveMessage(Player player, String itemType, int totalAmount, String currencySign) {
         List<Placeholder<Player>> placeholders = List.of(
                 new Placeholder<>("amount", String.valueOf(totalAmount)),

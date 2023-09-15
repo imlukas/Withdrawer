@@ -6,7 +6,7 @@ import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
 import org.bukkit.entity.Player;
 
 public class Interactions {
-    
+
     private final MessagesFile messages;
     private final SoundManager sounds;
     private final String configName;

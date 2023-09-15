@@ -1,7 +1,7 @@
 package me.imlukas.withdrawer.item;
 
-import me.imlukas.withdrawer.item.preparator.WithdrawablePreparator;
 import me.imlukas.withdrawer.item.item.ItemWrapper;
+import me.imlukas.withdrawer.item.preparator.WithdrawablePreparator;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,6 +12,7 @@ public interface Withdrawable {
     UUID getUUID();
 
     WithdrawablePreparator getPreparator();
+
     ItemWrapper getItemWrapper();
 
     ItemStack getDisplayItem(boolean clone);

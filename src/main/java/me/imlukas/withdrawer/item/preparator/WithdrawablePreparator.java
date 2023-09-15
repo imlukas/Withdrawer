@@ -3,12 +3,8 @@ package me.imlukas.withdrawer.item.preparator;
 import me.imlukas.withdrawer.Withdrawer;
 import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
-import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.sql.SQLOutput;
-import java.util.UUID;
 
 public class WithdrawablePreparator {
     /*
@@ -34,11 +30,10 @@ public class WithdrawablePreparator {
         int amount = item.getAmount();
         String configName = item.getConfigName();
 
-        if (!player.hasPermission("withdrawer.redeem.*")) {
-            if (!player.hasPermission("withdrawer.redeem." + configName)) {
+        if (!player.hasPermission("withdrawer.redeem.*") && (!player.hasPermission("withdrawer.redeem." + configName))) {
                 messages.sendMessage(player, "global.no-permission");
                 return 0;
-            }
+
         }
         int totalValue = value;
         ItemStack itemInHand = player.getInventory().getItemInMainHand();

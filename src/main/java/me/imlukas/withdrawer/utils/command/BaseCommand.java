@@ -1,6 +1,6 @@
 package me.imlukas.withdrawer.utils.command;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.utils.text.Placeholder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,9 +12,9 @@ import java.util.List;
 
 public class BaseCommand implements CommandExecutor, TabCompleter {
 
-    private final Withdrawer main;
+    private final WithdrawerPlugin main;
 
-    public BaseCommand(Withdrawer main) {
+    public BaseCommand(WithdrawerPlugin main) {
         this.main = main;
     }
 

@@ -1,17 +1,17 @@
 package me.imlukas.withdrawer.commands;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.text.TextUtils;
 import org.bukkit.command.CommandSender;
 
 public class HelpCommand implements SimpleCommand {
 
-    private final Withdrawer plugin;
-    private final MessagesFile messages;
+    private final WithdrawerPlugin plugin;
+    private final Messages messages;
 
-    public HelpCommand(Withdrawer plugin) {
+    public HelpCommand(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

@@ -1,6 +1,6 @@
 package me.imlukas.withdrawer.utils.pdc;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,19 +12,19 @@ import java.util.function.Consumer;
 
 public class PDCWrapper {
 
-    private final Withdrawer plugin;
+    private final WithdrawerPlugin plugin;
     private final ItemStack itemStack;
 
-    public PDCWrapper(Withdrawer plugin, ItemStack itemStack) {
+    public PDCWrapper(WithdrawerPlugin plugin, ItemStack itemStack) {
         this(plugin, itemStack, true);
     }
 
-    public PDCWrapper(Withdrawer plugin, ItemStack itemStack, boolean clone) {
+    public PDCWrapper(WithdrawerPlugin plugin, ItemStack itemStack, boolean clone) {
         this.plugin = plugin;
         this.itemStack = itemStack;
     }
 
-    public static void modifyItem(Withdrawer plugin, ItemStack item, Consumer<PDCWrapper> modifier) {
+    public static void modifyItem(WithdrawerPlugin plugin, ItemStack item, Consumer<PDCWrapper> modifier) {
         PDCWrapper wrapper = new PDCWrapper(plugin, item, false);
         modifier.accept(wrapper);
     }

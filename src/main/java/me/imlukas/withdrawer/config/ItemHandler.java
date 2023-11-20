@@ -1,6 +1,6 @@
 package me.imlukas.withdrawer.config;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.utils.item.ItemBuilder;
 import me.imlukas.withdrawer.utils.storage.YMLBase;
 import org.bukkit.Material;
@@ -13,7 +13,7 @@ public class ItemHandler extends YMLBase {
     private final List<Material> consumables = new ArrayList<>(Arrays.asList(Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION));
     private final Map<String, ItemStack> defaultItems = new HashMap<>();
 
-    public ItemHandler(Withdrawer plugin) {
+    public ItemHandler(WithdrawerPlugin plugin) {
         super(plugin, "items.yml");
         load();
     }

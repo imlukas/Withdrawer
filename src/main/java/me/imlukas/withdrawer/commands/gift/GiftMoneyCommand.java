@@ -1,15 +1,17 @@
 package me.imlukas.withdrawer.commands.gift;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.api.events.GiftEvent;
 import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.economy.EconomyManager;
-import me.imlukas.withdrawer.economy.IEconomy;
+import me.imlukas.withdrawer.economy.Economy;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.text.Placeholder;
 import me.imlukas.withdrawer.utils.text.TextUtils;
+import me.imlukas.withdrawer.v3.item.Withdrawable;
+import me.imlukas.withdrawer.v3.item.impl.MoneyWithdrawableItem;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,12 +21,12 @@ import java.util.Map;
 
 public class GiftMoneyCommand implements SimpleCommand {
 
-    private final Withdrawer plugin;
-    private final MessagesFile messages;
+    private final WithdrawerPlugin plugin;
+    private final Messages messages;
     private final ItemHandler itemsHandler;
     private final EconomyManager economyManager;
 
-    public GiftMoneyCommand(Withdrawer plugin) {
+    public GiftMoneyCommand(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
         this.itemsHandler = plugin.getItemHandler();
@@ -74,7 +76,7 @@ public class GiftMoneyCommand implements SimpleCommand {
             amount = TextUtils.parseInt(args[2], (integer -> integer > 0));
         }
 
-        IEconomy economy = economyManager.getFirstEconomy();
+        Economy economy = economyManager.getFirstEconomy();
         if (!args[3].isEmpty()) {
             economy = getEconomy(args[3]);
         }
@@ -87,9 +89,9 @@ public class GiftMoneyCommand implements SimpleCommand {
         giveItem(gifter, target, 1, value, amount, economy);
     }
 
-    private void giveItem(Player gifter, Player target, int iterations, int value, int amount, IEconomy economy) {
+    private void giveItem(Player gifter, Player target, int iterations, int value, int amount, Economy economy) {
         for (int i = 0; i < iterations; i++) {
-            MoneyItem moneyItem = new MoneyItem(plugin, value, amount, economy);
+            Withdrawable moneyItem = new MoneyWithdrawableItem(plugin, value, amount, economy);
 
             if (!checkValues(gifter, value * amount, moneyItem.getConfigName())) {
                 return;
@@ -106,7 +108,7 @@ public class GiftMoneyCommand implements SimpleCommand {
         }
     }
 
-    private IEconomy getEconomy(String economy) {
+    private Economy getEconomy(String economy) {
         return economyManager.getEconomy(economy);
     }
 

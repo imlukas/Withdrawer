@@ -1,13 +1,13 @@
 package me.imlukas.withdrawer.economy.impl;
 
-import me.imlukas.withdrawer.economy.IEconomy;
+import me.imlukas.withdrawer.economy.Economy;
 import me.realized.tokenmanager.api.TokenManager;
 import org.bukkit.entity.Player;
 
-public class Tokens implements IEconomy {
+public class TokensAdapter implements Economy {
     private final TokenManager tokenManager;
 
-    public Tokens(TokenManager tokenManager) {
+    public TokensAdapter(TokenManager tokenManager) {
         this.tokenManager = tokenManager;
     }
 

@@ -1,14 +1,14 @@
 package me.imlukas.withdrawer.economy.impl;
 
-import me.imlukas.withdrawer.economy.IEconomy;
+import me.imlukas.withdrawer.economy.Economy;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.entity.Player;
 
-public class PlayerPoints implements IEconomy {
+public class PlayerPointsAdapter implements Economy {
 
     private final PlayerPointsAPI playerPointsAPI;
 
-    public PlayerPoints(PlayerPointsAPI playerPointsAPI) {
+    public PlayerPointsAdapter(PlayerPointsAPI playerPointsAPI) {
         this.playerPointsAPI = playerPointsAPI;
     }
 

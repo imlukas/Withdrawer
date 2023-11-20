@@ -1,11 +1,11 @@
 package me.imlukas.withdrawer.economy;
 
-import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.economy.impl.PlayerPoints;
-import me.imlukas.withdrawer.economy.impl.Tokens;
-import me.imlukas.withdrawer.economy.impl.Vault;
+import me.imlukas.withdrawer.WithdrawerPlugin;
+import me.imlukas.withdrawer.economy.impl.PlayerPointsAdapter;
+import me.imlukas.withdrawer.economy.impl.TokensAdapter;
+import me.imlukas.withdrawer.economy.impl.VaultAdapter;
 import me.realized.tokenmanager.api.TokenManager;
-import net.milkbowl.vault.economy.Economy;
+import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -15,16 +15,16 @@ import java.util.Map;
 
 public class EconomyManager {
 
-    private final Withdrawer plugin;
+    private final WithdrawerPlugin plugin;
 
-    public EconomyManager(Withdrawer plugin) {
+    public EconomyManager(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         setupEconomies();
     }
 
-    private final Map<String, IEconomy> registeredEconomies = new LinkedHashMap<>();
+    private final Map<String, Economy> registeredEconomies = new LinkedHashMap<>();
 
-    public void registerEconomy(IEconomy economy) {
+    public void registerEconomy(Economy economy) {
         registeredEconomies.put(economy.getIdentifier(), economy);
     }
 
@@ -32,7 +32,7 @@ public class EconomyManager {
         registeredEconomies.remove(identifier);
     }
 
-    public IEconomy getEconomy(String identifier) {
+    public Economy getEconomy(String identifier) {
         return registeredEconomies.get(identifier);
     }
 
@@ -40,7 +40,7 @@ public class EconomyManager {
         return registeredEconomies.keySet().stream().toList();
     }
 
-    public IEconomy getFirstEconomy() {
+    public Economy getFirstEconomy() {
         return registeredEconomies.values().iterator().next();
     }
 
@@ -58,50 +58,56 @@ public class EconomyManager {
         }
 
         for (String economy : economies) {
-            if (economy.equalsIgnoreCase("vault") && !setupVault()) {
-                System.err.println("[Withdrawer] Vault or plugin that handles vault economy not found! DISABLING PLUGIN!");
-                Bukkit.getPluginManager().disablePlugin(plugin);
-                return;
-            }
 
-            if (economy.equalsIgnoreCase("playerpoints")) {
-                if (Bukkit.getPluginManager().getPlugin("PlayerPoints") != null) {
-                    registerEconomy(new PlayerPoints(org.black_ixx.playerpoints.PlayerPoints.getInstance().getAPI()));
-                    System.out.println("[Withdrawer] Found PlayerPoints!");
-                    continue;
-                }
-
-                System.err.println("[Withdrawer] PlayerPoints not found! DISABLING PLUGIN!");
-                Bukkit.getPluginManager().disablePlugin(plugin);
-                continue;
-            }
-
-            if (economy.equalsIgnoreCase("tokenmanager")) {
-                TokenManager tokenManager = (TokenManager) Bukkit.getServer().getPluginManager().getPlugin("TokenManager");
-                if (tokenManager != null) {
-                    registerEconomy(new Tokens(tokenManager));
-                    System.out.println("[Withdrawer] Found TokenManager!");
-                    continue;
-                }
-                System.err.println("[Withdrawer] TokenManager not found! DISABLING PLUGIN!");
-                Bukkit.getPluginManager().disablePlugin(plugin);
+            switch (economy) {
+                case "vault" -> setupVault();
+                case "tokenmanager" -> setupTokenManager();
+                case "playerpoints" -> setupPlayerPoints();
+                default -> System.out.println("[Withdrawer] Unknown economy plugin: " + economy);
             }
         }
     }
 
+    private void setupPlayerPoints() {
+        if (Bukkit.getPluginManager().getPlugin("PlayerPoints") != null) {
+            registerEconomy(new PlayerPointsAdapter(PlayerPoints.getInstance().getAPI()));
+            System.out.println("[Withdrawer] Found PlayerPoints!");
+            return;
+        }
+
+        System.err.println("[Withdrawer] PlayerPoints not found! DISABLING PLUGIN!");
+        Bukkit.getPluginManager().disablePlugin(plugin);
+    }
+
+
+    private boolean setupTokenManager() {
+        TokenManager tokenManager = (TokenManager) Bukkit.getServer().getPluginManager().getPlugin("TokenManager");
+        if (tokenManager != null) {
+            registerEconomy(new TokensAdapter(tokenManager));
+            System.out.println("[Withdrawer] Found TokenManager!");
+            return true;
+        }
+        System.err.println("[Withdrawer] TokenManager not found! DISABLING PLUGIN!");
+        Bukkit.getPluginManager().disablePlugin(plugin);
+        return false;
+    }
 
     private boolean setupVault() {
         if (plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+            System.err.println("[Withdrawer] Vault or plugin that handles vault economy not found! DISABLING PLUGIN!");
+            Bukkit.getPluginManager().disablePlugin(plugin);
             return false;
         }
         System.out.println("[Withdrawer] Found Vault and EconomyHandler!");
-        RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+        RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (rsp == null) {
+            System.err.println("[Withdrawer] Vault or plugin that handles vault economy not found! DISABLING PLUGIN!");
+            Bukkit.getPluginManager().disablePlugin(plugin);
             return false;
         }
 
-        Economy econ = rsp.getProvider();
-        registerEconomy(new Vault(econ));
+        net.milkbowl.vault.economy.Economy econ = rsp.getProvider();
+        registerEconomy(new VaultAdapter(econ));
         return true;
     }
 

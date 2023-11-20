@@ -2,7 +2,10 @@ package me.imlukas.withdrawer.utils.text;
 
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.Optional;
+import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,7 +13,9 @@ import java.util.regex.Pattern;
 public class TextUtils {
 
     private static final Pattern hexPattern = Pattern.compile("#([A-Fa-f0-9]){6}");
-    private static final Pattern illegalCharactersPattern = Pattern.compile("[^A-Za-z0-9]+");
+
+    private TextUtils() {
+    }
 
     public static String color(String message) {
         Matcher matcher = hexPattern.matcher(message);
@@ -23,8 +28,12 @@ public class TextUtils {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
+    public static String enumToText(Enum<?> enumToText) {
+        return capitalize(enumToText.toString().replace("_", " "));
+    }
+
     public static String capitalize(String toCapitalize) {
-        return toCapitalize.substring(0, 1).toUpperCase() + toCapitalize.substring(1);
+        return toCapitalize.substring(0, 1).toUpperCase() + toCapitalize.substring(1).toLowerCase();
     }
 
     /**
@@ -34,22 +43,27 @@ public class TextUtils {
      * @param predicate     A Predicate to test the parsed integer against
      * @return The parsed integer
      */
-    public static int parseInt(String stringToParse, Predicate<Integer> predicate) { // not really a text utility, but it's used in a text utility
-        int parsed = 1;
+    public static Optional<Integer> parseInt(String stringToParse, IntPredicate predicate) {
+        int parsed;
         try {
             parsed = Integer.parseInt(stringToParse);
         } catch (NumberFormatException e) {
             System.err.println("Invalid number: " + stringToParse);
-            return 1;
+            return Optional.of(1);
         }
 
         if (!predicate.test(parsed)) {
             System.err.println("Invalid number: " + stringToParse);
-            return 1;
+            return Optional.of(1);
         }
 
-        return parsed;
+        return Optional.of(parsed);
     }
+
+    public static Optional<Integer> parseInt(String stringToParse) {
+        return parseInt(stringToParse, ignored -> true);
+    }
+
 
 }
 

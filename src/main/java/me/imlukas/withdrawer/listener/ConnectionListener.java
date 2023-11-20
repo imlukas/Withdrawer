@@ -1,7 +1,6 @@
 package me.imlukas.withdrawer.listener;
 
-import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.item.WithdrawableItem;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemInitializers;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
@@ -16,11 +15,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 public class ConnectionListener implements Listener {
-    private final Withdrawer plugin;
+    private final WithdrawerPlugin plugin;
     private final WithdrawableItemInitializers defaultWithdrawables;
     private final WithdrawableItemsStorage itemsStorage;
 
-    public ConnectionListener(Withdrawer plugin) {
+    public ConnectionListener(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.defaultWithdrawables = plugin.getItemInitializers();
         this.itemsStorage = plugin.getWithdrawableItemsStorage();

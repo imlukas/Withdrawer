@@ -1,6 +1,6 @@
 package me.imlukas.withdrawer.utils.command.impl;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.utils.command.BaseCommand;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.command.comparison.ComparisonResult;
@@ -42,9 +42,9 @@ public class CommandManager {
 
     private final Set<String> registeredBaseCommands = new HashSet<>();
     private final Map<String, SimpleCommand> commands = new HashMap<>();
-    private final Withdrawer main;
+    private final WithdrawerPlugin main;
 
-    public CommandManager(Withdrawer main) {
+    public CommandManager(WithdrawerPlugin main) {
         this.main = main;
     }
 

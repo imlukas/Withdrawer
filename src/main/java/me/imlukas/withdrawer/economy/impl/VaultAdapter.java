@@ -1,14 +1,13 @@
 package me.imlukas.withdrawer.economy.impl;
 
-import me.imlukas.withdrawer.economy.IEconomy;
-import net.milkbowl.vault.economy.Economy;
+import me.imlukas.withdrawer.economy.Economy;
 import org.bukkit.entity.Player;
 
-public class Vault implements IEconomy {
+public class VaultAdapter implements Economy {
 
-    private final Economy vaultEconomy;
+    private final net.milkbowl.vault.economy.Economy vaultEconomy;
 
-    public Vault(Economy economy) {
+    public VaultAdapter(net.milkbowl.vault.economy.Economy economy) {
         this.vaultEconomy = economy;
     }
 

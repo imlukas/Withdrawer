@@ -1,11 +1,12 @@
 package me.imlukas.withdrawer.commands.give;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.api.events.GiveEvent;
-import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.text.TextUtils;
+import me.imlukas.withdrawer.v3.item.BaseWithdrawableItem;
+import me.imlukas.withdrawer.v3.item.Withdrawable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,11 +17,11 @@ import java.util.function.BiFunction;
 
 public class GiveCommand implements SimpleCommand {
 
-    private final MessagesFile messages;
+    private final Messages messages;
     private final String identifier;
-    private final BiFunction<Integer, Integer, WithdrawableItem> itemFunction;
+    private final BiFunction<Integer, Integer, BaseWithdrawableItem> itemFunction;
 
-    public GiveCommand(Withdrawer plugin, String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
+    public GiveCommand(WithdrawerPlugin plugin, String identifier, BiFunction<Integer, Integer, BaseWithdrawableItem> itemFunction) {
         this.messages = plugin.getMessages();
         this.identifier = identifier;
         this.itemFunction = itemFunction;
@@ -79,7 +80,7 @@ public class GiveCommand implements SimpleCommand {
     }
 
     private void giveItem(CommandSender sender, Player target, int value, int amount) {
-        WithdrawableItem withdrawableItem = itemFunction.apply(value, amount);
+        Withdrawable withdrawableItem = itemFunction.apply(value, amount);
 
         GiveEvent giveEvent = new GiveEvent(sender, target, withdrawableItem);
 

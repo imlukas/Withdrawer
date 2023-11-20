@@ -1,12 +1,11 @@
 package me.imlukas.withdrawer.api;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.commands.gift.GiftCommand;
 import me.imlukas.withdrawer.commands.give.GiveCommand;
 import me.imlukas.withdrawer.commands.withdraw.WithdrawCommand;
 import me.imlukas.withdrawer.config.ItemHandler;
-import me.imlukas.withdrawer.economy.IEconomy;
-import me.imlukas.withdrawer.item.WithdrawableItem;
+import me.imlukas.withdrawer.economy.Economy;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemInitializers;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
@@ -17,9 +16,9 @@ import java.util.function.Function;
 
 public class WithdrawerAPI {
 
-    private final Withdrawer plugin;
+    private final WithdrawerPlugin plugin;
 
-    public WithdrawerAPI(Withdrawer plugin) {
+    public WithdrawerAPI(WithdrawerPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -28,7 +27,7 @@ public class WithdrawerAPI {
      *
      * @param economy The economy to register
      */
-    public void registerEconomy(IEconomy economy) {
+    public void registerEconomy(Economy economy) {
         plugin.getEconomyManager().registerEconomy(economy);
     }
 

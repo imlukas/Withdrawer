@@ -1,8 +1,7 @@
 package me.imlukas.withdrawer.listener;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.config.PluginSettings;
-import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,10 +15,10 @@ import java.util.UUID;
 
 public class ItemPickupAndDropListener implements Listener {
 
-    private final Withdrawer plugin;
+    private final WithdrawerPlugin plugin;
     private final PluginSettings pluginSettings;
 
-    public ItemPickupAndDropListener(Withdrawer plugin) {
+    public ItemPickupAndDropListener(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.pluginSettings = plugin.getPluginSettings();
     }

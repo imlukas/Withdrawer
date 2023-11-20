@@ -1,13 +1,13 @@
 package me.imlukas.withdrawer.commands.withdraw;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.api.events.WithdrawEvent;
 import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.economy.EconomyManager;
-import me.imlukas.withdrawer.economy.IEconomy;
+import me.imlukas.withdrawer.economy.Economy;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.text.Placeholder;
 import me.imlukas.withdrawer.utils.text.TextUtils;
 import org.bukkit.Bukkit;
@@ -19,12 +19,12 @@ import java.util.Map;
 
 public class WithdrawMoneyCommand implements SimpleCommand {
 
-    private final Withdrawer plugin;
-    private final MessagesFile messages;
+    private final WithdrawerPlugin plugin;
+    private final Messages messages;
     private final ItemHandler itemsHandler;
     private final EconomyManager economyManager;
 
-    public WithdrawMoneyCommand(Withdrawer plugin) {
+    public WithdrawMoneyCommand(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
         this.itemsHandler = plugin.getItemHandler();
@@ -55,7 +55,7 @@ public class WithdrawMoneyCommand implements SimpleCommand {
             amount = TextUtils.parseInt(args[1], (integer -> integer > 0));
         }
 
-        IEconomy economy = economyManager.getFirstEconomy();
+        Economy economy = economyManager.getFirstEconomy();
         if (!args[2].isEmpty()) {
             economy = getEconomy(args[2]);
         }
@@ -68,7 +68,7 @@ public class WithdrawMoneyCommand implements SimpleCommand {
         giveItem(player, value, amount, economy);
     }
 
-    private void giveItem(Player player, int value, int amount, IEconomy economy) {
+    private void giveItem(Player player, int value, int amount, Economy economy) {
         MoneyItem moneyItem = new MoneyItem(plugin, value, amount, economy);
 
         if (!checkValues(player, value * amount, moneyItem.getConfigName())) {
@@ -85,7 +85,7 @@ public class WithdrawMoneyCommand implements SimpleCommand {
         moneyItem.withdraw(player);
     }
 
-    private IEconomy getEconomy(String economy) {
+    private Economy getEconomy(String economy) {
         return economyManager.getEconomy(economy);
     }
 

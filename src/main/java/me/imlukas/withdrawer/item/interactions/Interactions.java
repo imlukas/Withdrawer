@@ -1,17 +1,17 @@
 package me.imlukas.withdrawer.item.interactions;
 
-import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.utils.interactions.SoundManager;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.WithdrawerPlugin;
+import me.imlukas.withdrawer.utils.interactions.Sounds;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import org.bukkit.entity.Player;
 
 public class Interactions {
 
-    private final MessagesFile messages;
-    private final SoundManager sounds;
+    private final Messages messages;
+    private final Sounds sounds;
     private final String configName;
 
-    public Interactions(Withdrawer withdrawer, String configName) {
+    public Interactions(WithdrawerPlugin withdrawer, String configName) {
         this.messages = withdrawer.getMessages();
         this.sounds = withdrawer.getSounds();
         this.configName = configName;

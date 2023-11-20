@@ -1,16 +1,16 @@
 package me.imlukas.withdrawer.commands;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import org.bukkit.command.CommandSender;
 
 public class ReloadCommand implements SimpleCommand {
 
-    private final Withdrawer plugin;
-    private final MessagesFile messages;
+    private final WithdrawerPlugin plugin;
+    private final Messages messages;
 
-    public ReloadCommand(Withdrawer plugin) {
+    public ReloadCommand(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

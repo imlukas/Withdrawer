@@ -1,7 +1,7 @@
 package me.imlukas.withdrawer.api.events;
 
 import lombok.Getter;
-import me.imlukas.withdrawer.item.WithdrawableItem;
+import me.imlukas.withdrawer.v3.item.Withdrawable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -12,7 +12,7 @@ public class RedeemEvent extends Event implements Cancellable {
 
     private boolean cancelled = false;
     private final Player player;
-    private final WithdrawableItem withdrawable;
+    private final Withdrawable withdrawable;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -25,7 +25,7 @@ public class RedeemEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public RedeemEvent(Player player, WithdrawableItem withdrawable) {
+    public RedeemEvent(Player player, Withdrawable withdrawable) {
         this.player = player;
         this.withdrawable = withdrawable;
     }
@@ -34,7 +34,7 @@ public class RedeemEvent extends Event implements Cancellable {
         return player;
     }
 
-    public WithdrawableItem getWithdrawableItem() {
+    public Withdrawable getWithdrawableItem() {
         return withdrawable;
     }
 

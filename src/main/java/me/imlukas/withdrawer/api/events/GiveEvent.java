@@ -1,6 +1,6 @@
 package me.imlukas.withdrawer.api.events;
 
-import me.imlukas.withdrawer.item.Withdrawable;
+import me.imlukas.withdrawer.v3.item.Withdrawable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

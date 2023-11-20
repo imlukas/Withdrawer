@@ -1,17 +1,17 @@
 package me.imlukas.withdrawer.commands;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Map;
 
 public class ToggleCommand implements SimpleCommand {
-    private final MessagesFile messages;
+    private final Messages messages;
 
-    public ToggleCommand(Withdrawer plugin) {
+    public ToggleCommand(WithdrawerPlugin plugin) {
         this.messages = plugin.getMessages();
     }
 

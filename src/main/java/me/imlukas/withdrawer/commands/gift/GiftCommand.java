@@ -1,13 +1,13 @@
 package me.imlukas.withdrawer.commands.gift;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.api.events.GiftEvent;
 import me.imlukas.withdrawer.config.ItemHandler;
-import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.text.Placeholder;
 import me.imlukas.withdrawer.utils.text.TextUtils;
+import me.imlukas.withdrawer.v3.item.Withdrawable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,12 +17,12 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class GiftCommand implements SimpleCommand {
-    private final MessagesFile messages;
+    private final Messages messages;
     private final ItemHandler itemsHandler;
     private final String identifier;
-    private final BiFunction<Integer, Integer, WithdrawableItem> itemFunction;
+    private final BiFunction<Integer, Integer, Withdrawable> itemFunction;
 
-    public GiftCommand(Withdrawer plugin, String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
+    public GiftCommand(WithdrawerPlugin plugin, String identifier, BiFunction<Integer, Integer, Withdrawable> itemFunction) {
         this.messages = plugin.getMessages();
         this.itemsHandler = plugin.getItemHandler();
         this.identifier = identifier;
@@ -62,12 +62,12 @@ public class GiftCommand implements SimpleCommand {
 
         int value = 1;
         if (!args[1].isEmpty()) {
-            value = TextUtils.parseInt(args[1], (integer -> integer > 0));
+            value = TextUtils.parseInt(args[1], (integer -> integer > 0)).get();
         }
 
         int amount = 1;
         if (!args[2].isEmpty()) {
-            amount = TextUtils.parseInt(args[2], (integer -> integer > 0));
+            amount = TextUtils.parseInt(args[2], (integer -> integer > 0)).get();
         }
 
         while (amount > 64) {
@@ -79,7 +79,7 @@ public class GiftCommand implements SimpleCommand {
     }
 
     private void giveItem(Player gifter, Player target, int value, int amount) {
-        WithdrawableItem withdrawableItem = itemFunction.apply(value, amount);
+        Withdrawable withdrawableItem = itemFunction.apply(value, amount);
 
         if (!checkValues(gifter, value * amount, withdrawableItem.getConfigName())) {
             return;

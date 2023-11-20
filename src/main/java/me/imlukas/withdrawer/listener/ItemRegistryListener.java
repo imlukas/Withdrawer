@@ -1,7 +1,6 @@
 package me.imlukas.withdrawer.listener;
 
-import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.item.WithdrawableItem;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemInitializers;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
@@ -16,11 +15,11 @@ import java.util.UUID;
 
 public class ItemRegistryListener implements Listener {
 
-    private final Withdrawer plugin;
+    private final WithdrawerPlugin plugin;
     private final WithdrawableItemsStorage withdrawableItemsStorage;
     private final WithdrawableItemInitializers withdrawableItemInitializers;
 
-    public ItemRegistryListener(Withdrawer plugin) {
+    public ItemRegistryListener(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.withdrawableItemsStorage = plugin.getWithdrawableItemsStorage();
         this.withdrawableItemInitializers = plugin.getItemInitializers();

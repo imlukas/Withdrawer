@@ -14,7 +14,6 @@ import me.imlukas.withdrawer.commands.withdraw.WithdrawMoneyCommand;
 import me.imlukas.withdrawer.config.ItemHandler;
 import me.imlukas.withdrawer.config.PluginSettings;
 import me.imlukas.withdrawer.economy.EconomyManager;
-import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.item.impl.ExpItem;
 import me.imlukas.withdrawer.item.impl.HealthItem;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
@@ -23,8 +22,8 @@ import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
 import me.imlukas.withdrawer.listener.*;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
 import me.imlukas.withdrawer.utils.command.impl.CommandManager;
-import me.imlukas.withdrawer.utils.interactions.SoundManager;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Sounds;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import me.imlukas.withdrawer.utils.storage.YMLBase;
 import org.bukkit.Bukkit;
@@ -41,18 +40,16 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Getter
-public final class Withdrawer extends JavaPlugin {
+public final class WithdrawerPlugin extends JavaPlugin {
 
     private static WithdrawerAPI API;
-    private MessagesFile messages;
-    private SoundManager sounds;
+    private Messages messages;
+    private Sounds sounds;
     private PluginSettings pluginSettings;
     private CommandManager commandManager;
     private EconomyManager economyManager;
     private ItemHandler itemHandler;
 
-    private WithdrawableItemsStorage withdrawableItemsStorage;
-    private WithdrawableItemInitializers itemInitializers;
 
     @Override
     public void onEnable() {
@@ -61,17 +58,15 @@ public final class Withdrawer extends JavaPlugin {
         economyManager = new EconomyManager(this);
         commandManager = new CommandManager(this);
 
-        messages = new MessagesFile(this);
-        sounds = new SoundManager(this);
+        messages = new Messages(this);
+        sounds = new Sounds(this);
         pluginSettings = new PluginSettings(getConfig());
 
-        itemInitializers = new WithdrawableItemInitializers();
 
         registerDefaultWithdrawable("money", (item) -> new MoneyItem(this, item));
         registerDefaultWithdrawable("exp", (item) -> new ExpItem(this, item));
         registerDefaultWithdrawable("hp", (item) -> new HealthItem(this, item));
 
-        withdrawableItemsStorage = new WithdrawableItemsStorage(this);
         itemHandler = new ItemHandler(this);
 
         updateConfig(this, messages, itemHandler);
@@ -114,7 +109,6 @@ public final class Withdrawer extends JavaPlugin {
         sounds = null;
         pluginSettings = null;
         itemHandler = null;
-        itemInitializers = null;
 
         reloadConfig();
         HandlerList.unregisterAll(this);
@@ -125,9 +119,6 @@ public final class Withdrawer extends JavaPlugin {
         return API;
     }
 
-    private void registerDefaultWithdrawable(String name, Function<PDCWrapper, WithdrawableItem> function) {
-        itemInitializers.addDefault(name, function);
-    }
 
     public void registerCommand(SimpleCommand command) {
         commandManager.register(command);

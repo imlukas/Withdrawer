@@ -1,11 +1,10 @@
 package me.imlukas.withdrawer.commands.withdraw;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.api.events.WithdrawEvent;
 import me.imlukas.withdrawer.config.ItemHandler;
-import me.imlukas.withdrawer.item.WithdrawableItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.text.Placeholder;
 import me.imlukas.withdrawer.utils.text.TextUtils;
 import org.bukkit.Bukkit;
@@ -18,12 +17,12 @@ import java.util.function.BiFunction;
 
 public class WithdrawCommand implements SimpleCommand {
 
-    private final MessagesFile messages;
+    private final Messages messages;
     private final ItemHandler itemsHandler;
     private final String identifier;
     private final BiFunction<Integer, Integer, WithdrawableItem> itemFunction;
 
-    public WithdrawCommand(Withdrawer plugin, String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
+    public WithdrawCommand(WithdrawerPlugin plugin, String identifier, BiFunction<Integer, Integer, WithdrawableItem> itemFunction) {
         this.messages = plugin.getMessages();
         this.itemsHandler = plugin.getItemHandler();
         this.identifier = identifier;

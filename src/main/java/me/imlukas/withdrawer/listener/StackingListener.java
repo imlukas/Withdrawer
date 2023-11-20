@@ -1,9 +1,8 @@
 package me.imlukas.withdrawer.listener;
 
-import me.imlukas.withdrawer.Withdrawer;
-import me.imlukas.withdrawer.item.WithdrawableItem;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.item.registry.WithdrawableItemsStorage;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,11 +13,11 @@ import java.util.UUID;
 
 public class StackingListener implements Listener {
 
-    private final Withdrawer plugin;
-    private final MessagesFile messages;
+    private final WithdrawerPlugin plugin;
+    private final Messages messages;
     private final WithdrawableItemsStorage withdrawableItemsStorage;
 
-    public StackingListener(Withdrawer plugin) {
+    public StackingListener(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
         this.withdrawableItemsStorage = plugin.getWithdrawableItemsStorage();

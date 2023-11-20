@@ -8,11 +8,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class SoundManager extends YMLBase {
+public class Sounds extends YMLBase {
 
     private final ConfigurationSection soundsSections;
 
-    public SoundManager(JavaPlugin plugin) {
+    public Sounds(JavaPlugin plugin) {
         super(plugin, "sounds.yml");
         this.soundsSections = getConfiguration().getConfigurationSection("sounds");
     }

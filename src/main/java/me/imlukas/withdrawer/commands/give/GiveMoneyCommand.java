@@ -1,11 +1,11 @@
 package me.imlukas.withdrawer.commands.give;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.economy.EconomyManager;
-import me.imlukas.withdrawer.economy.IEconomy;
+import me.imlukas.withdrawer.economy.Economy;
 import me.imlukas.withdrawer.item.impl.MoneyItem;
 import me.imlukas.withdrawer.utils.command.SimpleCommand;
-import me.imlukas.withdrawer.utils.interactions.messages.MessagesFile;
+import me.imlukas.withdrawer.utils.interactions.Messages;
 import me.imlukas.withdrawer.utils.text.TextUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -16,11 +16,11 @@ import java.util.Map;
 
 public class GiveMoneyCommand implements SimpleCommand {
 
-    private final Withdrawer plugin;
+    private final WithdrawerPlugin plugin;
     private final EconomyManager economyManager;
-    private final MessagesFile messages;
+    private final Messages messages;
 
-    public GiveMoneyCommand(Withdrawer plugin) {
+    public GiveMoneyCommand(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.economyManager = plugin.getEconomyManager();
         this.messages = plugin.getMessages();
@@ -70,7 +70,7 @@ public class GiveMoneyCommand implements SimpleCommand {
             amount = TextUtils.parseInt(args[2], (integer -> integer > 0));
         }
 
-        IEconomy economy = economyManager.getFirstEconomy();
+        Economy economy = economyManager.getFirstEconomy();
         if (!args[3].isEmpty()) {
             economy = getEconomy(args[3]);
         }
@@ -83,12 +83,12 @@ public class GiveMoneyCommand implements SimpleCommand {
         giveItem(target, value, amount, economy);
     }
 
-    private void giveItem(Player target, int value, int amount, IEconomy economy) {
+    private void giveItem(Player target, int value, int amount, Economy economy) {
         MoneyItem moneyItem = new MoneyItem(plugin, value, amount, economy);
         moneyItem.give(target, value * amount);
     }
 
-    private IEconomy getEconomy(String economy) {
+    private Economy getEconomy(String economy) {
         return economyManager.getEconomy(economy);
     }
 }

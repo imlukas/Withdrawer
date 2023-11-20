@@ -1,6 +1,6 @@
 package me.imlukas.withdrawer.listener;
 
-import me.imlukas.withdrawer.Withdrawer;
+import me.imlukas.withdrawer.WithdrawerPlugin;
 import me.imlukas.withdrawer.config.PluginSettings;
 import me.imlukas.withdrawer.utils.pdc.PDCWrapper;
 import org.bukkit.entity.Player;
@@ -14,10 +14,10 @@ import java.util.UUID;
 
 public class CraftingVillagerListener implements Listener {
 
-    private final Withdrawer plugin;
+    private final WithdrawerPlugin plugin;
     private final PluginSettings settings;
 
-    public CraftingVillagerListener(Withdrawer plugin) {
+    public CraftingVillagerListener(WithdrawerPlugin plugin) {
         this.plugin = plugin;
         this.settings = plugin.getPluginSettings();
     }
